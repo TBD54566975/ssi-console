@@ -1,34 +1,35 @@
-## Usage
+# SSI Console
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
+The SSI Console aims to provide a seamless experience for issuers and verifiers in the SSI ecosystem. With the SSI Console, issuers and verifiers can create and manage their DIDs, credential issuance flows, and presentation exchanges all in one place. 
 
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+The SSI Console leverages the SSI Service API to simplify credential issuance and verification, and make both easy to do via a web interface.  
 
-```bash
-$ npm install # or pnpm install or yarn install
-```
+## Introduction
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+Orient users to the project here. This is a good place to start with an assumption
+that the user knows very little - so start with the Big Picture and show how this
+project fits into it. It may be good to reference/link the broader architecture in the
+`collaboration` repo or the developer site here.
 
-## Available Scripts
+Then maybe a dive into what this project does.
 
-In the project directory, you can run:
+Diagrams and other visuals are helpful here. Perhaps code snippets showing usage.
 
-### `npm dev` or `npm start`
+Project leads should complete, alongside this `README`:
+* [CODEOWNERS](./CODEOWNERS) - set project lead(s)
+* [CONTRIBUTING.md](./CONTRIBUTING.md) - Fill out how to: install prereqs, build, test, run, access CI, chat, discuss, file issues
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The other files in this template repo may be used as-is:
+* [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
+* [GOVERNANCE.md](./GOVERNANCE.md)
+* [LICENSE](./LICENSE)
 
-The page will reload if you make edits.<br>
+## Project Resources
 
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-## Deployment
-
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+| Resource                                   | Description                                                                    |
+| ------------------------------------------ | ------------------------------------------------------------------------------ |
+| [CODEOWNERS](./CODEOWNERS)                 | Outlines the project lead(s)                                                   |
+| [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) | Expected behavior for project contributors, promoting a welcoming environment |
+| [CONTRIBUTING.md](./CONTRIBUTING.md)       | Developer guide to build, test, run, access CI, chat, discuss, file issues     |
+| [GOVERNANCE.md](./GOVERNANCE.md)           | Project governance                                                             |
+| [LICENSE](./LICENSE)                       | Apache License, Version 2.0                                                    |
