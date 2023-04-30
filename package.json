@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "start": "npm run dev"
   },
   "license": "MIT",
   "devDependencies": {
@@ -15,6 +16,7 @@
     "vite-plugin-solid": "^2.5.0"
   },
   "dependencies": {
+    "@solidjs/router": "^0.8.2",
     "solid-js": "^1.6.10"
   }
 }
