@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-const Icon: Component<{svg: string}> = (props) => {
+const Icon: Component<{ svg: string }> = (props) => {
     let iconContainer;
     fetch(props.svg)
         .then(res => res.text())
