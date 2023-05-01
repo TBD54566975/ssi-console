@@ -1,0 +1,50 @@
+header {
+    padding: 1rem 0 0;
+    border-bottom: 2px solid var(--color-yellow);
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+    
+        &-logo {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+    
+            &-title {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                color: var(--color-yellow);
+                font-weight: 700;
+                font-size: var(--font-md);
+    
+                &-username {
+                    color: var(--color-white);
+                }
+            }
+        }
+    }
+    
+    .primary-nav {
+        ul {
+            display: flex;
+            gap: 2rem;
+            overflow-x: scroll;
+
+            a {
+                color: var(--color-yellow);
+                font-weight: 500;
+                padding: 2rem 0;
+                white-space: nowrap;
+
+                &:hover, &:focus, &.active {
+                    border-bottom-color: var(--color-yellow);
+                    border-bottom-width: 4px;
+                }
+            }
+        }
+    }
+}
+

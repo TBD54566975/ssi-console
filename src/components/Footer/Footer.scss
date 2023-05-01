@@ -1,0 +1,19 @@
+footer {
+    background: url("src/assets/border-multi.svg");
+    background-repeat: repeat-x;
+    display: flex;
+    justify-content: flex-end;
+    padding: 4rem 0;
+    margin-top: 4rem;
+    gap: 2rem;
+
+    & a {
+        color: var(--color-yellow);
+        font-weight: 400;
+        font-size: var(--font-sm);
+
+        &:hover, &:focus {
+            border-bottom: 2px solid var(--color-yellow);
+        }
+    }
+}

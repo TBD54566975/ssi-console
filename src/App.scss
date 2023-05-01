@@ -53,25 +53,13 @@ a {
     font-size: var(--font-md);
 }
 
-a[target="_blank"]::after {
-    content: url("assets/external-arrow.svg");
-    fill: currentColor;
-}
-
 a:hover,
 a:focus {
     border-bottom: 2px solid var(--color-blue);
 }
 
-footer a {
-    color: var(--color-yellow);
-    font-weight: 400;
-    font-size: var(--font-sm);
-}
-
-footer a:hover,
-footer a:focus {
-    border-bottom: 2px solid var(--color-yellow);
+a[target="_blank"] > svg {
+    margin-left: 0.5rem;
 }
 
 a.button-anchor {
@@ -80,6 +68,8 @@ a.button-anchor {
     padding: 12px 22px;
     border-radius: var(--radius-sm);
     border: 2px solid var(--color-blue);
+    display: inline-flex;
+    align-items: baseline;
 }
 
 button {
@@ -128,32 +118,8 @@ footer {
     margin: var(--site-margin);
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 2rem 0;
-    border-bottom: 2px solid var(--color-yellow);
-    gap: 2rem;
-}
-
 main {
     padding: 2rem 0;
-}
-
-footer {
-    background: url("assets/footer-bottom-multi.svg");
-    background-repeat: repeat-x;
-    display: flex;
-    justify-content: flex-end;
-    padding: 4rem 0;
-    margin-top: 4rem;
-    gap: 2rem;
-}
-
-.header-subheading {
-    font-size: var(--font-xs);
-    margin-top: 1rem;
-    align-items: center;
 }
 
 section {
@@ -166,7 +132,7 @@ section {
 }
 
 .section-header {
-    background-image: url("assets/border-6.svg");
+    background-image: url("src/assets/border-dashed.svg");
     background-repeat: repeat-x;
     background-position: bottom;
     padding-bottom: 1rem;
@@ -183,6 +149,12 @@ h2 {
 
 p {
     font-size: var(--font-md);
+}
+
+li, ul, menu {
+    list-style: none;
+    margin-block: 0;
+    padding-inline: 0;
 }
 
 .note-key-value {
