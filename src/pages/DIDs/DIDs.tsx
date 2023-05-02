@@ -1,7 +1,6 @@
 import { A, useRoutes } from "@solidjs/router";
 import { Component } from "solid-js";
 import * as baseRoutes from "../../routes/routes";
-import { submenuItems } from "./views/MyDIDs/MyDIDs";
 import NavSidebar from "../../components/NavSidebar/NavSidebar";
 import "./DIDs.scss";
 
@@ -29,4 +28,21 @@ const DIDs: Component = () => {
 }
 
 export default DIDs;
+
+export const submenuItems = {
+    "": [
+        {
+            path: "#key",
+            name: "Key DIDs"
+        },
+        {
+            path: "#web",
+            name: "Web DIDs"
+        },
+        {
+            path: "#ion",
+            name: "ION DIDs"
+        }
+    ]
+}
 

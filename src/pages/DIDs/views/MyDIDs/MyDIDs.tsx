@@ -29,20 +29,3 @@ const didIons = [
     "did:ion:1234567890poiuytrewqlkjhgfdsa",
     "did:ion:zaq123esdxcde34rfvgtr56ygbnhy"
 ]
-
-export const submenuItems = {
-    "": [
-        {
-            path: "#key",
-            name: "Key DIDs"
-        },
-        {
-            path: "#web",
-            name: "Web DIDs"
-        },
-        {
-            path: "#ion",
-            name: "ION DIDs"
-        }
-    ]
-}
