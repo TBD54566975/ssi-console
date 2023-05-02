@@ -24,7 +24,8 @@
     --font-sm: 1rem;
     --font-md: 1.125rem;
     --font-lg: 1.5rem;
-    --font-xl: 3.5rem;
+    --font-xl: 2rem;
+    --font-huge: 3.5rem;
     --radius-sm: 2px;
     --radius-round: 999px;
 }
@@ -41,6 +42,10 @@ html {
     line-height: 1.5;
     color: var(--color-white);
     background-color: var(--color-black);
+}
+
+svg {
+    height: auto;
 }
 
 a {
@@ -70,6 +75,7 @@ button {
     font-weight: 500;
     border-bottom: 4px solid transparent;
     border-top: 4px solid transparent;
+    font-family: inherit;
 
     &:hover,
     &:focus {
@@ -148,7 +154,7 @@ section {
 }
 
 h1 {
-    font-size: var(--font-xl);
+    font-size: var(--font-huge);
 }
 
 h2 {

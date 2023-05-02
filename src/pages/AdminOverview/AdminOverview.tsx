@@ -4,8 +4,9 @@ import SearchCheckmark from "../../assets/search-checkmark.svg";
 import GroupPeople from "../../assets/group-people.svg";
 import InputHeart from "../../assets/input-heart.svg";
 import Card, { CardContent } from "../../components/Card/Card";
-import NotifyBlock, { NotifyBlockContent } from "../../components/NotifyBlock/NotifyBlock";
+import NotifyBlock from "../../components/NotifyBlock/NotifyBlock";
 import "./AdminOverview.scss";
+import { notifications } from "../../components/Header/Header";
 
 const AdminOverview: Component = () => {
     return (
@@ -24,19 +25,6 @@ const AdminOverview: Component = () => {
 }
 
 export default AdminOverview;
-
-const notifications: NotifyBlockContent[] = [
-    {
-        title: "View applications",
-        href: "/credentials",
-        hasNotify: true,
-        message: "You have pending applications to resolve"
-    },
-    {
-        title: "View submissions",
-        href: "/verify"
-    }
-]
 
 const links: CardContent[] = [
     {

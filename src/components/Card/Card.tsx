@@ -1,6 +1,7 @@
 import { Component } from "solid-js";
 import './Card.scss';
 import Icon, { ArrowRight } from "../../icons/Icon";
+import { A } from "@solidjs/router";
 
 const Card: Component<{content: CardContent}> = (props) => {
     let cardLink;
@@ -9,9 +10,9 @@ const Card: Component<{content: CardContent}> = (props) => {
         class={`card card-${props.content.size} card-${props.content.color || "white"}`}>
             <div class="card-content">
                 <div>
-                    <a ref={cardLink} href={props.content.href}>
+                    <A ref={cardLink} href={props.content.href}>
                         <h2>{props.content.title}</h2>
-                    </a>
+                    </A>
                     <p>{props.content.tagline}</p>
                 </div>
                 <div class="arrow-icon">
