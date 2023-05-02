@@ -1,0 +1,43 @@
+.nav-sidebar {
+    &-menu {
+        background: var(--grey-5);
+        border: 1px solid var(--grey-50);
+
+        a {
+            color: var(--grey-50);
+            display: block;
+            padding: 12px;
+            border: 1px solid transparent;
+
+            &:hover,
+            &:focus-visible,
+            &:active,
+            &.active:not(.has-submenu),
+            &[data-active="true"] {
+                background: var(--grey-10);
+                color: var(--color-white);
+                border-color: var(--grey-15);
+            }
+
+            & > span {
+                display: block;
+            }
+
+            &.has-submenu.active {
+                & + .nav-sidebar-menu-submenu {
+                    display: block;
+
+                    a  {
+                        & > span {
+                            padding-inline: 24px; 
+                        }
+                    }
+                }
+            }
+        }
+
+        &-submenu {
+            display: none;
+        }
+    }
+}

@@ -9,7 +9,24 @@ const routes = [
   {
     path: '/dids',
     name: 'DIDs',
-    component: lazy(() => import('../pages/DIDs/DIDs'))
+    component: lazy(() => import('../pages/DIDs/DIDs')),
+    children: [
+        {
+          path: '',
+          name: 'My DIDs',
+          component: lazy(() => import('../pages/DIDs/views/MyDIDs/MyDIDs')),
+        },
+        {
+          path: 'trusted-dids',
+          name: 'Trusted DIDs',
+          component: lazy(() => import('../pages/DIDs/views/TrustedDIDs/TrustedDIDs')),
+        },
+        {
+          path: 'archived-dids',
+          name: 'Archived DIDs',
+          component: lazy(() => import('../pages/DIDs/views/ArchivedDIDs/ArchivedDIDs')),
+        },
+    ],
   },
   {
     path: '/credentials',
