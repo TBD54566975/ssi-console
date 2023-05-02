@@ -1,7 +1,6 @@
 import { Component } from "solid-js";
 import './Card.scss';
-import Icon from "../../icons/Icon";
-import ArrowRight from '../../icons/arrow-right.svg';
+import Icon, { ArrowRight } from "../../icons/Icon";
 
 const Card: Component<{content: CardContent}> = (props) => {
     let cardLink;

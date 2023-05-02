@@ -1,0 +1,30 @@
+.admin-overview {
+    display: grid;
+    grid-template-areas: 
+        "a b b"
+        "c c d"
+        "c c e";
+    gap: 2rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 3fr 1fr 1fr;
+
+        & > :is(:nth-child(1)) {
+            grid-area: a;
+        }
+
+        & > :is(:nth-child(2)) {
+            grid-area: b;
+        }
+
+        & > :is(:nth-child(3)) {
+            grid-area: c;
+        }
+
+        & > :is(:nth-child(4)) {
+            grid-area: d;
+        }
+
+        & > :is(:nth-child(5)) {
+            grid-area: e;
+        }
+}

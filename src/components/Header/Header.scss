@@ -25,6 +25,32 @@ header {
                 }
             }
         }
+
+        .secondary-nav {
+            display: flex;
+            gap: 2rem;
+            color: var(--color-yellow);
+            align-items: center;
+
+            &-icon-button {
+                display: inline-flex;
+                gap: 8px;
+
+                & > span {
+                    margin: auto;
+                }
+
+                &.has-notification > span::after {
+                    content: '';
+                    display: inline-block;
+                    border-radius: 999px;
+                    background: var(--color-blue);
+                    width: 8px;
+                    height: 8px;
+                    vertical-align: top;
+                }
+            }
+        }
     }
     
     .primary-nav {

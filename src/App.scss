@@ -51,18 +51,39 @@ a {
     padding-bottom: 2px;
     border-bottom: 2px solid transparent;
     font-size: var(--font-md);
+
+    &:hover,
+    &:focus {
+        border-bottom: 2px solid var(--color-blue);
+    }
+
+    &[target="_blank"] > svg {
+        margin-left: 0.5rem; 
+    }
 }
 
-a:hover,
-a:focus {
-    border-bottom: 2px solid var(--color-blue);
+button {
+    background: transparent;
+    color: inherit;
+    border: none;
+    font-size: var(--font-md);
+    font-weight: 500;
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+
+    &:hover,
+    &:focus {
+        opacity: 0.9;
+        border-bottom: 4px solid;
+    }
+
+    &:active {
+        opacity: 0.8; 
+        border-bottom: 4px solid;
+    }
 }
 
-a[target="_blank"] > svg {
-    margin-left: 0.5rem;
-}
-
-a.button-anchor {
+.primary-button {
     background: var(--color-blue);
     color: var(--color-black);
     padding: 12px 22px;
@@ -70,46 +91,33 @@ a.button-anchor {
     border: 2px solid var(--color-blue);
     display: inline-flex;
     align-items: baseline;
+
+    &:hover,
+    &:focus {
+        box-shadow: 0 0 10px 0 var(--color-blue);
+        opacity: 0.9;
+    }
+
+    &:active {
+        opacity: 0.8; 
+    }
 }
 
-button {
-    background: var(--color-blue);
-    color: var(--color-black);
-    padding: 12px 22px;
-    border-radius: var(--radius-sm);
-    border: 2px solid var(--color-blue);
-    font-size: var(--font-md);
-    font-weight: 500;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-
-a.button-anchor:hover,
-a.button-anchor:focus,
-button:hover,
-button:focus {
-    box-shadow: 0 0 10px 0 var(--color-blue);
-    opacity: 0.9;
-}
-
-a.button-anchor:active,
-a.button-anchor:active,
-button:active,
-button:active {
-    opacity: 0.8;
-}
-
-button.secondary {
+.secondary-button {
     background: var(--grey-30);
     color: var(--color-white);
     border: 2px solid var(--grey-50);
-}
 
-button.secondary:hover,
-button.secondary:focus {
-    background: var(--grey-50);
-    border-color: var(--color-white);
-    box-shadow: 0 0 10px 0 var(--grey-50);
+    &:hover,
+    &:focus {
+        background: var(--grey-50);
+        border-color: var(--color-white);
+        box-shadow: 0 0 10px 0 var(--grey-50);
+    }
+
+    &:active {
+        opacity: 0.8; 
+    }
 }
 
 header,

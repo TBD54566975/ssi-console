@@ -1,7 +1,6 @@
 import { Component } from "solid-js"
 import "./NotifyBlock.scss";
-import Icon from "../../icons/Icon";
-import ArrowRight from '../../icons/arrow-right.svg';
+import Icon, { ArrowRight } from "../../icons/Icon";
 
 const NotifyBlock: Component<{content: NotifyBlockContent}> = (props) => {
     let cardLink;

@@ -5,10 +5,11 @@ import GroupPeople from "../../assets/group-people.svg";
 import InputHeart from "../../assets/input-heart.svg";
 import Card, { CardContent } from "../../components/Card/Card";
 import NotifyBlock, { NotifyBlockContent } from "../../components/NotifyBlock/NotifyBlock";
+import "./AdminOverview.scss";
 
 const AdminOverview: Component = () => {
     return (
-        <div>
+        <div class="admin-overview">
             <div class="info-panel">
                 <h1>SSI Admin Console</h1>
                 <div class="info-panel-inbox">

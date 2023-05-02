@@ -1,8 +1,9 @@
 import { Component } from 'solid-js';
 import TBDBrackets from '../../assets/tbd-brackets.svg';
 import './Header.scss';
-import { A, Link } from '@solidjs/router';
+import { A } from '@solidjs/router';
 import routes from '../../routes/routes';
+import Icon, { Bell, ChevronDown, Plus } from '../../icons/Icon';
 
 const Header: Component<{ username: string }> = (props) => {
   return (
@@ -17,13 +18,20 @@ const Header: Component<{ username: string }> = (props) => {
 					</span>
 				</div>
 			</div>
-			<div>
+			<div class="secondary-nav">
 				<a
 					target="_blank"
 					href="https://developer.tbd.website/docs/apis/ssi-service/"
-					class="button-anchor">
+					class="primary-button">
 					Docs
 				</a>
+				<button title="Notifications menu" class="secondary-nav-icon-button has-notification">
+					<Icon svg={Bell} />
+				</button>
+				<button title="Create menu" class="secondary-nav-icon-button">
+					<Icon svg={Plus} />
+					<Icon svg={ChevronDown} />
+				</button>
 			</div>
 		</div>
 		<div class="primary-nav">
