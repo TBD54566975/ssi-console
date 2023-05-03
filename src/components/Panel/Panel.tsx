@@ -11,6 +11,7 @@ export interface PanelContent {
     body?,
     buttons?,
     footer?,
+    fallback?
 }
 
 const Panel: Component<{ content: PanelContent }> = (props) => {
@@ -25,50 +26,56 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                 </div>
                 {props.content.action && 
                     <div class="panel-header-action">
-                        <button class="primary-button">
-                            {props.content.action}
+                        <button class="primary-button" onclick={props.content.action.onclick}>
+                            {props.content.action.label}
                         </button>
                     </div>
                 }
             </div>
-            <ul>
-                {props.content.listItems && props.content.listItems.map(listItem => 
-                    <li class="panel-row">
-                        <details>
-                            <summary class="panel-row-header">
-                                <div class="panel-row-header-data">
-                                    {Object.keys(listItem).map(key => 
-                                        <p classList={{
-                                            "chip": key === 'tag',
-                                            "chip-danger": key === 'tag' && listItem[key].toLowerCase() === 'unverified',
-                                            "chip-success": key === 'tag' && listItem[key].toLowerCase() === 'verified',
-                                            "chip-warn": key === 'tag' && listItem[key].toLowerCase() === 'pending',
-                                        }}>{listItem[key]}</p>
-                                    )}
-                                </div>
-                                <div class="panel-row-header-action">
-                                    <Icon svg={ChevronDown} />
-                                </div>
-                            </summary>
-                            <div class="panel-row-body">
-                                {props.content.body}
-
-                                {props.content.buttons &&
-                                    <div class="panel-row-body-button-row">
-                                        {props.content.buttons.map(button => 
-                                            <button 
-                                                class={button.className}
-                                                onclick={() => button.onclick(listItem)}> 
-                                                {button.label} 
-                                            </button>
-                                        )}
+            {props.content.listItems.length ?
+                <ul>
+                    {props.content.listItems.map(listItem => 
+                        <li class="panel-row">
+                            <details>
+                                <summary class="panel-row-header">
+                                    <div class="panel-row-header-data">
+                                        {Object.keys(listItem).map(key => {
+                                            if (key === "tag") {
+                                                return <p class={`chip chip-${listItem[key].type}`}>{listItem[key].label}</p>
+                                            } else if (key === "type") {
+                                                return <p class="data-label">{listItem[key]}</p>
+                                            } else {
+                                                return <p>{listItem[key]}</p>
+                                            }
+                                        })}
                                     </div>
-                                }
-                            </div>
-                        </details>
-                    </li>
-                )}
-            </ul>
+                                    <div class="panel-row-header-action">
+                                        <Icon svg={ChevronDown} />
+                                    </div>
+                                </summary>
+                                <div class="panel-row-body">
+                                    {props.content.body}
+                                    {props.content.buttons &&
+                                        <div class="panel-row-body-button-row">
+                                            {props.content.buttons.map(button => 
+                                                <button 
+                                                    class={button.className}
+                                                    onclick={() => button.onclick(listItem)}> 
+                                                    {button.label} 
+                                                </button>
+                                            )}
+                                        </div>
+                                    }
+                                </div>
+                            </details>
+                        </li>
+                    )}
+                </ul>
+                :
+                <div class="panel-default">
+                    <p>{props.content.fallback}</p>
+                </div>
+            }
             <div class="panel-footer">
                 {props.content.footer}
             </div>

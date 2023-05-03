@@ -32,17 +32,17 @@ export default DIDs;
 export const submenuItems = {
     "": [
         {
-            path: "#key",
-            name: "Key DIDs"
+            path: "#all",
+            name: "All DIDs"
         },
         {
-            path: "#web",
-            name: "Web DIDs"
+            path: "#archived",
+            name: "Archived"
         },
-        {
-            path: "#ion",
-            name: "ION DIDs"
-        }
+        // {
+        //     path: "#ion",
+        //     name: "ION DIDs"
+        // }
     ]
 }
 

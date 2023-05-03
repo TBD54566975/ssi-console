@@ -21,11 +21,6 @@ const routes = [
           name: 'Trusted DIDs',
           component: lazy(() => import('../pages/DIDs/views/TrustedDIDs/TrustedDIDs')),
         },
-        {
-          path: 'archived-dids',
-          name: 'Archived DIDs',
-          component: lazy(() => import('../pages/DIDs/views/ArchivedDIDs/ArchivedDIDs')),
-        },
     ],
   },
   {

@@ -13,6 +13,18 @@
         padding: 1rem 1.5rem;
     }
 
+    &-default {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+
+        p {
+            font-size: var(--font-sm);
+            max-width: 420px;
+        }
+    }
+
     &-header {
         background-image: url("/src/assets/border-dashed.svg");
         background-repeat: repeat-x;
@@ -95,8 +107,16 @@
                     &:first-child {
                         font-weight: 700;
                         color: var(--color-white);
-                        flex: 0 0 8rem;
+                        flex: 0 0 12rem;
                         line-break: anywhere;
+                    }
+
+                    &.data-label {
+                        flex: 0 0 2rem;
+                        font-size: var(--font-xs);
+                        text-transform: uppercase;
+                        color: var(--color-white);
+                        font-weight: 700;
                     }
 
                     &.chip {
