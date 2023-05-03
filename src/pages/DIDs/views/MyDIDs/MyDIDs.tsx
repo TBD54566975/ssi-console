@@ -72,8 +72,8 @@ const didIons = [
 ]
 
 const content = {
-    keys: {
-        id: "#key",
+    key: {
+        id: "key",
         title: "Key DIDs",
         description: "Manage all of your Key-based DIDs.",
         action: `New Key DID`,
@@ -81,7 +81,7 @@ const content = {
         footer: <a href="" target="_blank">Learn about Key DIDs</a>
     },
     web: {
-        id: "#web",
+        id: "web",
         title: "Web DIDs",
         description: "Manage all of your Web-based DIDs.",
         action: "New Web DID",
@@ -89,7 +89,7 @@ const content = {
         footer: <a href="" target="_blank">Learn about Web DIDs</a>
     },
     ion: {
-        id: "#ion",
+        id: "ion",
         title: "ION DIDs",
         description: "Manage all of your ION-based DIDs.",
         action: "New ION DID",
