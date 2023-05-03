@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-    --color-white: #FFFFFF;
+    --color-white: #f0f0f0;
     --color-black: #000000;
     --color-yellow: #FFEC19;
     --color-blue: #24F2FF;
-    --blue-120: #93EBFF;
+    --blue-120: #83f7ff;
     --color-purple: #9A19FF;
     --color-green: #24FF54;
     --green-20: #073311;
@@ -28,6 +28,7 @@
     --font-huge: 3.5rem;
     --radius-sm: 2px;
     --radius-round: 999px;
+    --site-font: 'IBM Plex Mono', monospace;
 }
 
 * {
@@ -37,7 +38,7 @@
 html {
     margin: 0;
     padding: 0;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: var(--site-font);
     font-size: 100%;
     line-height: 1.5;
     color: var(--color-white);
@@ -73,56 +74,80 @@ button {
     border: none;
     font-size: var(--font-md);
     font-weight: 500;
-    border-bottom: 4px solid transparent;
-    border-top: 4px solid transparent;
     font-family: inherit;
 
     &:hover,
     &:focus {
         opacity: 0.9;
-        border-bottom: 4px solid;
     }
 
     &:active {
-        opacity: 0.8; 
-        border-bottom: 4px solid;
+        opacity: 0.6;
     }
 }
 
+a.primary-button,
 .primary-button {
     background: var(--color-blue);
     color: var(--color-black);
     padding: 12px 22px;
     border-radius: var(--radius-sm);
-    border: 2px solid var(--color-blue);
+    border: 1px solid var(--color-blue);
     display: inline-flex;
     align-items: baseline;
+    font-weight: 700;
 
     &:hover,
     &:focus {
-        box-shadow: 0 0 10px 0 var(--color-blue);
+        border-color: var(--blue-120);
+        box-shadow: 0 0 10px 0 var(--blue-120);
         opacity: 0.9;
     }
 
     &:active {
-        opacity: 0.8; 
+        opacity: 0.6; 
     }
 }
 
 .secondary-button {
-    background: var(--grey-30);
+    background: var(--grey-20);
     color: var(--color-white);
-    border: 2px solid var(--grey-50);
+    padding: 12px 22px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--grey-30);
+    display: inline-flex;
+    align-items: baseline;
+    font-weight: 700;
 
     &:hover,
     &:focus {
-        background: var(--grey-50);
-        border-color: var(--color-white);
-        box-shadow: 0 0 10px 0 var(--grey-50);
+        border-color: var(--grey-50);
+        opacity: 0.9;
     }
 
     &:active {
-        opacity: 0.8; 
+        opacity: 0.6; 
+    }
+}
+
+.danger-button {
+    background: var(--red-20);
+    color: var(--color-white);
+    padding: 12px 22px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--red-20);
+    display: inline-flex;
+    align-items: baseline;
+    font-weight: 700;
+
+    &:hover,
+    &:focus {
+        border-color: var(--color-red);
+        opacity: 0.9;
+    }
+
+    &:active {
+        opacity: 0.6; 
     }
 }
 
@@ -145,29 +170,14 @@ section {
     p {
         color: var(--grey-50);
     }
+}
 
-    &.page-hero {
-        max-width: 668px;
-        margin-block: 2rem 4rem;
-        
-        p {
-            margin-block: 0;
-        }
-    }
-
-    &.panel {
-        border: 1px solid var(--grey-15);
-        background: var(--grey-5);
-        border-radius: var(--radius-sm);
-        padding: 1.5rem;
-
-        &-header {
-            background-image: url("/src/assets/border-dashed.svg");
-            background-repeat: repeat-x;
-            background-position: bottom;
-            padding-bottom: 1rem;
-            margin-bottom: 2rem;
-        }
+.page-hero {
+    max-width: 668px;
+    margin-block: 2rem 4rem;
+    
+    p {
+        margin-block: 8px 0;
     }
 }
 
@@ -175,6 +185,7 @@ section {
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
+    flex: 3 1 auto;
     
     & > nav {
         flex: 0 0 16rem;
@@ -182,6 +193,9 @@ section {
 
     &-content {
         flex: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
     }
 }
 
@@ -236,7 +250,7 @@ textarea {
     font-size: 18px;
     padding: 12px 16px;
     font-weight: bold;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: var(--site-font);
     background: var(--grey-5);
     border: 1px solid var(--grey-50);
     border-radius: var(--radius-sm);

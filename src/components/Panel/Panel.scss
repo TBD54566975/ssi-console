@@ -89,11 +89,44 @@
                 flex-wrap: wrap;
                 flex: auto;
 
-                p:first-child {
-                    font-weight: 700;
-                    color: var(--color-white);
-                    flex: 0 0 8rem;
-                    line-break: anywhere;
+                p {
+                    word-break: break-all;
+
+                    &:first-child {
+                        font-weight: 700;
+                        color: var(--color-white);
+                        flex: 0 0 8rem;
+                        line-break: anywhere;
+                    }
+
+                    &:nth-child(2) {
+                        // flex: auto;
+                    }
+
+                    &.chip {
+                        color: var(--color-white);
+                        border-radius: 999px;
+                        padding: 0 6px;
+                        font-size: var(--font-xs);
+                        display: flex;
+                        align-items: center;
+
+                        &-danger {
+                            background: var(--red-20);
+                            border: 1px solid var(--color-red);
+                        }
+    
+                        &-success {
+                            background: var(--green-20);
+                            border: 1px solid var(--color-green);
+                        }
+
+                        &-warn {
+                            background: var(--orange-20);
+                            border: 1px solid var(--color-orange);
+                        }
+                    }
+
                 }
             }
         }
@@ -107,4 +140,3 @@
         }
     }
 }
-
