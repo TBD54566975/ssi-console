@@ -4,29 +4,44 @@ import "./MyDIDs.scss";
 import Panel from "../../../../components/Panel/Panel";
 
 const MyDIDs: Component = () => {
-    content["all"]["action"] = {
-        label: <><Icon svg={Plus} /> Add new </>,
-        onclick: () => console.log('clicked to add ', "all")
+    const content = {
+        all: {
+            id: "all",
+            title: "All DIDs",
+            listItems: [...didKeys, ...didWebs, ...didIons],
+            footer: <a href="" target="_blank">Learn about DIDs</a>,
+            fallback: "You don't have any DIDs in use here. Try creating one.",
+            action: {
+                label: <><Icon svg={Plus} /> Add new </>,
+                onclick: () => console.log('clicked to add ', "all")
+            },
+            buttons: [
+                {
+                    label: "Edit",
+                    className: "secondary-button",
+                    onclick: () => console.log('edited', "all")
+                },
+                {
+                    label: "Archive",
+                    className: "danger-button",
+                    onclick: (item) => console.log('archived', "all", item)
+                }
+            ]
+        },
+        archived: {
+            id: "archived",
+            title: "Archived",
+            listItems: [],
+            fallback: "You haven't archived any DIDs yet, so there's nothing here.",
+            buttons: [
+                {
+                    label: "Unarchive",
+                    className: "secondary-button",
+                    onclick: () => console.log('unarchived ', "archived")
+                },
+            ]
+        },
     }
-    content["all"]["buttons"] = [
-        {
-            label: "Edit",
-            className: "secondary-button",
-            onclick: () => console.log('edited', "all")
-        },
-        {
-            label: "Archive",
-            className: "danger-button",
-            onclick: (item) => console.log('archived', "all", item)
-        }
-    ];
-    content["archived"]["buttons"] = [
-        {
-            label: "Unarchive",
-            className: "secondary-button",
-            onclick: () => console.log('unarchived ', "archived")
-        },
-    ];
     return (
         <>
             {Object.keys(content).map(key => 
@@ -97,21 +112,4 @@ const didIons = [
         type: "ion"
     }
 ]
-
-const content = {
-    all: {
-        id: "all",
-        title: "All DIDs",
-        listItems: [...didKeys, ...didWebs, ...didIons],
-        footer: <a href="" target="_blank">Learn about DIDs</a>,
-        fallback: "You don't have any DIDs in use here. Try creating one."
-
-    },
-    archived: {
-        id: "archived",
-        title: "Archived",
-        listItems: [],
-        fallback: "You haven't archived any DIDs yet, so there's nothing here."
-    },
-}
 

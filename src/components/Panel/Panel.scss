@@ -10,7 +10,11 @@
     &-row-header,
     &-row-body,
     &-footer {
-        padding: 1rem 1.5rem;
+        padding: 1.5rem;
+    }
+
+    &-footer {
+        margin-block-start: 1rem;
     }
 
     &-default {
