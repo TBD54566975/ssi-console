@@ -62,17 +62,17 @@ export default MyDIDs;
 
 const didKeys = [
     {
-        name: "Primary",
+        name: "xxxx-7890",
         id: "did:key:1234567890zxcvbnmlkjhgfdsqwertyuio1234567890",
         type: "key"
     },
     {
-        name: "Test",
+        name: "xxxx-hjlk",
         id: "did:key:lkjhgfdsdfghjiuytrtyu89876543ertyujjhgfghjlk",
         type: "key"
     },
     {
-        name: "Test1",
+        name: "xxxx-mhjj",
         id: "did:key:zxcvbn23456789xcvbnm987654xcvbnkjhgfdghjmhjj",
         type: "key"
     }
@@ -80,7 +80,7 @@ const didKeys = [
 
 const didWebs = [
     {
-        name: "Example.com",
+        name: "example.com",
         id: "did:web:example.com",
         tag: {
             label: "Unverified",
@@ -89,7 +89,7 @@ const didWebs = [
         type: "web"
     },
     {
-        name: "TBD",
+        name: "tbd.website",
         id: "did:web:tbd.website",
         tag: {
             label: "Verified",
@@ -98,7 +98,7 @@ const didWebs = [
         type: "web"
     },
     {
-        name: "My Site",
+        name: "mysite.com",
         id: "did:web:mysite.com",
         tag: {
             label: "Pending",
@@ -109,12 +109,12 @@ const didWebs = [
 ]
 const didIons = [
     {
-        name: "Main",
+        name: "xxxx-fdsa",
         id: "did:ion:1234567890poiuytrewqlkjhgfdsa",
         type: "ion"
     },
     {
-        name: "Test2",
+        name: "xxxx-bnhy",
         id: "did:ion:zaq123esdxcde34rfvgtr56ygbnhy",
         type: "ion"
     }

@@ -292,6 +292,7 @@ textarea {
     font-size: var(--font-xs);
     line-height: 2;
     tab-size: 2;
+    resize: none;
 }
 
 select:hover,

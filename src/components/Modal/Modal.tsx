@@ -117,6 +117,9 @@ const Modal: Component<{ content }> = (props) => {
         const didInput = {
             keyType: "Ed25519"
         }
+        if (formValues().didType === "web") {
+            didInput["web"]  = "example.com"
+        }
         event.preventDefault();
         setFormValues((prev) => ({      
             ...prev, 
@@ -158,6 +161,7 @@ const Modal: Component<{ content }> = (props) => {
                                             id="didType" 
                                             name="didType" 
                                             value={formValues().didType} 
+                                            onInput={handleInput}
                                             required
                                         >
                                             {options && options.map(option => 
@@ -202,7 +206,9 @@ const Modal: Component<{ content }> = (props) => {
                         
                         {isSuccess() && (
                             <>
-                                <div class="banner banner-success">🎉 Success - did is: 34567</div>
+                                <div class="banner banner-success">
+                                    🎉 Success - did is: 34567
+                                </div>
                                 <div class="button-row"> 
                                     <button class="secondary-button" type="button" onClick={closeModal}>
                                         Done
