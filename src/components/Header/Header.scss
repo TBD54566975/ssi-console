@@ -57,6 +57,11 @@ header {
 
                     &:focus + .secondary-nav-menu-submenu {
                         display: block;
+
+                        a > div {
+                            display: flex;
+                            gap: 8px;
+                        }
                     }
                 }
     
