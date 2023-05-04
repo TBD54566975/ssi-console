@@ -3,7 +3,7 @@ import TBDBrackets from '../../assets/tbd-brackets.svg';
 import './Header.scss';
 import { A } from '@solidjs/router';
 import routes from '../../routes/routes';
-import Icon, { ArrowRight, Bell, ChevronDown, Plus } from '../../icons/Icon';
+import Icon, { ArrowRight, Bell, ChevronDown, ExternalArrow, Plus } from '../../icons/Icon';
 import NotifyBlock, { NotifyBlockContent } from '../NotifyBlock/NotifyBlock';
 
 const Header: Component<{ username: string }> = (props) => {
@@ -24,7 +24,7 @@ const Header: Component<{ username: string }> = (props) => {
 					target="_blank"
 					href="https://developer.tbd.website/docs/apis/ssi-service/"
 					class="primary-button">
-					Docs
+					Docs <Icon svg={ExternalArrow} />
 				</a>
 				<div class="secondary-nav-menu">
 					<button title="Notifications menu" class="secondary-nav-menu-icon has-notification">

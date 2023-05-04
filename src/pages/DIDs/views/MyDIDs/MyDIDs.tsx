@@ -1,30 +1,37 @@
 import { Component } from "solid-js";
-import Icon, { Plus } from "../../../../icons/Icon";
+import Icon, { ExternalArrow, Plus, XCross } from "../../../../icons/Icon";
 import "./MyDIDs.scss";
 import Panel from "../../../../components/Panel/Panel";
+import Modal from "../../../../components/Modal/Modal";
 
 const MyDIDs: Component = () => {
     const content = {
         all: {
             id: "all",
             title: "All DIDs",
-            listItems: [...didKeys, ...didWebs, ...didIons],
-            footer: <a href="" target="_blank">Learn about DIDs</a>,
+            listItems: [
+                ...didKeys, 
+                ...didWebs, 
+                ...didIons
+            ],
+            footer: <a href="" target="_blank">Learn about DIDs <Icon svg={ExternalArrow} /></a>,
             fallback: "You don't have any DIDs in use here. Try creating one.",
-            action: {
-                label: <><Icon svg={Plus} /> Add new </>,
-                onclick: () => console.log('clicked to add ', "all")
-            },
+            action: <Modal content={{
+                    button: { 
+                        label: <> <Icon svg={Plus} /> Add New </>,
+                        className: "primary-button" 
+                    },
+                }}/>,
             buttons: [
                 {
                     label: "Edit",
                     className: "secondary-button",
-                    onclick: () => console.log('edited', "all")
+                    onClick: () => console.log('edited', "all")
                 },
                 {
                     label: "Archive",
                     className: "danger-button",
-                    onclick: (item) => console.log('archived', "all", item)
+                    onClick: (item) => console.log('archived', "all", item)
                 }
             ]
         },
@@ -37,7 +44,7 @@ const MyDIDs: Component = () => {
                 {
                     label: "Unarchive",
                     className: "secondary-button",
-                    onclick: () => console.log('unarchived ', "archived")
+                    onClick: () => console.log('unarchived ', "archived")
                 },
             ]
         },

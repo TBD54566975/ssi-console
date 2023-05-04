@@ -5,7 +5,7 @@ import Icon, { ArrowRight } from "../../icons/Icon";
 const NotifyBlock: Component<{content: NotifyBlockContent}> = (props) => {
     let cardLink;
     return (
-        <div onclick={() => cardLink.click()} class="notify-block">
+        <div onClick={() => cardLink.click()} class="notify-block">
             <div class="notify-block-content">
                 {props.content.hasNotify && <span class="notify-block-alert">New</span>}
                 <a ref={cardLink} href={props.content.href}>

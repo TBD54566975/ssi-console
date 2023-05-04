@@ -7,15 +7,10 @@ import Main from './components/Main/Main';
 
 
 const App: Component = () => {
-    createEffect(() => {
-        document.querySelectorAll('a[target="_blank"]').forEach(async (a) => {
-            a.innerHTML += await (await fetch(ExternalArrow)).text();
-        });
-    }, []);
-
+    let username = "kirahsapong";
     return (
         <>
-            <Header username="kirahsapong" />
+            <Header username={username} />
             <Main />
             <Footer />
         </>

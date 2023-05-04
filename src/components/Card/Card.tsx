@@ -6,7 +6,7 @@ import { A } from "@solidjs/router";
 const Card: Component<{content: CardContent}> = (props) => {
     let cardLink;
     return (
-        <div onclick={() => cardLink.click()} 
+        <div onClick={() => cardLink.click()} 
         class={`card card-${props.content.size} card-${props.content.color || "white"}`}>
             <div class="card-content">
                 <div>

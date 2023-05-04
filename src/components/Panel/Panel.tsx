@@ -26,9 +26,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                 </div>
                 {props.content.action && 
                     <div class="panel-header-action">
-                        <button class="primary-button" onclick={props.content.action.onclick}>
-                            {props.content.action.label}
-                        </button>
+                        {props.content.action}
                     </div>
                 }
             </div>
@@ -56,11 +54,11 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                                 <div class="panel-row-body">
                                     {props.content.body}
                                     {props.content.buttons &&
-                                        <div class="panel-row-body-button-row">
+                                        <div class="button-row">
                                             {props.content.buttons.map(button => 
                                                 <button 
                                                     class={button.className}
-                                                    onclick={() => button.onclick(listItem)}> 
+                                                    onClick={() => button.onClick(listItem)}> 
                                                     {button.label} 
                                                 </button>
                                             )}
@@ -77,7 +75,16 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                 </div>
             }
             <div class="panel-footer">
-                {props.content.footer}
+                <div>
+                    {props.content.footer}
+                </div>
+                {props.content.listItems.length > 6 && 
+                    <div class="panel-footer-buttons">
+                        <button class="secondary-button" disabled={true}>Prev</button>
+                        Page 1
+                        <button class="secondary-button">Next</button>
+                    </div>
+                }
             </div>
         </section>
     )

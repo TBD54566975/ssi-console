@@ -6,6 +6,8 @@ import Bell from './bell.svg';
 import ChevronDown from './chevron-down.svg';
 import ExternalArrow from './external-arrow.svg';
 import Plus from './plus.svg';
+import XCross from './x-cross.svg';
+import DangerAlert from './danger-alert.svg';
 
 
 const Icon: Component<{ svg: string }> = (props) => {
@@ -13,7 +15,7 @@ const Icon: Component<{ svg: string }> = (props) => {
     fetch(props.svg)
         .then(res => res.text())
         .then(svg => iconContainer.innerHTML = svg);
-    return <span ref={iconContainer}></span>;
+    return <span ref={iconContainer} class="icon-container"></span>;
 } 
 
 export default Icon;
@@ -25,5 +27,7 @@ export {
     Bell,
     ChevronDown,
     ExternalArrow,
-    Plus
+    Plus,
+    XCross,
+    DangerAlert
 }
