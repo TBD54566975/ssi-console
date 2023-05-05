@@ -1,6 +1,7 @@
 import { Component, createSignal, onCleanup } from "solid-js";
 import "./Modal.scss";
 import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../icons/Icon";
+import { formatTextAreaOnKeyDown, insertSampleInput, submitForm, updateFormOnInput } from "../../utils/helpers";
 
 const Modal: Component<{ content }> = (props) => {
     //pass in these props
@@ -13,11 +14,18 @@ const Modal: Component<{ content }> = (props) => {
     ];
     let initialFormValues = { json: '', didType: options[0].toLowerCase() }
 
-    
+    // the component
     const [formValues, setFormValues] = createSignal(initialFormValues);
     const [isLoading, setIsLoading] = createSignal(false);
     const [isSuccess, setIsSuccess] = createSignal(false);
     const [isError, setIsError] = createSignal(false);
+
+    const resetForm = () => {
+        setFormValues(initialFormValues);
+        setIsLoading(false);
+        setIsSuccess(false);
+        setIsError(false);
+    }
 
     //dialog magic
     let dialog;
@@ -26,10 +34,7 @@ const Modal: Component<{ content }> = (props) => {
         document.body.classList.add('no-scroll');
         dialog.addEventListener('close', () => {
             document.body.classList.remove('no-scroll');
-            setFormValues(initialFormValues);
-            setIsLoading(false);
-            setIsSuccess(false);
-            setIsError(false);
+            resetForm();
         });
     }
     
@@ -37,99 +42,39 @@ const Modal: Component<{ content }> = (props) => {
         return dialog.close();
     }
 
-    //form magic
-    let form: HTMLFormElement;
-
     //actual form calls
     const handleSubmit = async (event) => {
-        event.preventDefault();
-        setIsLoading(true);
-        setIsSuccess(false);
-        setIsError(false);
-    
-        // form vars
-        let body = JSON.stringify(formValues());
-        let errorHandler = setIsError;
-        let successHandler = setIsSuccess;
-        let loadingHandler = setIsLoading;
-
-
-        // pure form
-        try {
-            const response = await fetch(endpoint, {
-                method,
-                headers: { 'Content-Type': 'application/json' },
-                body
-            });
-    
-            if (!response.ok) {
-                errorHandler(true)
-                throw new Error('Unable to create a DID.');
-            }
-
-            successHandler(true);
-        } catch (e) {
-            errorHandler(true)
-            throw new Error(e);
-        } finally {
-            loadingHandler(false);
-        }
+        const request = { endpoint, method, body: JSON.stringify(formValues()) };
+        const setters = { setIsLoading, setIsSuccess, setIsError };
+        submitForm(event, setters, request);
     };
 
-    // for any input fields but rn only select
     const handleInput = (event) => {
-        setIsError(false);
-        const { name, value } = event.target;
-        setFormValues((prev) => ({ 
-            ...prev, 
-            [name]: value 
-        }));
+        updateFormOnInput(event, { setIsError, setFormValues })
     };
 
-    // only for text area
-    function handleKeyDown(event) {
-        if (event.key === "Tab" && !event.altKey && !event.shiftKey) {
-            const start = event.target.selectionStart;
-            const end = event.target.selectionEnd;
-            const value = formValues().json;
-            event.preventDefault();
-            setFormValues((prev) => ({      
-                ...prev, 
-                json: `${value.substring(0, start)}\t${value.substring(end)}`
-            }));
-            event.target.selectionStart = event.target.selectionEnd = start + 1;
-        }
-        if (event.key === "Enter") {
-            const start = event.target.selectionStart;
-            const end = event.target.selectionEnd;
-            const value = formValues().json;
-            event.preventDefault();
-            setFormValues((prev) => ({      
-                ...prev, 
-                json: `${value.substring(0, start)}\n\t${value.substring(end)}`
-            }));
-            event.target.selectionEnd = end + 2; 
-        }
+    const handleKeyDown = (event) => {
+        formatTextAreaOnKeyDown(event, { setFormValues });
     }
 
-    const populateJSON = (event) => {
-        setIsError(false);
+    const isFormValid = () => {
+        return formValues().json.trim() !== '' && !isError();
+    }
+
+    //populate textarea field with sample input
+    const populateSampleInput = (event) => {
         const didInput = {
             keyType: "Ed25519"
         }
         if (formValues().didType === "web") {
             didInput["web"]  = "example.com"
         }
-        event.preventDefault();
-        setFormValues((prev) => ({      
-            ...prev, 
-            json: JSON.stringify(didInput, null, 2)
-        }));
+
+        const setters = { setIsError, setFormValues };
+        insertSampleInput(event, setters, 'json', didInput);
     }
 
-    const isFormValid = () => {
-        return formValues().json.trim() !== '' && !isError();
-    }
+
 
     return (
         <div>
@@ -145,7 +90,7 @@ const Modal: Component<{ content }> = (props) => {
 
                 <div class="dialog-body">
                     <h2>Create a DID</h2>
-                    <form onSubmit={handleSubmit} ref={form}>
+                    <form onSubmit={handleSubmit}>
                         {!isLoading() && !isSuccess() && (
                             <>
                                 {isError() && 
@@ -185,7 +130,7 @@ const Modal: Component<{ content }> = (props) => {
                                             rows={3}
                                             required
                                         />
-                                        <button class="tiny-ghost-button" onclick={populateJSON}>
+                                        <button class="tiny-ghost-button" onclick={populateSampleInput}>
                                             <Icon svg={Beaker} />
                                             Try sample input
                                         </button>
