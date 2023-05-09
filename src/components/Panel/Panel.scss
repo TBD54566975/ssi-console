@@ -116,12 +116,12 @@
                     &:first-child {
                         font-weight: 700;
                         color: var(--color-white);
-                        flex: 0 0 12rem;
+                        flex: 0 0 8rem;
                         line-break: anywhere;
                     }
 
                     &.data-label {
-                        flex: 0 0 2rem;
+                        flex: 0 0 auto;
                         font-size: var(--font-xs);
                         text-transform: uppercase;
                         color: var(--color-white);

@@ -38,6 +38,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                                 <summary class="panel-row-header">
                                     <div class="panel-row-header-data">
                                         {Object.keys(listItem).map(key => {
+                                            if (key === "body") return;
                                             if (key === "tag") {
                                                 return <p class={`chip chip-${listItem[key].type}`}>{listItem[key].label}</p>
                                             } else if (key === "type") {
@@ -52,7 +53,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                                     </div>
                                 </summary>
                                 <div class="panel-row-body">
-                                    {props.content.body}
+                                    {listItem.body}
                                     {props.content.buttons &&
                                         <div class="button-row">
                                             {props.content.buttons.map(button => 

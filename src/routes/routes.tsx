@@ -26,7 +26,19 @@ const routes = [
   {
     path: '/credentials',
     name: 'Credentials',
-    component: lazy(() => import('../pages/Credentials/Credentials'))
+    component: lazy(() => import('../pages/Credentials/Credentials')),
+    children: [
+        {
+          path: '',
+          name: 'Credentials',
+          component: lazy(() => import('../pages/Credentials/views/IssuedCredentials/IssuedCredentials')),
+        },
+        {
+          path: 'manifests',
+          name: 'Credential Manifests',
+          component: lazy(() => import('../pages/Credentials/views/CredentialManifests/CredentialManifests')),
+        },
+    ],
   },
   {
     path: '/verify',

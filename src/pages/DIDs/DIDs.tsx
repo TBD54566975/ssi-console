@@ -29,7 +29,7 @@ const DIDs: Component = () => {
 
 export default DIDs;
 
-export const submenuItems = {
+const submenuItems = {
     "": [
         {
             path: "#all",
@@ -38,11 +38,7 @@ export const submenuItems = {
         {
             path: "#archived",
             name: "Archived"
-        },
-        // {
-        //     path: "#ion",
-        //     name: "ION DIDs"
-        // }
+        }
     ]
 }
 
