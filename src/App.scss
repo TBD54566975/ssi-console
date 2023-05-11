@@ -26,7 +26,7 @@
     --font-lg: 1.5rem;
     --font-xl: 2rem;
     --font-huge: 3.5rem;
-    --radius-sm: 2px;
+    --radius-sm: 6px;
     --radius-round: 999px;
     --site-font: 'IBM Plex Mono', monospace;
 }
@@ -57,7 +57,6 @@ a {
     font-weight: 700;
     padding-bottom: 2px;
     border-bottom: 2px solid transparent;
-    font-size: var(--font-md);
 
     &:hover,
     &:focus {
@@ -69,7 +68,7 @@ button {
     background: transparent;
     color: inherit;
     border: 1px solid transparent;
-    font-size: var(--font-md);
+    font-size: var(--font-sm);
     font-weight: 500;
     font-family: inherit;
 
@@ -96,6 +95,7 @@ button {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    font-size: var(--font-sm);
 
     .icon-container > svg {
         width: 12px;
@@ -106,10 +106,11 @@ a.primary-button,
 .primary-button {
     background: var(--color-blue);
     color: var(--color-black);
-    padding: 12px 22px;
+    padding: 8px 22px;
     border-radius: var(--radius-sm);
     border: 1px solid var(--color-blue);
     font-weight: 700;
+    justify-content: center;
 
     &:hover,
     &:focus {
@@ -121,10 +122,11 @@ a.primary-button,
 .secondary-button {
     background: var(--grey-20);
     color: var(--color-white);
-    padding: 12px 22px;
+    padding: 8px 22px;
     border-radius: var(--radius-sm);
     border: 1px solid var(--grey-30);
     font-weight: 700;
+    justify-content: center;
 
     &:hover,
     &:focus {
@@ -135,10 +137,11 @@ a.primary-button,
 .danger-button {
     background: var(--red-20);
     color: var(--color-white);
-    padding: 12px 22px;
+    padding: 8px 22px;
     border-radius: var(--radius-sm);
     border: 1px solid var(--red-20);
     font-weight: 700;
+    justify-content: center;
 
     &:hover,
     &:focus {
@@ -207,14 +210,14 @@ section {
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
-    flex: 3 1 auto;
     
     & > nav {
-        flex: 0 0 16rem;
+        flex: 1 0 25%;
+        min-width: 12rem;
     }
 
     &-content {
-        flex: auto;
+        flex: 1 0 calc(75% - 2rem);
         display: flex;
         flex-direction: column;
         gap: 2rem;

@@ -1,15 +1,15 @@
 import { Component } from "solid-js";
-import "./CredentialManifests.scss";
+import "./Requests.scss";
 import Icon, { Plus } from "../../../../icons/Icon";
 
-const CredentialManifests: Component = () => {
+const Requests: Component = () => {
     return (
         <section class="item-panel">
             <button class="item-panel-card card-create-new">
                 <Icon svg={Plus} />
                 <p>Create new</p>
             </button>
-            {credentials && credentials.map(credential => 
+            {requests && requests.map(credential => 
                 <div class="item-panel-card">
                     <div>
                         <div class="item-panel-card-header">
@@ -24,7 +24,7 @@ const CredentialManifests: Component = () => {
                     </div>
                     <div>
                         <button class="item-panel-card-button secondary-button">
-                            Issue
+                            🔗 Submission URL
                         </button>
                         <button class="item-panel-card-button secondary-button">
                             Details
@@ -36,23 +36,19 @@ const CredentialManifests: Component = () => {
     )
 }
 
-export default CredentialManifests;
+export default Requests;
 
-const credentials = [
+const requests = [
     {
-        name: "KYC Credential",
-        description: "Credential proving the subject has passed KYC with our organization",
+        name: "Proof of KYC",
+        description: "Request for a credential proving subject passed KYC",
     },
     {
-        name: "LLC Credential",
-        description: "Credential proving the subject is a registered LLC in good standing within our organization",
+        name: "Proof of Course 1",
+        description: "Request for a credential proving subject passed Course 1",
     },
     {
-        name: "Learning Degree",
-        description: "Credential proving the subject is a graduate of our organization's learning curriculum",
-    },
-    {
-        name: "Course 1 Graduate",
-        description: "Credential proving the subject passed Course 1 of our organization's learning curriculum",
+        name: "Proof of Course 2",
+        description: "Request of proof that subject passed Course 2",
     },
 ]

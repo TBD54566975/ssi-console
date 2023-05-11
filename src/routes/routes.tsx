@@ -29,26 +29,38 @@ const routes = [
     component: lazy(() => import('../pages/Credentials/Credentials')),
     children: [
         {
-          path: '',
-          name: 'Credentials',
-          component: lazy(() => import('../pages/Credentials/views/IssuedCredentials/IssuedCredentials')),
+            path: '',
+            name: 'Credentials',
+            component: lazy(() => import('../pages/Credentials/views/CredentialManifests/CredentialManifests')),
         },
         {
-          path: 'manifests',
-          name: 'Credential Manifests',
-          component: lazy(() => import('../pages/Credentials/views/CredentialManifests/CredentialManifests')),
+            path: 'history',
+            name: 'History',
+            component: lazy(() => import('../pages/Credentials/views/IssuedCredentials/IssuedCredentials')),
+        },
+        {
+            path: 'applications',
+            name: 'Applications',
+            component: lazy(() => import('../pages/Credentials/views/Applications/Applications')),
         },
     ],
   },
   {
-    path: '/verify',
-    name: 'Verify',
-    component: lazy(() => import('../pages/Verify/Verify')),
-  },
-  {
-    path: '/automate',
-    name: 'Automate',
-    component: lazy(() => import('../pages/Automate/Automate')),
+    path: '/verification',
+    name: 'Verification',
+    component: lazy(() => import('../pages/Verification/Verification')),
+    children: [
+        {
+            path: '',
+            name: 'Submission Links',
+            component: lazy(() => import('../pages/Verification/views/Requests/Requests')),
+        },
+        {
+            path: 'submissions',
+            name: 'Submissions',
+            component: lazy(() => import('../pages/Verification/views/Submissions/Submissions')),
+        }
+    ],
   },
   {
     path: '/settings',

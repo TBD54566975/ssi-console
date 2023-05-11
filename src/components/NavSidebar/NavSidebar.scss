@@ -1,13 +1,15 @@
 .nav-sidebar {
     &-menu {
-        background: var(--grey-5);
-        border: 1px solid var(--grey-50);
+        border: 1px solid var(--grey-15);
+        padding: 6px;
 
         a {
             color: var(--grey-50);
             display: block;
             padding: 12px;
+            margin: 6px;
             border: 1px solid transparent;
+            border-radius: 2px;
 
             &:hover,
             &:focus-visible,

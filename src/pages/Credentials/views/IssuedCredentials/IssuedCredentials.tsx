@@ -1,23 +1,17 @@
 import { Component } from "solid-js";
 import "./IssuedCredentials.scss";
 import Panel from "../../../../components/Panel/Panel";
-import Modal from "../../../../components/Modal/Modal";
+import Modal from "../../../DIDs/views/MyDIDs/Modal/Modal";
 import Icon, { ExternalArrow, Plus } from "../../../../icons/Icon";
 
 const IssuedCredentials: Component = () => {
     const content = {
-        all: {
-            id: "all",
-            title: "All Issued",
+        active: {
+            id: "active",
+            title: "Active",
             listItems: credentials,
             footer: <a href="" target="_blank">Learn about Credentials <Icon svg={ExternalArrow} /></a>,
             fallback: "You haven't issued any Credentials, so there's nothing here.",
-            action: <Modal content={{
-                    button: { 
-                        label: <> <Icon svg={Plus} /> Add New </>,
-                        className: "primary-button" 
-                    },
-                }}/>,
             buttons: [
                 {
                     label: "Suspend",
@@ -37,11 +31,11 @@ const IssuedCredentials: Component = () => {
             listItems: [],
             fallback: "You haven't suspended any Credentials yet, so there's nothing here.",
             buttons: [
-                // {
-                //     label: "Unarchive",
-                //     className: "secondary-button",
-                //     onClick: () => console.log('unarchived ', "archived")
-                // },
+                {
+                    label: "Reinstate",
+                    className: "secondary-button",
+                    onClick: () => console.log('reinstated ', "reinstate")
+                },
             ]
         },
         revoked: {
@@ -49,14 +43,7 @@ const IssuedCredentials: Component = () => {
             title: "Revoked",
             listItems: [],
             fallback: "You haven't revoked any Credentials yet, so there's nothing here.",
-            buttons: [
-                // {
-                //     label: "Unarchive",
-                //     className: "secondary-button",
-                //     onClick: () => console.log('unarchived ', "archived")
-                // },
-            ]
-        },
+        }
     }
     return (
         <>
@@ -69,16 +56,35 @@ const IssuedCredentials: Component = () => {
 
 export default IssuedCredentials;
 
+const credentialSubject = {
+    "firstName": "Test",
+    "id": "did:key:z6MkfLvEXvtr4MXEicc7u8jyFo9nDuZ59cwj8hqf9r4oSrDk",
+    "lastName": "Subject"
+}
+
+const formattedCred = Object.entries(credentialSubject).map(entry => {
+    return (
+        <div class="entry-row">
+            <div class="key-entry">{entry[0]}</div>
+            <div class="value-entry"><code>{JSON.stringify(entry[1], null, 2)}</code></div>
+        </div>
+    )
+});
+
 const credentials = [
     {
         name: "xxxx-0cce",
         id: "did:key:z6MkfLvEXvtr4MXEicc7u8jyFo9nDuZ59cwj8hqf9r4oSrDk",
         type: "2023-05-05",
-        body: <pre><code>{`"credentialSubject": {
-            "firstName": "Test",
-            "id": "did:key:z6MkfLvEXvtr4MXEicc7u8jyFo9nDuZ59cwj8hqf9r4oSrDk",
-            "lastName": "Subject"
-        }`}</code></pre>
+        body: <pre>
+                <code class="entry-container">
+                    <div class="entry-row entry-row-header">
+                        <div class="key-entry">Label</div>
+                        <div class="value-entry"><code>Value</code></div>
+                    </div>
+                    {formattedCred}
+                </code>
+            </pre>
     },
     {
         name: "xxxx-mhjj",
@@ -86,3 +92,4 @@ const credentials = [
         type: "2023-05-05",
     }
 ]
+

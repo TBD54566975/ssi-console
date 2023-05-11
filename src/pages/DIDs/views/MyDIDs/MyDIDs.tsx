@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 import Icon, { ExternalArrow, Plus, XCross } from "../../../../icons/Icon";
 import "./MyDIDs.scss";
 import Panel from "../../../../components/Panel/Panel";
-import Modal from "../../../../components/Modal/Modal";
+import Modal from "./Modal/Modal";
 
 const MyDIDs: Component = () => {
     const content = {
@@ -40,13 +40,6 @@ const MyDIDs: Component = () => {
             title: "Archived",
             listItems: [],
             fallback: "You haven't archived any DIDs yet, so there's nothing here.",
-            buttons: [
-                {
-                    label: "Unarchive",
-                    className: "secondary-button",
-                    onClick: () => console.log('unarchived ', "archived")
-                },
-            ]
         },
     }
     return (

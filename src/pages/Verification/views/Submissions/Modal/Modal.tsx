@@ -1,18 +1,20 @@
 import { Component, createSignal, onCleanup } from "solid-js";
 import "./Modal.scss";
-import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../icons/Icon";
-import { formatTextAreaOnKeyDown, insertSampleInput, submitForm, updateFormOnInput } from "../../utils/helpers";
+import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../icons/Icon";
+import { formatTextAreaOnKeyDown, insertSampleInput, submitForm, updateFormOnInput } from "../../../../../utils/helpers";
 
 const Modal: Component<{ content }> = (props) => {
     //pass in these props
-    let endpoint = '/v1/did';
+    let submission_id = `123456`;
+    let endpoint = `/v1/manifests/applications/${submission_id}`;
     let method = 'POST';
-    let options = [
-        "Key",
-        "Web",
-        "Ion"
-    ];
-    let initialFormValues = { json: '', didType: options[0].toLowerCase() }
+
+    const reviewInput = {
+        "approved": "",
+        "reason": ""
+    }
+
+    let initialFormValues = { json: '' }
 
     // the component
     const [formValues, setFormValues] = createSignal(initialFormValues);
@@ -63,18 +65,9 @@ const Modal: Component<{ content }> = (props) => {
 
     //populate textarea field with sample input
     const populateSampleInput = (event) => {
-        const didInput = {
-            keyType: "Ed25519"
-        }
-        if (formValues().didType === "web") {
-            didInput["web"]  = "example.com"
-        }
-
         const setters = { setIsError, setFormValues };
-        insertSampleInput(event, setters, 'json', didInput);
+        insertSampleInput(event, setters, 'json', reviewInput);
     }
-
-
 
     return (
         <div>
@@ -99,23 +92,6 @@ const Modal: Component<{ content }> = (props) => {
                                         Error creating DID. Try again
                                     </div> 
                                 }
-                                <div class="field-container">
-                                    <label for="didType">DID Type</label>
-                                    <div class="select-container">
-                                        <select 
-                                            id="didType" 
-                                            name="didType" 
-                                            value={formValues().didType} 
-                                            onInput={handleInput}
-                                            required
-                                        >
-                                            {options && options.map(option => 
-                                                <option value={option.toLowerCase()}>{option}</option>
-                                            )}
-                                        </select>
-                                        <Icon svg={ArrowUpDown} />
-                                    </div>
-                                </div>
                                 <div class="field-container">
                                     <label for="json">JSON</label>
                                     <div class="textarea-container">

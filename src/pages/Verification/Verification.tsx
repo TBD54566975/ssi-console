@@ -1,12 +1,10 @@
 import { Component } from "solid-js";
-import "./Credentials.scss";
+import NavSidebar from "../../components/NavSidebar/NavSidebar";
 import * as baseRoutes from "../../routes/routes";
 import { useRoutes } from "@solidjs/router";
-import NavSidebar from "../../components/NavSidebar/NavSidebar";
 
-
-const Credentials: Component = () => {
-    const routes = baseRoutes.default.find(route => route.path === '/credentials').children;
+const Verification: Component = () => {
+    const routes = baseRoutes.default.find(route => route.path === '/verification').children;
     const Routes = useRoutes(routes);
     for (let route of routes) {
         route['submenuItems'] = submenuItems[route.path];
@@ -14,8 +12,8 @@ const Credentials: Component = () => {
     return (
         <>
             <section class="page-hero">
-                <h1>Credentials</h1>
-                <p>Manage your Credentials and issuance processes in one place.</p>
+                <h1>Verification</h1>
+                <p>Accept and verify credentials. Set up submission links and review submissions in one place.</p>
             </section>
             <div class="page-layout">
                 <NavSidebar routes={routes} />
@@ -27,31 +25,17 @@ const Credentials: Component = () => {
     )
 }
 
-export default Credentials;
+export default Verification;
 
 const submenuItems = {
-    "applications": [
+    "submissions": [
         {
-            path: "#incoming",
-            name: "Incoming"
+            path: "#for-review",
+            name: "For Review"
         },
         {
             path: "#declined",
             name: "Declined"
-        }
-    ],
-    "history": [
-        {
-            path: "#active",
-            name: "Active"
-        },
-        {
-            path: "#suspended",
-            name: "Suspended"
-        },
-        {
-            path: "#revoked",
-            name: "Revoked"
         }
     ]
 }
