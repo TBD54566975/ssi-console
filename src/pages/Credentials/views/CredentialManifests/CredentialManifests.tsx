@@ -1,14 +1,17 @@
 import { Component } from "solid-js";
 import "./CredentialManifests.scss";
 import Icon, { Plus } from "../../../../icons/Icon";
+import Modal from "./Modal/Modal";
 
 const CredentialManifests: Component = () => {
     return (
         <section class="item-panel">
-            <button class="item-panel-card card-create-new">
-                <Icon svg={Plus} />
-                <p>Create new</p>
-            </button>
+            <Modal content={{
+                button: {
+                    className: "item-panel-card card-create-new",
+                    label: <> <Icon svg={Plus} /> <p>Create new</p> </>
+                }
+            }} />
             {credentials && credentials.map(credential => 
                 <div class="item-panel-card">
                     <div>

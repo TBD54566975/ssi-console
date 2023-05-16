@@ -1,4 +1,4 @@
-import { Component, createSignal, onCleanup } from "solid-js";
+import { Component, JSX, createSignal, onCleanup } from "solid-js";
 import "./Modal.scss";
 import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../icons/Icon";
 import { formatTextAreaOnKeyDown, insertSampleInput, submitForm, updateFormOnInput } from "../../../../../utils/helpers";
@@ -9,169 +9,318 @@ const Modal: Component<{ content }> = (props) => {
     let method = 'POST';
 
     const manifestInput =  {
-        description: "",
-        format: {
-            jwt_vc: {
-                alg: [
-                    "EdDSA"
-                ]
-            }
-        },
-        issuerDid: "",
-        issuerKid: "",
-        issuerName: "",
-        name: "",
-        outputDescriptors: [
-            {
-                description: "",
-                display: {
-                    description: {
-                        fallback: "",
-                        path: "",
-                        schema: {
-                            format: "",
-                            type: ""
-                        },
-                        text: ""
-                    },
-                    properties: [
-                        {
-                            fallback: "",
-                            label: "",
-                            path: "",
-                            schema: {
-                                format: "",
-                                type: ""
-                            },
-                            text: ""
-                        }
-                    ],
-                    subtitle: {
-                        fallback: "",
-                        path: "",
-                        schema: {
-                            format: "",
-                            type: ""
-                        },
-                        text: ""
-                    },
-                    title: {
-                        fallback: "",
-                        path: "",
-                        schema: {
-                            format: "",
-                            type: ""
-                        },
-                        text: ""
-                    },
-                },
-                id: "",
-                name: "",
-                schema: "",
-                styles: {
-
-                }
-            }
-        ],
-        presentationDefinition: {
-            format: {
-                jwt_vp: {
-                    alg: [
-                        "EdDSA"
-                    ]
-                }
-            },
-            id: "",
-            input_descriptors: [
-                {
-                    constraints: [
-                        {
-                            fields: [
-                                {
-                                    filter: {
-                                        additionalProperties: "",
-                                        allOf: "",
-                                        const: "",
-                                        enum: "",	
-                                        exclusiveMaximum: "",
-                                        exclusiveMinimum: "",
-                                        format: "",
-                                        maxLength: "",
-                                        maximum: "",
-                                        minLength: "",
-                                        minimum: "",
-                                        not: "",
-                                        oneOf: "",
-                                        pattern: "",
-                                        properties: "",
-                                        required: "",
-                                        type: ""
-                                    },
-                                    id: "",
-                                    intent_to_retain: "",
-                                    name: "",
-                                    optional: "",
-                                    path: [""],
-                                    predicate: "",
-                                    purpose: ""
-                                }
-                            ],
-                            is_holder: [
-                                {
-                                    directive: "",
-                                    field_id: ""
-                                }
-                            ],
-                            limit_disclosure: "",
-                            same_subject: [
-                                {
-                                    directive: "",
-                                    field_id: ""
-                                }
-                            ],
-                            statuses: {
-                                active: {
-                                    directive: ""
-                                },
-                                revoked: {
-                                    directive: ""
-                                },
-                                suspended: {
-                                    directive: ""
-                                }
-                            },
-                            subject_is_issuer: ""
-                        }
-                    ],
-                    format: {
-                        jwt_vc: {
-                            alg: [
-                                "EdDSA"
-                            ]
-                        }
-                    },
-                    group: [""],
-                    id: "",
-                    name: "",
-                    purpose: ""
-                }
-            ],
-            name: "",
-            purpose: "",
-            submission_requirements: [
-                {
-                    count: "",
-                    from: "",
-                    from_nested: "",
-                    max: "",
-                    min: "",
-                    name: "",
-                    purpose: "",
-                    rule: ""
-                }
+        "description": "",
+        "format": {
+          "jwt_vc": {
+            "alg": [
+              "EdDSA"
             ]
+          },
+        },
+        "issuerDid": "",
+        "issuerKid": "",
+        "issuerName": "",
+        "name": "",
+        "outputDescriptors": [
+          {
+            "description": "",
+            "display": {
+              "description": {
+                "fallback": "",
+                "path": [
+                  ""
+                ],
+                "schema": {
+                  "format": "",
+                  "type": ""
+                },
+                "text": ""
+              },
+              "properties": [
+                {
+                  "fallback": "",
+                  "label": "",
+                  "path": [
+                    ""
+                  ],
+                  "schema": {
+                    "format": "",
+                    "type": ""
+                  },
+                  "text": ""
+                }
+              ],
+              "subtitle": {
+                "fallback": "",
+                "path": [
+                  ""
+                ],
+                "schema": {
+                  "format": "",
+                  "type": ""
+                },
+                "text": ""
+              },
+              "title": {
+                "fallback": "",
+                "path": [
+                  ""
+                ],
+                "schema": {
+                  "format": "",
+                  "type": ""
+                },
+                "text": ""
+              }
+            },
+            "id": "",
+            "name": "",
+            "schema": "",
+            "styles": {
+              "background": {
+                "color": ""
+              },
+              "hero": {
+                "alt": "",
+                "uri": ""
+              },
+              "text": {
+                "color": ""
+              },
+              "thumbnail": {
+                "alt": "",
+                "uri": ""
+              }
+            }
+          }
+        ],
+        "presentationDefinition": {
+          "format": {
+            "jwt": {
+              "alg": [
+                ""
+              ]
+            },
+            "jwt_vc": {
+              "alg": [
+                ""
+              ]
+            },
+            "jwt_vp": {
+              "alg": [
+                "EdDSA"
+              ]
+            },
+            "ldp": {
+              "proof_type": [
+                ""
+              ]
+            },
+            "ldp_vc": {
+              "proof_type": [
+                ""
+              ]
+            },
+            "ldp_vp": {
+              "proof_type": [
+                ""
+              ]
+            }
+          },
+          "frame": null,
+          "id": "",
+          "input_descriptors": [
+            {
+              "constraints": {
+                "fields": [
+                  {
+                    "filter": {
+                      "additionalProperties": true,
+                      "allOf": null,
+                      "const": null,
+                      "enum": [
+                        null
+                      ],
+                      "exclusiveMaximum": null,
+                      "exclusiveMinimum": null,
+                      "format": "",
+                      "maxLength": 0,
+                      "maximum": null,
+                      "minLength": 0,
+                      "minimum": null,
+                      "not": null,
+                      "oneOf": null,
+                      "pattern": "",
+                      "properties": null,
+                      "required": [
+                        ""
+                      ],
+                      "type": ""
+                    },
+                    "id": "",
+                    "intent_to_retain": true,
+                    "name": "",
+                    "optional": true,
+                    "path": [
+                      ""
+                    ],
+                    "predicate": "",
+                    "purpose": ""
+                  }
+                ],
+                "is_holder": [
+                  {
+                    "directive": "",
+                    "field_id": [
+                      ""
+                    ]
+                  }
+                ],
+                "limit_disclosure": "",
+                "same_subject": [
+                  {
+                    "directive": "",
+                    "field_id": [
+                      ""
+                    ]
+                  }
+                ],
+                "statuses": {
+                  "active": {
+                    "directive": ""
+                  },
+                  "revoked": {
+                    "directive": ""
+                  },
+                  "suspended": {
+                    "directive": ""
+                  }
+                },
+                "subject_is_issuer": ""
+              },
+              "format": {
+                "jwt": {
+                  "alg": [
+                    ""
+                  ]
+                },
+                "jwt_vc": {
+                  "alg": [
+                    ""
+                  ]
+                },
+                "jwt_vp": {
+                  "alg": [
+                    ""
+                  ]
+                },
+                "ldp": {
+                  "proof_type": [
+                    ""
+                  ]
+                },
+                "ldp_vc": {
+                  "proof_type": [
+                    ""
+                  ]
+                },
+                "ldp_vp": {
+                  "proof_type": [
+                    ""
+                  ]
+                }
+              },
+              "group": [
+                ""
+              ],
+              "id": "",
+              "name": "",
+              "purpose": ""
+            }
+          ],
+          "name": "",
+          "purpose": "",
+          "submission_requirements": [
+            {
+              "count": 1,
+              "from": "",
+              "from_nested": [
+                {}
+              ],
+              "max": 0,
+              "min": 0,
+              "name": "",
+              "purpose": "",
+              "rule": ""
+            }
+          ]
         }
     }
+
+    const [formState, setFormState] = createSignal(null);
+
+    const renderFormFromJSON = (json) => {
+        setFormState(json);
+        const entries = Object.entries(json);
+        return entries.map(entry => {
+            let template; 
+            switch (typeof entry[1]) {
+                case "string" :
+                    <input onInput={(e) => {
+                        setFormState(prevState => { 
+                            return {
+                                ...prevState, 
+                                [entry[0]]: e.currentTarget.value 
+                            } 
+                        });
+                    }} 
+                    id={entry[0]} 
+                    type="text"
+                    value={entry[1]}/>;
+                    break;
+                case "number" :
+                    <input onInput={(e) => {
+                        setFormState(prevState => { 
+                            return {
+                                ...prevState, 
+                                [entry[0]]: Number(e.currentTarget.value) 
+                            } 
+                        });
+                    }} 
+                    id={entry[0]} 
+                    type="number"
+                    value={entry[1]}/>;
+                    break;
+                case "boolean" :
+                    <input onInput={(e) => {
+                        setFormState(prevState => { 
+                            return {
+                                ...prevState, 
+                                [entry[0]]: e.currentTarget.value 
+                            } 
+                        });
+                    }} 
+                    id={entry[0]} 
+                    type="checkbox"
+                    checked={entry[1]}/>;
+                    break;
+                default :
+                    const value = {
+                        [entry[0]] : entry[1]
+                    };
+                    template = <textarea id={entry[0]}>{JSON.stringify(value, null, 2)}</textarea>;
+                    break;
+            }
+            return (
+                <div class="field-container">
+                    <label for={entry[0]}>{entry[0]}</label>
+                    {template}
+                </div>
+            )
+        });
+    }
+
+
     let initialFormValues = { json: '' }
 
     // the component
@@ -228,7 +377,7 @@ const Modal: Component<{ content }> = (props) => {
     }
 
     return (
-        <div>
+        <>
             <button class={props.content.button.className} onclick={showModal}>
                 {props.content.button.label}
             </button>
@@ -240,7 +389,7 @@ const Modal: Component<{ content }> = (props) => {
                 </div>
 
                 <div class="dialog-body">
-                    <h2>Create a DID</h2>
+                    <h2>New Verifiable Credential</h2>
                     <form onSubmit={handleSubmit}>
                         {!isLoading() && !isSuccess() && (
                             <>
@@ -250,7 +399,7 @@ const Modal: Component<{ content }> = (props) => {
                                         Error creating DID. Try again
                                     </div> 
                                 }
-                                <div class="field-container">
+                                {/* <div class="field-container">
                                     <label for="json">JSON</label>
                                     <div class="textarea-container">
                                         <textarea 
@@ -269,7 +418,8 @@ const Modal: Component<{ content }> = (props) => {
                                             Try sample input
                                         </button>
                                     </div>
-                                </div>
+                                </div> */}
+                                {renderFormFromJSON(manifestInput.outputDescriptors[0])}
                                 <div class="button-row">
                                     <button class="secondary-button" type="button" onClick={() => dialog.close()}>
                                         Cancel
@@ -298,7 +448,7 @@ const Modal: Component<{ content }> = (props) => {
                     </form>
                 </div>
             </dialog>
-        </div>
+        </>
     )
 }
 

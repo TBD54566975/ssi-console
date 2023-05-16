@@ -61,7 +61,8 @@ const Modal: Component<{ content }> = (props) => {
     }
 
     const isFormValid = () => {
-        return formValues().json.trim() !== '' && !isError();
+        // TODO - add better form validation
+        return formValues().json.trim() !== "" && !isError();
     }
 
     //populate textarea field with sample input
@@ -80,6 +81,8 @@ const Modal: Component<{ content }> = (props) => {
                     }
                 ]
             }
+        } else {
+            delete didInput["options"]
         }
 
         const setters = { setIsError, setFormValues };

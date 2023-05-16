@@ -55,13 +55,16 @@ header {
                         vertical-align: top;
                     }
 
-                    &:focus + .secondary-nav-menu-submenu {
-                        display: block;
+                    & + .secondary-nav-menu-submenu {
 
                         a > div {
                             display: flex;
                             gap: 8px;
                         }
+                    }
+
+                    &:focus + .secondary-nav-menu-submenu {
+                        display: block;
                     }
                 }
     
