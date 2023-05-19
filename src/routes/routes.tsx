@@ -62,11 +62,11 @@ const routes = [
         }
     ],
   },
-  {
-    path: '/settings',
-    name: 'Settings',
-    component: lazy(() => import('../pages/Settings/Settings')),
-  }
+//   {
+//     path: '/settings',
+//     name: 'Settings',
+//     component: lazy(() => import('../pages/Settings/Settings')),
+//   }
 ];
 
 export default routes;
