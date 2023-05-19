@@ -16,6 +16,30 @@ export interface PanelContent {
 
 const Panel: Component<{ content: PanelContent }> = (props) => {
     const [ query, setQuery ] = createSignal('');
+
+    const getQueryResults = (listItem) => {
+        return Object.values(listItem).some((el) => { 
+            if (typeof el === "string") return el.includes(query())
+        })
+    }
+
+    const getPanelRowHeader = (filteredItem) => {
+        return Object.keys(filteredItem).map(key => {
+            if (key === "body") return;
+            if (key === "tag") return (
+                <p class={`chip chip-${filteredItem[key].type}`}>
+                    {filteredItem[key].label}
+                </p>
+            );
+            if (key === "type") return (
+                <p class="data-label">
+                    {filteredItem[key]}
+                </p>
+            )
+            return <p>{filteredItem[key]}</p>
+        });
+    }
+
     return (
         <section class="panel" id={props.content.id}>
             <div class="panel-header">
@@ -25,50 +49,45 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                         <p>{props.content.description}</p>
                     }
                 </div>
-                <div class="field-container">
-                    <label for="search">Search</label>
-                    <input type="search"
-                        id="search" 
-                        value={query()}
-                        onInput={(e) => setQuery(e.currentTarget.value)}
-                        />
-                </div>
-                {props.content.action && 
-                    <div class="panel-header-action">
-                        {props.content.action}
+                <div class="panel-header-end">
+                    <div class="field-container">
+                        <label for="search" class="sr-only">Search</label>
+                        <input type="search"
+                            id="search" 
+                            placeholder="Search"
+                            value={query()}
+                            onInput={(e) => setQuery(e.currentTarget.value)}
+                            />
                     </div>
-                }
+                    {props.content.action && 
+                        <div class="panel-header-action">
+                            {props.content.action}
+                        </div>
+                    }
+                </div>
             </div>
             {props.content.listItems.length ?
                 <ul>
-                    {props.content.listItems.map(listItem => 
+                    {props.content.listItems.filter(listItem => getQueryResults(listItem)).map(filteredItem => 
                         <li class="panel-row">
                             <details>
                                 <summary class="panel-row-header">
                                     <div class="panel-row-header-data">
-                                        {Object.keys(listItem).map(key => {
-                                            if (key === "body") return;
-                                            if (key === "tag") {
-                                                return <p class={`chip chip-${listItem[key].type}`}>{listItem[key].label}</p>
-                                            } else if (key === "type") {
-                                                return <p class="data-label">{listItem[key]}</p>
-                                            } else {
-                                                return <p>{listItem[key]}</p>
-                                            }
-                                        })}
+                                    {getPanelRowHeader(filteredItem)}
+
                                     </div>
                                     <div class="panel-row-header-action">
                                         <Icon svg={ChevronDown} />
                                     </div>
                                 </summary>
                                 <div class="panel-row-body">
-                                    {listItem.body}
+                                    {filteredItem.body}
                                     {props.content.buttons &&
                                         <div class="button-row">
                                             {props.content.buttons.map(button => 
                                                 <button 
                                                     class={button.className}
-                                                    onClick={() => button.onClick(listItem)}> 
+                                                    onClick={() => button.onClick(filteredItem)}> 
                                                     {button.label} 
                                                 </button>
                                             )}

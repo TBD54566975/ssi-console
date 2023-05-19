@@ -59,6 +59,11 @@
             font-size: var(--font-sm);
         }
 
+        &-end {
+            display: flex;
+            gap: 2rem;
+        }
+
         &-action {
             flex-shrink: 0;
         }
