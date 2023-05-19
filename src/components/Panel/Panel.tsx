@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Component, createSignal } from "solid-js";
 import "./Panel.scss";
 import Icon, { ChevronDown } from "../../icons/Icon";
 
@@ -15,6 +15,7 @@ export interface PanelContent {
 }
 
 const Panel: Component<{ content: PanelContent }> = (props) => {
+    const [ query, setQuery ] = createSignal('');
     return (
         <section class="panel" id={props.content.id}>
             <div class="panel-header">
@@ -23,6 +24,14 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                     {props.content.description && 
                         <p>{props.content.description}</p>
                     }
+                </div>
+                <div class="field-container">
+                    <label for="search">Search</label>
+                    <input type="search"
+                        id="search" 
+                        value={query()}
+                        onInput={(e) => setQuery(e.currentTarget.value)}
+                        />
                 </div>
                 {props.content.action && 
                     <div class="panel-header-action">

@@ -88,58 +88,66 @@ export function renderFormFromJSON(json, setters: Setters) {
         switch (typeof entry[1]) {
             case "string" :
                 template = 
-                    <input onInput={(e) => {
-                        setFormValues(prevState => { 
-                            return {
-                                ...prevState, 
-                                [entry[0]]: e.currentTarget.value 
-                            } 
-                        });
-                    }} 
-                    id={entry[0]} 
-                    type="text"
-                    value={entry[1]}/>;
+                    <div class="field-container">
+                        <label for={entry[0]}>{entry[0]}</label>
+                        <input onInput={(e) => {
+                                setFormValues(prevState => { 
+                                    return {
+                                        ...prevState, 
+                                        [entry[0]]: e.currentTarget.value 
+                                    } 
+                                });
+                            }} 
+                            id={entry[0]} 
+                            type="text"
+                            value={entry[1]}/>
+                    </div>;
                 break;
             case "number" :
                 template = 
-                    <input onInput={(e) => {
-                        setFormValues(prevState => { 
-                            return {
-                                ...prevState, 
-                                [entry[0]]: Number(e.currentTarget.value) 
-                            } 
-                        });
-                    }} 
-                    id={entry[0]} 
-                    type="number"
-                    value={entry[1]}/>;
+                    <div class="field-container">
+                        <label for={entry[0]}>{entry[0]}</label>
+                        <input onInput={(e) => {
+                            setFormValues(prevState => { 
+                                return {
+                                    ...prevState, 
+                                    [entry[0]]: Number(e.currentTarget.value) 
+                                } 
+                            });
+                        }} 
+                        id={entry[0]} 
+                        type="number"
+                        value={entry[1]}/>
+                    </div>;
                 break;
             case "boolean" :
                 template = 
-                    <input onInput={(e) => {
-                        setFormValues(prevState => { 
-                            return {
-                                ...prevState, 
-                                [entry[0]]: e.currentTarget.value 
-                            } 
-                        });
-                    }} 
-                    id={entry[0]} 
-                    type="checkbox"
-                    checked={entry[1]}/>;
+                    <div class="field-container">
+                        <input onInput={(e) => {
+                            setFormValues(prevState => { 
+                                return {
+                                    ...prevState, 
+                                    [entry[0]]: e.currentTarget.value 
+                                } 
+                            });
+                        }} 
+                        id={entry[0]} 
+                        type="checkbox"
+                        checked={entry[1]}/>
+                        <label for={entry[0]}>{entry[0]}</label>
+                    </div>;
                 break;
             default :
                 const value = {
                     [entry[0]] : entry[1]
                 };
-                template = <textarea id={entry[0]}>{JSON.stringify(value, null, 2)}</textarea>;
+                template = 
+                    <div class="field-container">
+                        <label for={entry[0]}>{entry[0]}</label>
+                        <textarea id={entry[0]}>{JSON.stringify(value, null, 2)}</textarea>
+                    </div>;
                 break;
         }
-        return (
-            <div class="field-container">
-                <label for={entry[0]}>{entry[0]}</label>
-                {template}
-            </div>
-        )
+        return template;
     });
 }

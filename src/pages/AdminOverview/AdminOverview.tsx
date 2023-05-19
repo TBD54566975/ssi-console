@@ -47,17 +47,17 @@ const links: CardContent[] = [
         },
         size: "large",
         color: "purple",
-        href: "/verify"
+        href: "/verification"
     },
     {
-        title: "Create new credential",
+        title: "View all credentials",
         img: {
             src: GroupPeople,
             alt: "Pixelated avatar of a group of cartoon people",
         },
         size: "small",
         color: "yellow",
-        href: "/credentials"
+        href: "/credentials/history"
     },
     {
         title: "Manage DID Registry",
@@ -67,6 +67,6 @@ const links: CardContent[] = [
         },
         size: "small",
         color: "blue",
-        href: "/dids"
+        href: "/dids/trusted-dids"
     }
 ]

@@ -141,28 +141,28 @@ const IssueModal: Component<{ content }> = (props) => {
                                         </button>
                                     </div>
                                 </div>
-                                <div class="field-container">
-                                    <label for="revocable">Revocable?</label>
+                                <div class="field-container checkbox-container">
                                     <input id="revocable" 
                                         checked={formValues().revocable}
                                         type="checkbox"
                                         class="checkbox-container" />
+                                    <label for="revocable">Revocable?</label>
                                 </div>
-                                <div class="field-container">
-                                    <label for="suspendable">Suspendable?</label>
+                                <div class="field-container checkbox-container">
                                     <input id="suspendable" 
                                         checked={formValues().suspendable}
                                         type="checkbox"
                                         class="checkbox-container" />
+                                    <label for="suspendable">Suspendable?</label>
                                 </div>
-                                <div class="field-container">
-                                    <label for="expires">Expires?</label>
+                                <div class="field-container checkbox-container">
                                     <input id="expires"
                                         name="expires"
                                         checked={formValues().expires}
                                         onInput={handleInput}
                                         type="checkbox"
                                         class="checkbox-container" />
+                                    <label for="expires">Expires?</label>
                                 </div>
                                 {formValues().expires && <div class="field-container">
                                     <label for="expiry">Expiry</label>
@@ -170,14 +170,14 @@ const IssueModal: Component<{ content }> = (props) => {
                                         type="datetime-local"
                                         class="input-container" />
                                 </div>}
-                                <div class="field-container">
-                                    <label for="useDefaultContext">Use default context?</label>
+                                <div class="field-container checkbox-container">
                                     <input id="useDefaultContext"
                                         name="useDefaultContext"
                                         checked={formValues().useDefaultContext}
                                         onInput={handleInput}
                                         type="checkbox"
                                         class="checkbox-container" />
+                                    <label for="useDefaultContext">Use default context?</label>
                                 </div>
                                 {!formValues().useDefaultContext && <div class="field-container">
                                     <label for="context">@context</label>

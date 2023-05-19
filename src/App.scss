@@ -275,6 +275,7 @@ legend {
 select,
 input[type="text"],
 input[type="datetime-local"],
+input[type="search"],
 textarea {
     width: 100%;
     font-size: var(--font-md);
@@ -288,18 +289,14 @@ textarea {
 
 select,
 input[type="text"],
-input[type="datetime-local"] {
+input[type="datetime-local"],
+input[type="search"] {
     font-weight: 500;
     font-size: var(--font-sm);
 }
 
 input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     display: none;
-    // filter: invert(75%) brightness(100%);
-
-    // &:hover {
-    //     filter: invert(100%) brightness(100%);
-    // }
 }
 
 textarea {
@@ -315,6 +312,8 @@ input[type="text"]:hover,
 input[type="text"]:focus,
 input[type="datetime-local"]:hover,
 input[type="datetime-local"]:focus,
+input[type="search"]:hover,
+input[type="search"]:focus,
 textarea:hover,
 textarea:focus {
     border-color: var(--color-white);
@@ -394,6 +393,47 @@ input[type="radio"]:checked ~ label {
                 height: 100%;
                 display: flex;
                 align-items: center;
+            }
+        }
+    }
+
+    &.checkbox-container {
+        align-items: center;
+
+        input[type="checkbox"] {
+            appearance: none;
+            margin-inline-end: 0.5rem;
+    
+            ~ label {
+                flex: auto;
+            }
+    
+            &::before {
+                content: '';
+                display: block;
+                border: 1px solid var(--grey-50);
+                height: 1.25rem;
+                width: 1.25rem;
+                border-radius: 0.125rem;
+            }
+    
+            &:hover {
+                &::before {
+                    border-color: var(--color-white);
+                }
+            }
+    
+            &:checked {
+                border-radius: 0.125rem;
+    
+                &::before {
+                    border: 1px solid var(--color-black);
+                    background: url('/src/assets/checkmark.svg');
+                    background-size: 0.75rem;
+                    background-position: center center;
+                    background-repeat: no-repeat;
+                    filter: invert(100%) brightness(100%);
+                }
             }
         }
     }

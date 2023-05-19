@@ -1,0 +1,60 @@
+.intake-page {
+    &-section {
+        margin: auto;
+        max-width: 600px;
+
+        .textarea-container {
+            height: 200px;
+        }
+
+        .button-row {
+            justify-content: flex-end;
+        }
+    }
+}
+
+.details-container {
+    border: 1px solid var(--grey-20);
+    background: var(--grey-10);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    width: 100%;
+    margin-block: 2rem 4rem;
+
+    details  {
+        summary {
+            align-items: center;
+            display: flex;
+            padding-block: 1rem;
+    
+            &::before {
+                display: block;
+                content: '';
+                height: 0.75rem;
+                width: 0.75rem;
+                margin-inline-end: 1rem;
+                background: url('/src/assets/caret-up.svg');
+                background-repeat: no-repeat;
+                transform: rotate(0.25turn);
+                transition: ease all 0.25s;
+                background-size: contain;
+                background-position: left;
+                filter: invert(1);
+            }
+        }
+    
+        &[open] summary::before {
+            transform: rotate(0.5turn);
+        }
+    
+        pre {
+            border: 1px solid var(--grey-15);
+            background: var(--grey-5);
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            font-family: var(--site-font);
+            font-size: var(--font-xs);
+        }
+    
+    }
+}
