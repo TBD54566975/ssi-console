@@ -46,9 +46,9 @@ const Header: Component<{ username: string }> = (props) => {
 						<ul>
 							{createMenu && createMenu.map(createItem => 
 								<li>
-									<A href="/credentials">
+									<A href={createItem.href}>
 										<div>
-											<Icon svg={Plus} /> {createItem}
+											<Icon svg={Plus} /> {createItem.title}
 										</div> 
 										<Icon svg={ArrowRight} />
 									</A>
@@ -81,18 +81,23 @@ export default Header;
 export const notifications: NotifyBlockContent[] = [
     {
         title: "View applications",
-        href: "/credentials",
+        href: "/credentials/applications",
         hasNotify: true,
         message: "You have pending applications to resolve"
     },
     {
         title: "View submissions",
-        href: "/verify"
+        href: "/verification/submissions"
     }
 ]
 
 const createMenu = [
-	"new credential",
-	"new manifest",
-	"new presentation request"
+    {
+        title: "new credential",
+        href: "/credentials"
+    },
+    {
+        title: "new submission link",
+        href: "/verification"
+    }
 ]

@@ -29,7 +29,7 @@ const Requests: Component = () => {
                         </p>
                     </div>
                     <div>
-                        <a class="item-panel-card-link" href={`${location.host}/submit/${requestId}`}>
+                        <a class="item-panel-card-link" href={`${location.origin}/submit/${requestId}`}>
                             Submission URL <Icon svg={ExternalArrow} />
                         </a>
                         <button onClick={() => navigate(requestId)}

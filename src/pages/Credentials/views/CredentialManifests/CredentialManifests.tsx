@@ -30,7 +30,7 @@ const CredentialManifests: Component = () => {
                         </p>
                     </div>
                     <div>
-                        <a class="item-panel-card-link" href={`${location.host}/apply/${credentialId}`}>
+                        <a class="item-panel-card-link" href={`${location.origin}/apply/${credentialId}`} target="blank">
                             Application URL <Icon svg={ExternalArrow} />
                         </a>
                         <IssueModal content={{
