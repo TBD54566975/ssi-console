@@ -1,17 +1,18 @@
-import { Component, createSignal, onCleanup } from "solid-js";
-import "./Modal.scss";
-import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../icons/Icon";
-import { formatTextAreaOnKeyDown, insertSampleInput, submitForm, updateFormOnInput } from "../../../../../utils/helpers";
-import { requestInput } from "./samples/mocks";
+import { Component, JSX, createSignal, onCleanup } from "solid-js";
+import "./IssueModalJson.scss";
+import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../../icons/Icon";
+import { formatTextAreaOnKeyDown, insertSampleInput, renderFormFromJSON, submitForm, updateFormOnInput } from "../../../../../../utils/helpers";
+import { credentialInputJson } from "./samples/mock";
 
-const Modal: Component<{ content }> = (props) => {
+const IssueModal: Component<{ content }> = (props) => {
     //pass in these props
-    let endpoint = '/v1/presentation/definition';
+    let endpoint = '/v1/credentials';
     let method = 'POST';
 
     let initialFormValues = { json: '' }
 
     // the component
+    
     const [formValues, setFormValues] = createSignal(initialFormValues);
     const [isLoading, setIsLoading] = createSignal(false);
     const [isSuccess, setIsSuccess] = createSignal(false);
@@ -61,7 +62,7 @@ const Modal: Component<{ content }> = (props) => {
     //populate textarea field with sample input
     const populateSampleInput = (event) => {
         const setters = { setIsError, setFormValues };
-        insertSampleInput(event, setters, 'json', requestInput);
+        insertSampleInput(event, setters, 'json', credentialInputJson);
     }
 
     return (
@@ -77,14 +78,14 @@ const Modal: Component<{ content }> = (props) => {
                 </div>
 
                 <div class="dialog-body">
-                    <h2>Create a Submission Link</h2>
+                    <h2>Issue Verifiable Credential</h2>
                     <form onSubmit={handleSubmit}>
                         {!isLoading() && !isSuccess() && (
                             <>
                                 {isError() && 
                                     <div class="banner banner-danger">
                                         <Icon svg={DangerAlert} />
-                                        Error creating Submission Link. Try again
+                                        Error issuing credential. Try again
                                     </div> 
                                 }
                                 <div class="field-container">
@@ -107,6 +108,7 @@ const Modal: Component<{ content }> = (props) => {
                                         </button>
                                     </div>
                                 </div>
+                                {/* {renderFormFromJSON(manifestInput.outputDescriptors[0], { setFormValues })} */}
                                 <div class="button-row">
                                     <button class="secondary-button" type="button" onClick={() => dialog.close()}>
                                         Cancel
@@ -123,7 +125,7 @@ const Modal: Component<{ content }> = (props) => {
                         {isSuccess() && (
                             <>
                                 <div class="banner banner-success">
-                                    🎉 Success - did is: 34567
+                                    🎉 Success - Credential ID 12345-134546-1232456
                                 </div>
                                 <div class="button-row"> 
                                     <button class="secondary-button" type="button" onClick={closeModal}>
@@ -139,4 +141,4 @@ const Modal: Component<{ content }> = (props) => {
     )
 }
 
-export default Modal;
+export default IssueModal;

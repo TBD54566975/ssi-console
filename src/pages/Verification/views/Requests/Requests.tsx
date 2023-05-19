@@ -1,14 +1,20 @@
 import { Component } from "solid-js";
 import "./Requests.scss";
-import Icon, { Plus } from "../../../../icons/Icon";
+import Icon, { ExternalArrow, Plus } from "../../../../icons/Icon";
+import Modal from "./Modal/Modal";
+import { useNavigate } from "@solidjs/router";
 
 const Requests: Component = () => {
+    const navigate = useNavigate();
+    const requestId = '123';
     return (
         <section class="item-panel">
-            <button class="item-panel-card card-create-new">
-                <Icon svg={Plus} />
-                <p>Create new</p>
-            </button>
+            <Modal content={{
+                button: {
+                    className: "item-panel-card card-create-new",
+                    label: <> <Icon svg={Plus} /> <p>Create new</p> </>
+                }
+            }} />
             {requests && requests.map(credential => 
                 <div class="item-panel-card">
                     <div>
@@ -23,10 +29,11 @@ const Requests: Component = () => {
                         </p>
                     </div>
                     <div>
-                        <button class="item-panel-card-button secondary-button">
-                            🔗 Submission URL
-                        </button>
-                        <button class="item-panel-card-button secondary-button">
+                        <a class="item-panel-card-link" href={`${location.host}/submit/${requestId}`}>
+                            Submission URL <Icon svg={ExternalArrow} />
+                        </a>
+                        <button onClick={() => navigate(requestId)}
+                            class="item-panel-card-button secondary-button">
                             Details
                         </button>
                     </div>

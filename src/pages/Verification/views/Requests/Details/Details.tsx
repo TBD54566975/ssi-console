@@ -2,7 +2,6 @@ import { Component } from "solid-js";
 import "./Details.scss";
 import "../../../../../components/Panel/Panel.scss";
 import { credentialOutput } from "./samples/mock";
-import IssueModal from "./IssueModalJson/IssueModalJson";
 
 const Details: Component<{ credential }> = (props) => {
     const { credential_manifest } = credentialOutput;
@@ -10,18 +9,12 @@ const Details: Component<{ credential }> = (props) => {
         <div class="details-page">
             <section class="details-page-hero panel">
                 <div class="details-page-hero-content">
-                    <h1>credname //{credential_manifest.name}</h1>
-                    <p>cred link mysite.com/12345678 //</p>
+                    <h1>request name //{credential_manifest.name}</h1>
+                    <p>Link is : mysite.com/232435</p>
                     <p>credid //{credential_manifest.id}</p>
                     <p>Issuing from issuername// {credential_manifest.issuer.name}</p>
                     <p>issuerdid // {credential_manifest.issuer.id}</p>
                     <div class="details-page-hero-content-actions button-row">
-                        <IssueModal content={{
-                            button: {
-                                className: "secondary-button",
-                                label: "Issue"
-                            }
-                        }} />
                         <button class="danger-button">Delete</button>
                     </div>
                 </div>

@@ -95,7 +95,7 @@ button {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-size: var(--font-sm);
+    font-size: inherit;
 
     .icon-container > svg {
         width: 12px;
@@ -274,9 +274,10 @@ legend {
 
 select,
 input[type="text"],
+input[type="datetime-local"],
 textarea {
     width: 100%;
-    font-size: 18px;
+    font-size: var(--font-md);
     padding: 12px 16px;
     font-family: var(--site-font);
     background: var(--grey-5);
@@ -286,9 +287,19 @@ textarea {
 }
 
 select,
-input[type="text"] {
+input[type="text"],
+input[type="datetime-local"] {
     font-weight: 500;
     font-size: var(--font-sm);
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    display: none;
+    // filter: invert(75%) brightness(100%);
+
+    // &:hover {
+    //     filter: invert(100%) brightness(100%);
+    // }
 }
 
 textarea {
@@ -302,6 +313,8 @@ select:hover,
 select:focus,
 input[type="text"]:hover,
 input[type="text"]:focus,
+input[type="datetime-local"]:hover,
+input[type="datetime-local"]:focus,
 textarea:hover,
 textarea:focus {
     border-color: var(--color-white);
@@ -363,6 +376,7 @@ input[type="radio"]:checked ~ label {
     }
 
     .select-container,
+    .input-container,
     .textarea-container {
         flex: 1 1 75%;
     }

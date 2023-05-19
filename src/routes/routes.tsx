@@ -66,7 +66,33 @@ const routes = [
     path: '/settings',
     name: 'Settings',
     component: lazy(() => import('../pages/Settings/Settings')),
-  },
+  }
 ];
 
 export default routes;
+
+export const dynamicRoutes = [
+    {
+        path: '/credentials/:id',
+        name: 'Details',
+        component: lazy(() => import('../pages/Credentials/views/CredentialManifests/Details/Details')),
+    },
+    {
+        path: '/verification/:id',
+        name: 'Details',
+        component: lazy(() => import('../pages/Verification/views/Requests/Details/Details')),
+    }
+]
+
+export const intakeRoutes = [
+    {
+        path: '/apply/:id',
+        name: 'Apply',
+        component: lazy(() => import('../pages/Intake/Apply/Apply')),
+    },
+    {
+        path: '/submit/:id',
+        name: 'Submit',
+        component: lazy(() => import('../pages/Intake/Submit/Submit')),
+    },
+]

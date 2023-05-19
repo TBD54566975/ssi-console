@@ -1,9 +1,13 @@
 import { Component } from "solid-js";
 import "./CredentialManifests.scss";
-import Icon, { Plus } from "../../../../icons/Icon";
+import Icon, { ExternalArrow, Plus } from "../../../../icons/Icon";
 import Modal from "./Modal/Modal";
+import { useNavigate } from "@solidjs/router";
+import IssueModal from "./Details/IssueModalJson/IssueModalJson";
 
 const CredentialManifests: Component = () => {
+    const navigate = useNavigate();
+    const credentialId = '123';
     return (
         <section class="item-panel">
             <Modal content={{
@@ -26,10 +30,17 @@ const CredentialManifests: Component = () => {
                         </p>
                     </div>
                     <div>
-                        <button class="item-panel-card-button secondary-button">
-                            Issue
-                        </button>
-                        <button class="item-panel-card-button secondary-button">
+                        <a class="item-panel-card-link" href={`${location.host}/apply/${credentialId}`}>
+                            Application URL <Icon svg={ExternalArrow} />
+                        </a>
+                        <IssueModal content={{
+                            button: {
+                                className: "item-panel-card-button secondary-button",
+                                label: "Issue"
+                            }
+                        }} />
+                        <button onClick={() => navigate(credentialId)}
+                            class="item-panel-card-button secondary-button">
                             Details
                         </button>
                     </div>

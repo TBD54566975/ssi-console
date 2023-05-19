@@ -1,13 +1,14 @@
-import { Component } from "solid-js";
+import { Component, createEffect, createSignal, useTransition } from "solid-js";
 import "./Credentials.scss";
 import * as baseRoutes from "../../routes/routes";
-import { useRoutes } from "@solidjs/router";
+import { useBeforeLeave, useIsRouting, useLocation, useMatch, useRoutes } from "@solidjs/router";
 import NavSidebar from "../../components/NavSidebar/NavSidebar";
 
 
 const Credentials: Component = () => {
     const routes = baseRoutes.default.find(route => route.path === '/credentials').children;
     const Routes = useRoutes(routes);
+
     for (let route of routes) {
         route['submenuItems'] = submenuItems[route.path];
     };
