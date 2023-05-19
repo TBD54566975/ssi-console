@@ -19,13 +19,16 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
 
     const getQueryResults = (listItem) => {
         return Object.values(listItem).some((el) => { 
-            if (typeof el === "string") return el.includes(query())
+            if (typeof el === "string") {
+                return el.toLowerCase().includes(query().toLowerCase())
+            }
         })
     }
 
     const getPanelRowHeader = (filteredItem) => {
         return Object.keys(filteredItem).map(key => {
             if (key === "body") return;
+            if (key === "status") return;
             if (key === "tag") return (
                 <p class={`chip chip-${filteredItem[key].type}`}>
                     {filteredItem[key].label}

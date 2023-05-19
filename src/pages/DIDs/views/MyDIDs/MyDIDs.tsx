@@ -75,6 +75,7 @@ const didWebs = [
     {
         name: "example.com",
         id: "did:web:example.com",
+        status: "Unverified",
         tag: {
             label: "Unverified",
             type: "danger"
@@ -84,6 +85,7 @@ const didWebs = [
     {
         name: "tbd.website",
         id: "did:web:tbd.website",
+        status: "Verified",
         tag: {
             label: "Verified",
             type: "success"
@@ -93,6 +95,7 @@ const didWebs = [
     {
         name: "mysite.com",
         id: "did:web:mysite.com",
+        status: "Pending",
         tag: {
             label: "Pending",
             type: "warn"

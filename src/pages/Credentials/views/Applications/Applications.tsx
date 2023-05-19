@@ -50,7 +50,7 @@ export default Applications;
 const applications = [
     {
         name: "xxxx-mhjj",
-        id: "did:key:z6MkfLvEXvtr4MXEicc7u8jyFo9nDuZ59cwj8hqf9r4oSrDk",
+        id: "KYC Credential",
         type: "2023-05-05",
     }
 ]
