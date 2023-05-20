@@ -1,27 +1,17 @@
 import { Component, JSX, createSignal, onCleanup } from "solid-js";
 import "./IssueModal.scss";
 import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../../icons/Icon";
-import { formatTextAreaOnKeyDown, insertSampleInput, renderFormFromJSON, submitForm, updateFormOnInput } from "../../../../../../utils/helpers";
-import { credentialInput } from "./samples/mock";
+import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "../../../../../../utils/helpers";
+import { credentialInputJson } from "./samples/mock";
+import SSI from "../../../../../../utils/service";
 
 const IssueModal: Component<{ content }> = (props) => {
     //pass in these props
-    let endpoint = '/v1/credentials';
-    let method = 'POST';
 
-    let initialFormValues = { 
-        "@context": '',
-        data: '',
-        issuer: 'did:key:123',
-        expiry: '',
-        revocable: null,
-        subject: '',
-        suspendable: null,
-        expires: null,
-        useDefaultContext: true
-    }
+    let initialFormValues = { json: '' }
 
     // the component
+    
     const [formValues, setFormValues] = createSignal(initialFormValues);
     const [isLoading, setIsLoading] = createSignal(false);
     const [isSuccess, setIsSuccess] = createSignal(false);
@@ -33,19 +23,6 @@ const IssueModal: Component<{ content }> = (props) => {
         setIsSuccess(false);
         setIsError(false);
     }
-
-
-    // this is transforming our stuff to something the service will accept
-    const transformValues = () => {
-        const { expires, useDefaultContext, data, ...values } = formValues();
-        return {
-            ...values,
-            data: JSON.parse(data),
-            issuerKid: formValues().issuer.slice(8),
-            schemaId: "schemaId passed here from GET call to cred",
-        }
-    }
-
 
     //dialog magic
     let dialog;
@@ -64,9 +41,9 @@ const IssueModal: Component<{ content }> = (props) => {
 
     //actual form calls
     const handleSubmit = async (event) => {
-        const request = { endpoint, method, body: JSON.stringify(formValues()) };
+        const request = SSI.putCredential(formValues().json);
         const setters = { setIsLoading, setIsSuccess, setIsError };
-        submitForm(event, setters, request);
+        handleRequest(event, request, setters);
     };
 
     const handleInput = (event) => {
@@ -78,17 +55,13 @@ const IssueModal: Component<{ content }> = (props) => {
     }
 
     const isFormValid = () => {
-        if (isError()) return false;
-        if (!formValues().data.trim()) return false;
-        if (!formValues().subject.trim()) return false;
-        if (formValues().expires && !formValues().expiry.trim()) return false;
-        return true;
+        return formValues().json.trim() !== '' && !isError();
     }
 
     //populate textarea field with sample input
     const populateSampleInput = (event) => {
         const setters = { setIsError, setFormValues };
-        insertSampleInput(event, setters, 'json', credentialInput);
+        insertSampleInput(event, setters, 'json', credentialInputJson);
     }
 
     return (
@@ -115,19 +88,12 @@ const IssueModal: Component<{ content }> = (props) => {
                                     </div> 
                                 }
                                 <div class="field-container">
-                                    <label for="subject">Subject DID</label>
-                                    <input id="subject" 
-                                        type="text" 
-                                        placeholder="did:xxx:xxxx" 
-                                        class="input-container" />
-                                </div>
-                                <div class="field-container">
-                                    <label for="data">Subject data</label>
+                                    <label for="json">JSON</label>
                                     <div class="textarea-container">
                                         <textarea 
-                                            id="data" 
-                                            name="data" 
-                                            value={formValues().data} 
+                                            id="json" 
+                                            name="json" 
+                                            value={formValues().json} 
                                             onInput={handleInput}
                                             onkeydown={handleKeyDown}
                                             spellcheck={false}
@@ -139,68 +105,6 @@ const IssueModal: Component<{ content }> = (props) => {
                                             <Icon svg={Beaker} />
                                             Try sample input
                                         </button>
-                                    </div>
-                                </div>
-                                <div class="field-container checkbox-container">
-                                    <input id="revocable" 
-                                        checked={formValues().revocable}
-                                        type="checkbox"
-                                        class="checkbox-container" />
-                                    <label for="revocable">Revocable?</label>
-                                </div>
-                                <div class="field-container checkbox-container">
-                                    <input id="suspendable" 
-                                        checked={formValues().suspendable}
-                                        type="checkbox"
-                                        class="checkbox-container" />
-                                    <label for="suspendable">Suspendable?</label>
-                                </div>
-                                <div class="field-container checkbox-container">
-                                    <input id="expires"
-                                        name="expires"
-                                        checked={formValues().expires}
-                                        onInput={handleInput}
-                                        type="checkbox"
-                                        class="checkbox-container" />
-                                    <label for="expires">Expires?</label>
-                                </div>
-                                {formValues().expires && <div class="field-container">
-                                    <label for="expiry">Expiry</label>
-                                    <input id="expiry" 
-                                        type="datetime-local"
-                                        class="input-container" />
-                                </div>}
-                                <div class="field-container checkbox-container">
-                                    <input id="useDefaultContext"
-                                        name="useDefaultContext"
-                                        checked={formValues().useDefaultContext}
-                                        onInput={handleInput}
-                                        type="checkbox"
-                                        class="checkbox-container" />
-                                    <label for="useDefaultContext">Use default context?</label>
-                                </div>
-                                {!formValues().useDefaultContext && <div class="field-container">
-                                    <label for="context">@context</label>
-                                    <input id="context" 
-                                        type="text" 
-                                        placeholder="@context" 
-                                        class="input-container" />
-                                </div>}
-                                <div class="field-container">
-                                    <label for="issuer">Issuer</label>
-                                    <div class="select-container">
-                                        <select 
-                                            id="issuer" 
-                                            name="issuer" 
-                                            value={formValues().issuer} 
-                                            onInput={handleInput}
-                                            required
-                                        >
-                                            {['did:key:123','did:key:234'].map(option => 
-                                                <option value={option.toLowerCase()}>{option}</option>
-                                            )}
-                                        </select>
-                                        <Icon svg={ArrowUpDown} />
                                     </div>
                                 </div>
                                 {/* {renderFormFromJSON(manifestInput.outputDescriptors[0], { setFormValues })} */}
@@ -220,7 +124,7 @@ const IssueModal: Component<{ content }> = (props) => {
                         {isSuccess() && (
                             <>
                                 <div class="banner banner-success">
-                                    🎉 Success - Verifiable Credential ID is 45627913-131231-13213-132
+                                    🎉 Success - Credential ID 12345-134546-1232456
                                 </div>
                                 <div class="button-row"> 
                                     <button class="secondary-button" type="button" onClick={closeModal}>

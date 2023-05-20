@@ -1,7 +1,8 @@
 import { Component, createSignal, onCleanup } from "solid-js";
 import "./Modal.scss";
 import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../icons/Icon";
-import { formatTextAreaOnKeyDown, insertSampleInput, submitForm, updateFormOnInput } from "../../../../../utils/helpers";
+import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "../../../../../utils/helpers";
+import SSI from "../../../../../utils/service";
 
 const Modal: Component<{ content }> = (props) => {
     //pass in these props
@@ -52,9 +53,9 @@ const Modal: Component<{ content }> = (props) => {
 
     //actual form calls
     const handleSubmit = async (event) => {
-        const request = { endpoint, method, body: JSON.stringify(formValues()) };
+        const request = SSI.putCredential(formValues().json);
         const setters = { setIsLoading, setIsSuccess, setIsError };
-        submitForm(event, setters, request);
+        handleRequest(event, request, setters);
     };
 
     const handleInput = (event) => {
@@ -88,14 +89,14 @@ const Modal: Component<{ content }> = (props) => {
                 </div>
 
                 <div class="dialog-body">
-                    <h2>Create a DID</h2>
+                    <h2>Issue a Credential</h2>
                     <form onSubmit={handleSubmit}>
                         {!isLoading() && !isSuccess() && (
                             <>
                                 {isError() && 
                                     <div class="banner banner-danger">
                                         <Icon svg={DangerAlert} />
-                                        Error creating DID. Try again
+                                        Error issuing credential. Try again
                                     </div> 
                                 }
                                 <div class="field-container">
@@ -134,7 +135,7 @@ const Modal: Component<{ content }> = (props) => {
                         {isSuccess() && (
                             <>
                                 <div class="banner banner-success">
-                                    🎉 Success - did is: 34567
+                                    🎉 Success - credential ID is: 34567
                                 </div>
                                 <div class="button-row"> 
                                     <button class="secondary-button" type="button" onClick={closeModal}>

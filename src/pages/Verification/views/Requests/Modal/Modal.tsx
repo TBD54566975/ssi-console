@@ -1,13 +1,12 @@
 import { Component, createSignal, onCleanup } from "solid-js";
 import "./Modal.scss";
 import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../icons/Icon";
-import { formatTextAreaOnKeyDown, insertSampleInput, submitForm, updateFormOnInput } from "../../../../../utils/helpers";
+import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "../../../../../utils/helpers";
 import { requestInput } from "./samples/mocks";
+import SSI from "../../../../../utils/service";
 
 const Modal: Component<{ content }> = (props) => {
     //pass in these props
-    let endpoint = '/v1/presentation/definition';
-    let method = 'POST';
 
     let initialFormValues = { json: '' }
 
@@ -41,9 +40,9 @@ const Modal: Component<{ content }> = (props) => {
 
     //actual form calls
     const handleSubmit = async (event) => {
-        const request = { endpoint, method, body: JSON.stringify(formValues()) };
+        const request = SSI.putDefinition(formValues().json);
         const setters = { setIsLoading, setIsSuccess, setIsError };
-        submitForm(event, setters, request);
+        handleRequest(event, request, setters);
     };
 
     const handleInput = (event) => {

@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 import "./Details.scss";
 import "../../../../../components/Panel/Panel.scss";
 import { credentialOutput } from "./samples/mock";
-import IssueModal from "./IssueModalJson/IssueModalJson";
+import IssueModal from "./IssueModal/IssueModal";
 
 const Details: Component<{ credential }> = (props) => {
     const { credential_manifest } = credentialOutput;

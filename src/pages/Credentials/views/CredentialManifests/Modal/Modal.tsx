@@ -1,15 +1,12 @@
 import { Component, JSX, createSignal, onCleanup } from "solid-js";
 import "./Modal.scss";
 import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../icons/Icon";
-import { formatTextAreaOnKeyDown, insertSampleInput, renderFormFromJSON, submitForm, updateFormOnInput } from "../../../../../utils/helpers";
+import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, renderFormFromJSON, updateFormOnInput } from "../../../../../utils/helpers";
 import { manifestInput } from "./samples/mock";
+import SSI from "../../../../../utils/service";
 
 const Modal: Component<{ content }> = (props) => {
-    //pass in these props
-    let endpoint = '/v1/manifest';
-    let method = 'POST';
-
-    let initialFormValues = { json: '' }
+    let initialFormValues = { json: '', schema: '', template: '' }
 
     // the component
     const [formValues, setFormValues] = createSignal(initialFormValues);
@@ -41,9 +38,9 @@ const Modal: Component<{ content }> = (props) => {
 
     //actual form calls
     const handleSubmit = async (event) => {
-        const request = { endpoint, method, body: JSON.stringify(formValues()) };
+        const request = SSI.putManifest(formValues().json);
         const setters = { setIsLoading, setIsSuccess, setIsError };
-        submitForm(event, setters, request);
+        handleRequest(event, request, setters);
     };
 
     const handleInput = (event) => {
@@ -88,12 +85,52 @@ const Modal: Component<{ content }> = (props) => {
                                     </div> 
                                 }
                                 <div class="field-container">
+                                    <label for="json">Schema</label>
+                                    <div class="textarea-container">
+                                        <textarea 
+                                            id="schema" 
+                                            name="schema" 
+                                            value={formValues().schema} 
+                                            onInput={handleInput}
+                                            onkeydown={handleKeyDown}
+                                            spellcheck={false}
+                                            autocomplete="off"
+                                            rows={3}
+                                            required
+                                        />
+                                        <button class="tiny-ghost-button" onclick={populateSampleInput}>
+                                            <Icon svg={Beaker} />
+                                            Try sample input
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="field-container">
                                     <label for="json">JSON</label>
                                     <div class="textarea-container">
                                         <textarea 
                                             id="json" 
                                             name="json" 
                                             value={formValues().json} 
+                                            onInput={handleInput}
+                                            onkeydown={handleKeyDown}
+                                            spellcheck={false}
+                                            autocomplete="off"
+                                            rows={3}
+                                            required
+                                        />
+                                        <button class="tiny-ghost-button" onclick={populateSampleInput}>
+                                            <Icon svg={Beaker} />
+                                            Try sample input
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="field-container">
+                                    <label for="json">Issuance Template</label>
+                                    <div class="textarea-container">
+                                        <textarea 
+                                            id="template" 
+                                            name="template" 
+                                            value={formValues().template} 
                                             onInput={handleInput}
                                             onkeydown={handleKeyDown}
                                             spellcheck={false}

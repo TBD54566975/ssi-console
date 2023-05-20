@@ -1,7 +1,8 @@
 import { Component, createSignal } from "solid-js";
 import "./Apply.scss";
-import { submitForm, updateFormOnInput, formatTextAreaOnKeyDown } from "../../../utils/helpers";
+import { updateFormOnInput, formatTextAreaOnKeyDown, handleRequest } from "../../../utils/helpers";
 import Icon, { DangerAlert } from "../../../icons/Icon";
+import SSI from "../../../utils/service";
 
 const Apply: Component = () => {
     let endpoint = `/v1/manifests/applications/`;
@@ -22,9 +23,9 @@ const Apply: Component = () => {
     }
 
     const handleSubmit = async (event) => {
-        const request = { endpoint, method, body: JSON.stringify(formValues()) };
+        const request = SSI.putApplication(formValues().json);
         const setters = { setIsLoading, setIsSuccess, setIsError };
-        submitForm(event, setters, request);
+        handleRequest(event, request, setters);
     };
 
     const handleInput = (event) => {

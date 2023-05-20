@@ -16,11 +16,11 @@ const routes = [
           name: 'My DIDs',
           component: lazy(() => import('../pages/DIDs/views/MyDIDs/MyDIDs')),
         },
-        {
-          path: 'trusted-dids',
-          name: 'Trusted DIDs',
-          component: lazy(() => import('../pages/DIDs/views/TrustedDIDs/TrustedDIDs')),
-        },
+        // {
+        //   path: 'trusted-dids',
+        //   name: 'Trusted DIDs',
+        //   component: lazy(() => import('../pages/DIDs/views/TrustedDIDs/TrustedDIDs')),
+        // },
     ],
   },
   {

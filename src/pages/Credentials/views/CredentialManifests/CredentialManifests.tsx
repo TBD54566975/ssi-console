@@ -3,7 +3,7 @@ import "./CredentialManifests.scss";
 import Icon, { ExternalArrow, Plus } from "../../../../icons/Icon";
 import Modal from "./Modal/Modal";
 import { useNavigate } from "@solidjs/router";
-import IssueModal from "./Details/IssueModalJson/IssueModalJson";
+import IssueModal from "./Details/IssueModal/IssueModal";
 
 const CredentialManifests: Component = () => {
     const navigate = useNavigate();

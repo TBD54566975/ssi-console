@@ -48,19 +48,14 @@ export function insertSampleInput(event, setters: Setters, key, sample) {
 
 // Submit the form and set a loading state, success state, 
 // and error state based on response from the server
-export async function submitForm(event, setters: Setters, request: Request, ) {
-    const { endpoint, method, body } = request;
+export async function handleRequest(event, request, setters: Setters) {
     const { setIsLoading, setIsSuccess, setIsError } = setters;
     event.preventDefault();
     setIsLoading(true);
     setIsSuccess(false);
     setIsError(false);
     try {
-        const response = await fetch(endpoint, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body
-        });
+        const response = await request;
         if (!response.ok) {
             setIsError(true)
             throw new Error(`Request failed with ${response.status}.`);
@@ -73,9 +68,8 @@ export async function submitForm(event, setters: Setters, request: Request, ) {
         setIsLoading(false);
     }
 }
-export type Request = { endpoint, method, body };
-export type Setters = { setIsLoading?, setIsSuccess?, setIsError?, setFormValues? };
 
+export type Setters = { setIsLoading?, setIsSuccess?, setIsError?, setFormValues? };
 
 // Render form from a JSON object based on type of a given property
 // so that the appropriate input element with label is displayed
