@@ -67,6 +67,6 @@ const links: CardContent[] = [
         },
         size: "small",
         color: "blue",
-        href: "/dids/trusted-dids"
+        href: "/dids"
     }
 ]
