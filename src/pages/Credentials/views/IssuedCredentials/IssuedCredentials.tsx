@@ -3,13 +3,14 @@ import "./IssuedCredentials.scss";
 import Panel from "../../../../components/Panel/Panel";
 import Modal from "../../../DIDs/views/MyDIDs/Modal/Modal";
 import Icon, { ExternalArrow, Plus } from "../../../../icons/Icon";
+import { store } from "../../../../utils/store";
 
 const IssuedCredentials: Component = () => {
     const content = {
         active: {
             id: "active",
             title: "Active",
-            listItems: credentials(),
+            listItems: transformCredentials(store.credentials),
             footer: <a href="" target="_blank">Learn about Credentials <Icon svg={ExternalArrow} /></a>,
             fallback: "You haven't issued any Credentials, so there's nothing here.",
             buttons: [
@@ -56,44 +57,35 @@ const IssuedCredentials: Component = () => {
 
 export default IssuedCredentials;
 
-const credentialSubject = {
-    "firstName": "Test",
-    "id": "did:key:z6MkfLvEXvtr4MXEicc7u8jyFo9nDuZ59cwj8hqf9r4oSrDk",
-    "lastName": "Subject"
-}
-
-const formattedCred = () => {
-    return Object.entries(credentialSubject).map(entry => {
+const formatCredentialData = (credentialSubject) => {
+    const data = Object.entries(credentialSubject).map(entry => {
         return (
             <div class="entry-row">
                 <div class="key-entry">{entry[0]}</div>
                 <div class="value-entry"><code>{JSON.stringify(entry[1], null, 2)}</code></div>
             </div>
         )
+    });
+    return (
+        <pre>
+            <code class="entry-container">
+                <div class="entry-row entry-row-header">
+                    <div class="key-entry">Label</div>
+                    <div class="value-entry"><code>Value</code></div>
+                </div>
+                {data}
+            </code>
+        </pre>
+    )
+}
+
+const transformCredentials = (credentials) => {
+    return Object.values(credentials).map((credential: { credentialSubject, issuanceDate, id }) => {
+        return {
+            name: `****-${credential.id.slice(-4)}`,
+            id: credential.credentialSubject.id,
+            type: credential.issuanceDate,
+            body: formatCredentialData(credential.credentialSubject)
+        }
     })
 }
-
-const credentials = () => {
-    return [
-        {
-            name: "xxxx-0cce",
-            id: "did:key:z6MkfLvEXvtr4MXEicc7u8jyFo9nDuZ59cwj8hqf9r4oSrDk",
-            type: "2023-05-05",
-            body: <pre>
-                    <code class="entry-container">
-                        <div class="entry-row entry-row-header">
-                            <div class="key-entry">Label</div>
-                            <div class="value-entry"><code>Value</code></div>
-                        </div>
-                        {formattedCred()}
-                    </code>
-                </pre>
-        },
-        {
-            name: "xxxx-mhjj",
-            id: "did:key:z6MkfLvEXvtr4MXEicc7u8jyFo9nDuZ59cwj8hqf9r4oSrDk",
-            type: "2023-05-05",
-        }
-    ]
-}
-
