@@ -30,45 +30,77 @@ const setupStore = async () => {
         }; 
 
         localStorage.setItem(newDID.id, JSON.stringify(metadata))
-        // no need to attempt to hydrate the store
     } else {
         // there are store dids, so lets store our metadata with them
-        for (const { id } of dids) {
-            if (localStorage.getItem(id)) {
-                store.user[id] = {
-                    did: id,
-                    kid: id.verificationMethod.find(method => method.controller === id.id).id,
-                    metadata: JSON.parse(localStorage.getItem(id))
-                };
-            } else {
-                store.user[id] = {
-                    did: id,
-                    kid: id.verificationMethod.find(method => method.controller === id.id).id,
-                }
-            }
-            // make sure to hydrate the store with credentials we have access to
-            if (store.credentials.length === 0) {
-                const credentials = await SSI.getCredentials("issuer", id);
-                store.credentials = [
-                    ...store.credentials,
-                    ...credentials
-                ]
-            }
-        }
+        await hydrateDIDStore(dids);
     }
     // hydrate the rest of the store
     if (store.manifests.length === 0) {
-        store.manifests = await SSI.getManifests();
+        await hydrateManifestStore();
     }
     if (store.applications.length === 0) {
-        store.applications = await SSI.getApplications();
+        await hydrateApplicationStore();
     }
     if (store.definitions.length === 0) {
-        store.definitions = await SSI.getDefinitions();
+        await hydrateDefinitionStore();
     }
     if (store.submissions.length === 0) {
-        store.submissions = await SSI.getSubmissions();
+        await hydrateSubmissionStore();
     }
+    // we hydrate these because there may be objects not issued by a newly set did
+    // after all dids were soft deleted
+    // but we dont hydrate credentials outside of our did logic 
+    // because we only ever access credentials by issuer did anyway
+
 };
 
 export default setupStore;
+
+export const hydrateDIDStore = async (dids?) => {
+    if (!dids) {
+        dids = await SSI.getDIDs();
+    }
+
+    for (const { id } of dids) {
+        if (localStorage.getItem(id)) {
+            store.user[id] = {
+                did: id,
+                kid: id.verificationMethod.find(method => method.controller === id.id).id,
+                metadata: JSON.parse(localStorage.getItem(id))
+            };
+        } else {
+            store.user[id] = {
+                did: id,
+                kid: id.verificationMethod.find(method => method.controller === id.id).id,
+            }
+        }
+        // make sure to hydrate the store with credentials we have access to
+        if (store.credentials.length === 0) {
+            await hydrateCredentialsStore(id);
+        }
+    }
+}
+
+export const hydrateCredentialsStore = async (issuerId) => {
+    const credentials = await SSI.getCredentials("issuer", issuerId);
+    store.credentials = [
+        ...store.credentials,
+        ...credentials
+    ]
+}
+
+export const hydrateManifestStore = async () => {
+    store.manifests = await SSI.getManifests();
+}
+
+export const hydrateApplicationStore = async () => {
+    store.applications = await SSI.getApplications();
+}
+
+export const hydrateDefinitionStore = async () => {
+    store.definitions = await SSI.getDefinitions();
+}
+
+export const hydrateSubmissionStore = async () => {
+    store.submissions = await SSI.getSubmissions();
+}

@@ -6,7 +6,6 @@ import Modal from "./Modal/Modal";
 import { store } from "../../../../utils/store";
 
 const MyDIDs: Component = () => {
-    console.log(getDIDMethodFromID("did:key:123456"))
     const content = {
         all: {
             id: "all",

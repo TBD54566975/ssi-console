@@ -3,6 +3,7 @@ import "./Modal.scss";
 import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../icons/Icon";
 import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "../../../../../utils/helpers";
 import SSI, { DIDMethods } from "../../../../../utils/service";
+import { hydrateDIDStore } from "../../../../../utils/setup";
 
 const Modal: Component<{ content }> = (props) => {
     let options: DIDMethods[] = [
@@ -47,7 +48,7 @@ const Modal: Component<{ content }> = (props) => {
     const handleSubmit = async (event) => {
         const request = SSI.putDID(formValues().didType, formValues().json);
         const setters = { setIsLoading, setIsSuccess, setIsError };
-        handleRequest(event, request, setters);
+        handleRequest(event, request, setters, hydrateDIDStore);
     };
 
     const handleInput = (event) => {

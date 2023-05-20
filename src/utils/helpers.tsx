@@ -48,7 +48,7 @@ export function insertSampleInput(event, setters: Setters, key, sample) {
 
 // Submit the form and set a loading state, success state, 
 // and error state based on response from the server
-export async function handleRequest(event, request, setters: Setters) {
+export async function handleRequest(event, request, setters: Setters, hydrator) {
     const { setIsLoading, setIsSuccess, setIsError } = setters;
     event.preventDefault();
     setIsLoading(true);
@@ -61,6 +61,7 @@ export async function handleRequest(event, request, setters: Setters) {
             throw new Error(`Request failed with ${response.status}.`);
         }
         setIsSuccess(true);
+        await hydrator();
     } catch (e) {
         setIsError(true)
         throw new Error(e);
