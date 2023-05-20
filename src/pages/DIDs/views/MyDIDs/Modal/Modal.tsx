@@ -2,18 +2,18 @@ import { Component, createSignal, onCleanup } from "solid-js";
 import "./Modal.scss";
 import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../icons/Icon";
 import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "../../../../../utils/helpers";
-import SSI from "../../../../../utils/service";
+import SSI, { DIDMethods } from "../../../../../utils/service";
 
 const Modal: Component<{ content }> = (props) => {
-    let options = [
-        "Ion",
-        "Web",
-        "Key"
+    let options: DIDMethods[] = [
+        "ion",
+        "web",
+        "key"
     ];
     const didInput = {
         "keyType": "Ed25519"
     }
-    let initialFormValues: { json, didType: "ion" | "web" | "key" } = { json: '', didType: "ion" }
+    let initialFormValues: { json, didType: DIDMethods } = { json: '', didType: options[0] }
 
     // the component
     const [formValues, setFormValues] = createSignal(initialFormValues);

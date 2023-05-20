@@ -3,17 +3,15 @@ import Icon, { ExternalArrow, Plus, XCross } from "../../../../icons/Icon";
 import "./MyDIDs.scss";
 import Panel from "../../../../components/Panel/Panel";
 import Modal from "./Modal/Modal";
+import { store } from "../../../../utils/store";
 
 const MyDIDs: Component = () => {
+    console.log(getDIDMethodFromID("did:key:123456"))
     const content = {
         all: {
             id: "all",
             title: "All DIDs",
-            listItems: [
-                ...didKeys, 
-                ...didWebs, 
-                ...didIons
-            ],
+            listItems: transformDIDs(store.user),
             footer: <a href="" target="_blank">Learn about DIDs <Icon svg={ExternalArrow} /></a>,
             fallback: "You don't have any DIDs in use here. Try creating one.",
             action: <Modal content={{
@@ -53,66 +51,22 @@ const MyDIDs: Component = () => {
 
 export default MyDIDs;
 
-const didKeys = [
-    {
-        name: "xxxx-7890",
-        id: "did:key:1234567890zxcvbnmlkjhgfdsqwertyuio1234567890",
-        type: "key"
-    },
-    {
-        name: "xxxx-hjlk",
-        id: "did:key:lkjhgfdsdfghjiuytrtyu89876543ertyujjhgfghjlk",
-        type: "key"
-    },
-    {
-        name: "xxxx-mhjj",
-        id: "did:key:zxcvbn23456789xcvbnm987654xcvbnkjhgfdghjmhjj",
-        type: "key"
-    }
-]
+const transformDIDs = (userDIDs) => {
+    return Object.values(userDIDs).map((userDID: { did, kid, metadata }) => {
+        return {
+            name: `****-${userDID.did.slice(-4)}`,
+            id: userDID.did,
+            type: getDIDMethodFromID(userDID.did)
+        }
+    })
+}
 
-const didWebs = [
-    {
-        name: "example.com",
-        id: "did:web:example.com",
-        status: "Unverified",
-        tag: {
-            label: "Unverified",
-            type: "danger"
-        },
-        type: "web"
-    },
-    {
-        name: "tbd.website",
-        id: "did:web:tbd.website",
-        status: "Verified",
-        tag: {
-            label: "Verified",
-            type: "success"
-        },
-        type: "web"
-    },
-    {
-        name: "mysite.com",
-        id: "did:web:mysite.com",
-        status: "Pending",
-        tag: {
-            label: "Pending",
-            type: "warn"
-        },
-        type: "web"
+const getDIDMethodFromID = (did) => {
+    const regex = /:(\w+):/;
+    const match = regex.exec(did);
+    if (match && match.length >= 2) {
+      return match[1];
     }
-]
-const didIons = [
-    {
-        name: "xxxx-fdsa",
-        id: "did:ion:1234567890poiuytrewqlkjhgfdsa",
-        type: "ion"
-    },
-    {
-        name: "xxxx-bnhy",
-        id: "did:ion:zaq123esdxcde34rfvgtr56ygbnhy",
-        type: "ion"
-    }
-]
+    return null;
+}
 

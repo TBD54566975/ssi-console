@@ -43,7 +43,7 @@ export class SSIService {
         return method;
     }
 
-    async getDIDsByMethod(method?: "ion" | "web" | "key"): Promise<any> {
+    async getDIDsByMethod(method?: DIDMethods): Promise<any> {
         const url = GET_SSI.DIDS.replace("{method}", method);
         const { dids } = await this.sendRequest(url);
         return dids;
@@ -60,7 +60,7 @@ export class SSIService {
         ];
     }
 
-    async getDID(method: "ion" | "web" | "key", id: string): Promise<any> {
+    async getDID(method: DIDMethods, id: string): Promise<any> {
         const url = GET_SSI.DID.replace("{method}", method).replace('{id}', id);
         return this.sendRequest(url);
     }
@@ -176,8 +176,41 @@ export class SSIService {
         return this.sendRequest(PUT_SSI.VERIFY_CREDENTIAL, 'PUT', data);
     }
     
-    async putDID(method: "ion" | "web" | "key", data): Promise<any> {
+    async putDID(method: DIDMethods, data): Promise<any> {
         const url = PUT_SSI.DID.replace("{method}", method)
+        const { did } = await this.sendRequest(url, 'PUT', data);
+        return did;
+    }
+
+    async putDIDIon(serviceEndpoints: DIDIonServiceEndpoint[] = []): Promise<any> {
+        const url = PUT_SSI.DID.replace("{method}", "ion")
+        const data = {
+            "keyType": "Ed25519",
+            "options": {
+                serviceEndpoints //empty array if none
+            }
+        }
+        const { did } = await this.sendRequest(url, 'PUT', data);
+        return did;
+    }
+
+    async putDIDWeb(didWebID: string): Promise<any> {
+        const url = PUT_SSI.DID.replace("{method}", "web")
+        const data = {
+            "keyType": "Ed25519",
+            "options": {
+                didWebID // should be did:web:xxxx
+            }
+        }
+        const { did } = await this.sendRequest(url, 'PUT', data);
+        return did;
+    }
+
+    async putDIDKey(): Promise<any> {
+        const url = PUT_SSI.DID.replace("{method}", "key")
+        const data = {
+            "keyType": "Ed25519"
+        }
         const { did } = await this.sendRequest(url, 'PUT', data);
         return did;
     }
@@ -232,7 +265,7 @@ export class SSIService {
         return response;
     }
     
-    async deleteDID(method: "ion" | "web" | "key", id: string): Promise<any> {
+    async deleteDID(method: DIDMethods, id: string): Promise<any> {
         const url = DELETE_SSI.DID.replace('{method}', method).replace('{id}', id);
         const response = await this.sendRequest(url, 'DELETE');
         await this.getDIDs();
@@ -338,6 +371,13 @@ enum DELETE_SSI {
     RESPONSE = '/v1/manifests/responses/{id}',
     DEFINITION = '/v1/presentations/definitions/{id}',
     SCHEMA = '/v1/schemas/{id}'
+}
+
+export type DIDMethods = "ion" | "web" | "key";
+export type DIDIonServiceEndpoint = {
+    "id",
+    "type",
+    "serviceEndpoint",
 }
 
 const SSI = new SSIService();

@@ -2,15 +2,13 @@ import SSI from "./service";
 import { store } from "./store";
 
 // On first start of the application
-(async () => {
+const setupStore = async () => {
     // Attempt to get DIDs to add to the store
     const dids = await SSI.getDIDs();
     
     if (!dids) {
-        // If no DIDs exist, create one and store it
-        const newDID = await SSI.putDID("ion",{
-                "keyType": "Ed25519"
-            });
+        // If no DIDs exist, create an ion DID and store it
+        const newDID = await SSI.putDIDIon();
 
         const metadata = {
             "type": "didMetadata",
@@ -27,6 +25,7 @@ import { store } from "./store";
 
         store.user[newDID.id] = {
             did: newDID.id,
+            kid: newDID.verificationMethod.find(method => method.controller === newDID.id).id,
             metadata
         }; 
 
@@ -38,11 +37,13 @@ import { store } from "./store";
             if (localStorage.getItem(id)) {
                 store.user[id] = {
                     did: id,
+                    kid: id.verificationMethod.find(method => method.controller === id.id).id,
                     metadata: JSON.parse(localStorage.getItem(id))
                 };
             } else {
                 store.user[id] = {
-                    did: id
+                    did: id,
+                    kid: id.verificationMethod.find(method => method.controller === id.id).id,
                 }
             }
             // make sure to hydrate the store with credentials we have access to
@@ -68,4 +69,6 @@ import { store } from "./store";
     if (store.submissions.length === 0) {
         store.submissions = await SSI.getSubmissions();
     }
-});
+};
+
+export default setupStore;
