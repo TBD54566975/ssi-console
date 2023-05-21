@@ -4,6 +4,8 @@ import "./MyDIDs.scss";
 import Panel from "../../../../components/Panel/Panel";
 import Modal from "./Modal/Modal";
 import { store } from "../../../../utils/store";
+import { dids } from "./samples/mocks";
+import { hydrateDIDStore } from "../../../../utils/setup";
 
 const MyDIDs: Component = () => {
     const content = {

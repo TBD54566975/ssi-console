@@ -1,5 +1,5 @@
 import SSI from "./service";
-import { store } from "./store";
+import { store, setStore, updateStore } from "./store";
 
 // On first start of the application
 const setupStore = async () => {
@@ -23,11 +23,14 @@ const setupStore = async () => {
             }
         }
 
-        store.user[newDID.id] = {
-            did: newDID.id,
-            kid: newDID.verificationMethod.find(method => method.controller === newDID.id).id,
-            metadata
+        const updateValue = {
+            [newDID.id]: {
+                did: newDID.id,
+                kid: newDID.verificationMethod.find(method => method.controller === newDID.id).id,
+                metadata
+            }
         }; 
+        updateStore("user", updateValue);
 
         localStorage.setItem(newDID.id, JSON.stringify(metadata))
     } else {
@@ -61,46 +64,47 @@ export const hydrateDIDStore = async (dids?) => {
         dids = await SSI.getDIDs();
     }
 
-    for (const { id } of dids) {
-        if (localStorage.getItem(id)) {
-            store.user[id] = {
-                did: id,
-                kid: id.verificationMethod.find(method => method.controller === id.id).id,
-                metadata: JSON.parse(localStorage.getItem(id))
-            };
-        } else {
-            store.user[id] = {
-                did: id,
-                kid: id.verificationMethod.find(method => method.controller === id.id).id,
+    for (const did of dids) {
+        const updateValue = {
+            [did.id] : {
+                did: did.id,
+                kid: did.verificationMethod.find(method => method.controller === did.id).id,
             }
         }
+        // include metadata if available in localstorage
+        if (localStorage.getItem(did.id)) {
+            updateValue[did.id]["metadata"] = JSON.parse(localStorage.getItem(did.id));
+        }
+        updateStore("user", updateValue);
+
         // make sure to hydrate the store with credentials we have access to
         if (store.credentials.length === 0) {
-            await hydrateCredentialsStore(id);
+            await hydrateCredentialsStore(did.id);
         }
     }
 }
 
 export const hydrateCredentialsStore = async (issuerId) => {
     const credentials = await SSI.getCredentials("issuer", issuerId);
-    store.credentials = [
+    const updateValue = [
         ...store.credentials,
         ...credentials
     ]
+    updateStore("credentials", updateValue);
 }
 
 export const hydrateManifestStore = async () => {
-    store.manifests = await SSI.getManifests();
+    updateStore("manifests", await SSI.getManifests());
 }
 
 export const hydrateApplicationStore = async () => {
-    store.applications = await SSI.getApplications();
+    updateStore("applications", await SSI.getApplications());
 }
 
 export const hydrateDefinitionStore = async () => {
-    store.definitions = await SSI.getDefinitions();
+    updateStore("definitions", await SSI.getDefinitions());
 }
 
 export const hydrateSubmissionStore = async () => {
-    store.submissions = await SSI.getSubmissions();
+    updateStore("submissions", await SSI.getSubmissions());
 }

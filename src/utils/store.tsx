@@ -1,6 +1,6 @@
 import { createStore } from 'solid-js/store';
 
-export const [store] = createStore({
+export const [store, setStore] = createStore({
   user: {},
   manifests: [],
   credentials: [],
@@ -8,3 +8,12 @@ export const [store] = createStore({
   definitions: [],
   submissions: [],
 });
+
+export const updateStore = (store, value) => {
+    setStore((prevVal) => {
+        return {
+            ...prevVal,
+            [store]: value
+        }
+    })
+}

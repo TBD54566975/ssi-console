@@ -1,4 +1,4 @@
-const dids = [
+export const dids = [
     {
         "@context": "https://www.w3.org/ns/did/v1",
         "id": "did:key:z6MkkvjWZqDTgob6PwRwbwP27Rdat9nTztYwcLrR9T5ieqfo",
