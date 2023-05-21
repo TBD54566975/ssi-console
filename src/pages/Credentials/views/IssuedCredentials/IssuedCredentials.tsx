@@ -4,6 +4,8 @@ import Panel from "../../../../components/Panel/Panel";
 import Modal from "../../../DIDs/views/MyDIDs/Modal/Modal";
 import Icon, { ExternalArrow, Plus } from "../../../../icons/Icon";
 import { store } from "../../../../utils/store";
+import { hydrateCredentialsStore } from "../../../../utils/setup";
+import { credentials } from "./samples/mocks";
 
 const IssuedCredentials: Component = () => {
     const content = {
@@ -80,7 +82,8 @@ const formatCredentialData = (credentialSubject) => {
 }
 
 const transformCredentials = (credentials) => {
-    return Object.values(credentials).map((credential: { credentialSubject, issuanceDate, id }) => {
+    return Object.values(credentials).map((vc: { credential }) => {
+        const { credential } = vc;
         return {
             name: `****-${credential.id.slice(-4)}`,
             id: credential.credentialSubject.id,
