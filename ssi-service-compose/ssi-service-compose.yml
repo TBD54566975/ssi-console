@@ -1,0 +1,44 @@
+version: "3.98"
+
+services:
+  web:
+    image: ghcr.io/tbd54566975/ssi-service:main
+    ports:
+      - "8080:3000"
+    environment:
+      - JAEGER_HTTP_URL=http://jaeger:14268/api/traces
+    depends_on:
+      - jaeger
+      - redis
+    volumes:
+      - ./config.toml:/app/config/config.toml
+    networks:
+      - ssi_network
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+      - "14268:14268"
+  redis:
+    image: redis:alpine
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    # This allows for data to not be persisted on new runs
+    command: [sh, -c, "rm -f /data/dump.rdb && redis-server --save ''"]
+    networks:
+      - ssi_network
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: ghcr.io/joeferner/redis-commander:latest
+    restart: always
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "9001:8081"
+    networks:
+      - ssi_network
+
+networks:
+  ssi_network:
