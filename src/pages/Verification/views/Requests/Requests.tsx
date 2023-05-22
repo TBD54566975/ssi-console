@@ -3,6 +3,7 @@ import "./Requests.scss";
 import Icon, { ExternalArrow, Plus } from "../../../../icons/Icon";
 import Modal from "./Modal/Modal";
 import { useNavigate } from "@solidjs/router";
+import { store } from "../../../../utils/store";
 
 const Requests: Component = () => {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Requests: Component = () => {
                     label: <> <Icon svg={Plus} /> <p>Create new</p> </>
                 }
             }} />
-            {requests && requests.map(credential => 
+            {store.definitions && transformDefinitions(store.definitions).map(credential => 
                 <div class="item-panel-card">
                     <div>
                         <div class="item-panel-card-header">
@@ -45,17 +46,11 @@ const Requests: Component = () => {
 
 export default Requests;
 
-const requests = [
-    {
-        name: "Proof of KYC",
-        description: "Request for a credential proving subject passed KYC",
-    },
-    {
-        name: "Proof of Course 1",
-        description: "Request for a credential proving subject passed Course 1",
-    },
-    {
-        name: "Proof of Course 2",
-        description: "Request of proof that subject passed Course 2",
-    },
-]
+const transformDefinitions = (definitions) => {
+    return Object.values(definitions).map((definition: { name, purpose }) => {
+        return {
+            name: definition.name,
+            description: definition.purpose
+        }
+    })
+}

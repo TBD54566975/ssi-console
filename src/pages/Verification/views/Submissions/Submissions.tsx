@@ -1,12 +1,14 @@
 import { Component } from "solid-js";
 import Panel from "../../../../components/Panel/Panel";
+import { store } from "../../../../utils/store";
+import { submissions } from "./samples/mocks";
 
 const Submissions: Component = () => {
     const content = {
         "for-review": {
             id: "for-review",
             title: "For Review",
-            listItems: submissions,
+            listItems: transformSubmissions(submissions),
             fallback: "You have no new Submissions to review, so there's nothing here.",
             buttons: [
                 {
@@ -46,10 +48,12 @@ const Submissions: Component = () => {
 
 export default Submissions;
 
-const submissions = [
-    {
-        name: "xxxx-mhjj",
-        id: "did:key:z6MkfLvEXvtr4MXEicc7u8jyFo9nDuZ59cwj8hqf9r4oSrDk",
-        type: "2023-05-05",
-    }
-]
+const transformSubmissions = (submissions) => {
+    return Object.values(submissions).map((submission: { verifiablePresentation, status, }) => {
+        return {
+            name: `****-${submission.verifiablePresentation.id.slice(-4)}`,
+            id: store.definitions.find(definition => definition.id === submission.verifiablePresentation.presentation_submission.definitionID)?.name,
+            type: submission.status
+        }
+    })
+}
