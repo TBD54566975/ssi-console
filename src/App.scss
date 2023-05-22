@@ -19,7 +19,7 @@
     --grey-20: #333333;
     --grey-30: #4D4D4D;
     --grey-50: #868686;
-    --site-margin: 0 6rem;
+    --site-margin: 0 1rem;
     --font-xs: 0.75rem;
     --font-sm: 1rem;
     --font-md: 1.125rem;
@@ -29,6 +29,10 @@
     --radius-sm: 6px;
     --radius-round: 999px;
     --site-font: 'IBM Plex Mono', monospace;
+
+    @media screen and (min-width: 996px) {
+        --site-margin: 0 6rem;
+    }
 }
 
 * {
@@ -451,12 +455,6 @@ input[type="radio"]:checked ~ label {
 .icon-container {
     display: flex;
     align-items: center;
-}
-
-@media screen and (max-width: 998px) {
-    :root {
-        --site-margin: 0 1rem;
-    }
 }
 
 .sr-only:not(:focus):not(:active) {

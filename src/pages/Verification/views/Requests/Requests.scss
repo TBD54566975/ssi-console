@@ -1,7 +1,11 @@
 .item-panel {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(1fr, 200px));
     gap: 1rem;
+
+    @media screen and (min-width: 996px) {
+        grid-template-columns: repeat(auto-fit, 1fr);
+    }
 
     &-card {
         border: 1px solid var(--grey-15);
