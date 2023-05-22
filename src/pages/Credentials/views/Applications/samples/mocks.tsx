@@ -1,4 +1,4 @@
-const applications = [
+export const applications = [
     {
         "application": {
           "applicant": "did:key:1234567",
@@ -9,8 +9,8 @@ const applications = [
               ]
             }
           },
-          "id": "test_application",
-          "manifest_id": "test_manifest",
+          "id": "123456-12345678-12345678",
+          "manifest_id": "1234-12345-123456",
           "presentation_submission": {
             "definition_id": "test_definition",
             "descriptor_map": [
@@ -26,7 +26,7 @@ const applications = [
                 "path": "$.vc.test"
               }
             ],
-            "id": "test-12345"
+            "id": "12345678-12345"
           },
           "spec_version": "spec_v1"
         },

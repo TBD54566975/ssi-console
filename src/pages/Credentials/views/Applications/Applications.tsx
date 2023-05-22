@@ -1,13 +1,15 @@
 import { Component } from "solid-js";
 import "./Applications.scss";
 import Panel from "../../../../components/Panel/Panel";
+import { store } from "../../../../utils/store";
+import { applications } from "./samples/mocks";
 
 const Applications: Component = () => {
     const content = {
         incoming: {
             id: "incoming",
             title: "Incoming",
-            listItems: applications,
+            listItems: transformApplications(applications),
             fallback: "You have no new Applications to review, so there's nothing here.",
             buttons: [
                 {
@@ -47,11 +49,14 @@ const Applications: Component = () => {
 
 export default Applications;
 
-const applications = [
-    {
-        name: "xxxx-mhjj",
-        id: "KYC Credential",
-        type: "2023-05-05",
-    }
-]
+const transformApplications = (applications) => {
+    return Object.values(applications).map((vc_application: { application }) => {
+        const { application } = vc_application;
+        return {
+            name: `****-${application.id.slice(-4)}`,
+            id: store.credentials.find(credential => credential.id === application.manifest_id)?.name,
+            type: "Needs Review"
+        }
+    })
+}
 

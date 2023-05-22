@@ -30,8 +30,8 @@ export const manifests = [
         "credential_manifest": {
             "id": "dc978b18-8728-4a66-86ab-c0230a13f835",
             "spec_version": "https://identity.foundation/credential-manifest/spec/v1.0.0/",
-            "name": "Test Manifest",
-            "description": "Test manifest for demonstration purposes",
+            "name": "2nd Test Manifest",
+            "description": "2nd Test manifest for demonstration purposes",
             "issuer": {
                 "id": "did:key:z6MkjqweA2cGy25AtLQUQTdjxg8KMBxAbCBqVU3cW6vKgomB"
             },

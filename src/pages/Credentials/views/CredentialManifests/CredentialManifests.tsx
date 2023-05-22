@@ -4,6 +4,8 @@ import Icon, { ExternalArrow, Plus } from "../../../../icons/Icon";
 import Modal from "./Modal/Modal";
 import { useNavigate } from "@solidjs/router";
 import IssueModal from "./Details/IssueModal/IssueModal";
+import { manifests } from "./samples/mocks";
+import { store } from "../../../../utils/store";
 
 const CredentialManifests: Component = () => {
     const navigate = useNavigate();
@@ -16,7 +18,7 @@ const CredentialManifests: Component = () => {
                     label: <> <Icon svg={Plus} /> <p>Create new</p> </>
                 }
             }} />
-            {credentials && credentials.map(credential => 
+            {store.manifests && transformManifests(manifests).map(credential => 
                 <div class="item-panel-card">
                     <div>
                         <div class="item-panel-card-header">
@@ -52,21 +54,13 @@ const CredentialManifests: Component = () => {
 
 export default CredentialManifests;
 
-const credentials = [
-    {
-        name: "KYC Credential",
-        description: "Credential proving the subject has passed KYC with our organization",
-    },
-    {
-        name: "LLC Credential",
-        description: "Credential proving the subject is a registered LLC in good standing within our organization",
-    },
-    {
-        name: "Learning Degree",
-        description: "Credential proving the subject is a graduate of our organization's learning curriculum",
-    },
-    {
-        name: "Course 1 Graduate",
-        description: "Credential proving the subject passed Course 1 of our organization's learning curriculum",
-    },
-]
+const transformManifests = (manifests) => {
+    return Object.values(manifests).map((manifest: { credential_manifest }) => {
+        const { credential_manifest } = manifest;
+        return {
+            name: credential_manifest.name,
+            description: credential_manifest.description
+
+        }
+    })
+}
