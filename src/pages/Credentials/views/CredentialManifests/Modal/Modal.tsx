@@ -38,6 +38,8 @@ const Modal: Component<{ content }> = (props) => {
 
     //actual form calls
     const handleSubmit = async (event) => {
+        // once we have schema and potentially issuance template
+        // prob need to break this down more - a lot more
         const request = SSI.putManifest(formValues().json);
         const setters = { setIsLoading, setIsSuccess, setIsError };
         handleRequest(event, request, setters);
