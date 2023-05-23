@@ -112,7 +112,7 @@ const Modal: Component<{ content }> = (props) => {
                                     </div>
                                 </div>
                                 <div class="button-row">
-                                    <button class="secondary-button" type="button" onClick={() => dialog.close()}>
+                                    <button class="secondary-button" onClick={() => dialog.close()}>
                                         Cancel
                                     </button>
                                     <button class="primary-button" type="submit" disabled={!isFormValid()}>
@@ -130,7 +130,7 @@ const Modal: Component<{ content }> = (props) => {
                                     🎉 Success - did is: 34567
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" type="button" onClick={closeModal}>
+                                    <button class="secondary-button" onClick={closeModal}>
                                         Done
                                     </button>
                                 </div>

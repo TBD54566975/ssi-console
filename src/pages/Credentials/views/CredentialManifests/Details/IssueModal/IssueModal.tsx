@@ -109,7 +109,7 @@ const IssueModal: Component<{ content }> = (props) => {
                                 </div>
                                 {/* {renderFormFromJSON(manifestInput.outputDescriptors[0], { setFormValues })} */}
                                 <div class="button-row">
-                                    <button class="secondary-button" type="button" onClick={() => dialog.close()}>
+                                    <button class="secondary-button" onClick={() => dialog.close()}>
                                         Cancel
                                     </button>
                                     <button class="primary-button" type="submit" disabled={!isFormValid()}>
@@ -127,7 +127,7 @@ const IssueModal: Component<{ content }> = (props) => {
                                     🎉 Success - Credential ID 12345-134546-1232456
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" type="button" onClick={closeModal}>
+                                    <button class="secondary-button" onClick={closeModal}>
                                         Done
                                     </button>
                                 </div>

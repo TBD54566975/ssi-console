@@ -206,7 +206,7 @@ const IssueModalWithRender: Component<{ content }> = (props) => {
                                 </div>
                                 {/* {renderFormFromJSON(manifestInput.outputDescriptors[0], { setFormValues })} */}
                                 <div class="button-row">
-                                    <button class="secondary-button" type="button" onClick={() => dialog.close()}>
+                                    <button class="secondary-button" onClick={() => dialog.close()}>
                                         Cancel
                                     </button>
                                     <button class="primary-button" type="submit" disabled={!isFormValid()}>
@@ -224,7 +224,7 @@ const IssueModalWithRender: Component<{ content }> = (props) => {
                                     🎉 Success - Verifiable Credential ID is 45627913-131231-13213-132
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" type="button" onClick={closeModal}>
+                                    <button class="secondary-button" onClick={closeModal}>
                                         Done
                                     </button>
                                 </div>
