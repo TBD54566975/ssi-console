@@ -18,7 +18,7 @@ const CredentialManifests: Component = () => {
                     label: <> <Icon svg={Plus} /> <p>Create new</p> </>
                 }
             }} />
-            {store.manifests && transformManifests(manifests).map(credential => 
+            {store.manifests && transformManifests(store.manifests).map(credential => 
                 <div class="item-panel-card">
                     <div>
                         <div class="item-panel-card-header">

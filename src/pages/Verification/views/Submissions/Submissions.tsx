@@ -8,7 +8,7 @@ const Submissions: Component = () => {
         "for-review": {
             id: "for-review",
             title: "For Review",
-            listItems: transformSubmissions(submissions),
+            listItems: transformSubmissions(store.submissions),
             fallback: "You have no new Submissions to review, so there's nothing here.",
             buttons: [
                 {
