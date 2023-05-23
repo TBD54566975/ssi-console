@@ -62,6 +62,7 @@ export async function handleRequest(event, request, setters: Setters, hydrator?)
         }
         setIsSuccess(true);
         await hydrator();
+        return response.json();
     } catch (e) {
         setIsError(true)
         throw new Error(e);
@@ -74,6 +75,7 @@ export type Setters = { setIsLoading?, setIsSuccess?, setIsError?, setFormValues
 
 // Render form from a JSON object based on type of a given property
 // so that the appropriate input element with label is displayed
+// Usage: {renderFormFromJSON(jsonObject, { setFormValues })}
 export function renderFormFromJSON(json, setters: Setters) {
     const { setFormValues } = setters;
     setFormValues(json);
@@ -145,4 +147,20 @@ export function renderFormFromJSON(json, setters: Setters) {
         }
         return template;
     });
+}
+
+export const vcJWTFormat = {
+    "jwt_vc": {
+      "alg": [
+        "EdDSA"
+      ]
+    },
+}
+
+export const vpJWTFormat = {
+    "jwt_vp": {
+      "alg": [
+        "EdDSA"
+      ]
+    },
 }

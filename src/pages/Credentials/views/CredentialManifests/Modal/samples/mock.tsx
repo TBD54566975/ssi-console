@@ -268,4 +268,29 @@ export const issuanceInput = {
     "id": "string",
     "issuer": "string",
     "issuerKid": "string"
-  }
+}
+
+export const schemaInput = {
+    "author": "string",
+    "authorKid": "string",
+    "name": "string",
+    "schema": {
+      "firstName": "string",
+      "lastName": "string"
+    },
+    "sign": true
+}
+
+export const inputDescriptorsInput = [
+    {
+        "constraints": {
+            "fields": [
+                {
+                    "intent_to_retain": true,
+                    "path": "$.path, $.vc.path",
+                }
+            ]
+        },
+        "id": 0
+    }
+]

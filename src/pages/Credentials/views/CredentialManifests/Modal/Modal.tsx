@@ -1,12 +1,22 @@
 import { Component, JSX, Show, createSignal, onCleanup } from "solid-js";
 import "./Modal.scss";
 import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../icons/Icon";
-import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, renderFormFromJSON, updateFormOnInput } from "../../../../../utils/helpers";
-import { manifestInput } from "./samples/mock";
+import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, renderFormFromJSON, updateFormOnInput, vcJWTFormat, vpJWTFormat } from "../../../../../utils/helpers";
+import { inputDescriptorsInput, manifestInput, schemaInput } from "./samples/mock";
 import SSI from "../../../../../utils/service";
+import { store } from "../../../../../utils/store";
 
 const Modal: Component<{ content }> = (props) => {
-    let initialFormValues = { json: '', schema: '' }
+    let initialFormValues = { 
+        inputDescriptors: '', 
+        submissionRequirements: '',
+        schema: '', 
+        name: '', 
+        description: '',
+        issuerName: '',
+        issuer: '',
+        includeSubmissionRequirements: null
+    }
 
     // the component
     const [formValues, setFormValues] = createSignal(initialFormValues);
@@ -19,6 +29,7 @@ const Modal: Component<{ content }> = (props) => {
         setIsLoading(false);
         setIsSuccess(false);
         setIsError(false);
+        setStep(1);
     }
 
     //dialog magic
@@ -36,11 +47,58 @@ const Modal: Component<{ content }> = (props) => {
         return dialog.close();
     }
 
+    // Specific to verifiable credential modal
+    const [ step, setStep ] = createSignal(1);
+
+    const goToNextStep = () => {
+        if (step() + 1 > 4) return;
+        setStep(step() + 1);
+    }
+
+    const goToPrevStep = () => {
+        if (step() - 1 < 1) return;
+        setStep(step() - 1);
+    }
+
     //actual form calls
     const handleSubmit = async (event) => {
-        // once we have schema and potentially issuance template
-        // prob need to break this down more - a lot more
-        const request = SSI.putManifest(formValues().json);
+        // first get schemaID
+        const schemaPayload = {
+            "author": store.user[formValues().issuer]["did"],
+            "authorKid": store.user[formValues().issuer]["kid"],
+            "name": formValues().name,
+            "schema": formValues().schema,
+            "sign": true
+        }
+        const { id: schemaId } = await SSI.putSchema(schemaPayload);
+        
+        // then let's map the fields to the expected payload
+        const credentialPayload = {
+            "name": formValues().name,
+            "description": formValues().description,
+            "issuerDid": store.user[formValues().issuer]["did"],
+            "issuerKid": store.user[formValues().issuer]["kid"],
+            "issuerName": formValues().issuerName,
+            "format": vcJWTFormat,
+            "outputDescriptors": [
+                {
+                    "name": formValues().name,
+                    "description": formValues().description,
+                    "id": 0,
+                    "schema": schemaId
+                }
+            ],
+            "presentationDefinition": {
+                "format": vpJWTFormat,
+                "name": `${formValues().name} Application Requirements`,
+                "description": `Some information is requireed in order to issue ${formValues().description}`,
+                "input_descriptors": formValues().inputDescriptors,
+                ...formValues().submissionRequirements !== '' &&  { "submission_requirements": formValues().submissionRequirements }
+            }
+        }
+
+        // in future we prob also want a step for styles and issuance template, but backlog for now
+        const request = SSI.putManifest(credentialPayload);
         const setters = { setIsLoading, setIsSuccess, setIsError };
         handleRequest(event, request, setters);
     };
@@ -54,28 +112,28 @@ const Modal: Component<{ content }> = (props) => {
     }
 
     const isFormValid = () => {
-        if (step() === 1) return true;
-        if (step() === 2)  return true;
-        if (step() === 3) return formValues().json.trim() !== '' && !isError();
-        return false;
+        let isComplete;
+        if (step() === 1) isComplete = formValues().name.trim() !== '' && formValues().description.trim() !== ''
+        if (step() === 2) isComplete = formValues().schema.trim() !== ''
+        if (step() === 3) isComplete = formValues().inputDescriptors.trim() !== ''
+        if (step() === 4) isComplete = formValues().issuerName.trim() !== ''
+        return isComplete && !isError();
     }
 
     //populate textarea field with sample input
     const populateSampleInput = (event) => {
-        const setters = { setIsError, setFormValues };
-        insertSampleInput(event, setters, 'json', manifestInput);
-    }
-
-    const [ step, setStep ] = createSignal(1);
-
-    const goToNextStep = () => {
-        if (step() + 1 > 3) return;
-        setStep(step() + 1);
-    }
-
-    const goToPrevStep = () => {
-        if (step() - 1 < 1) return;
-        setStep(step() - 1);
+        const setters = { setIsError, setFormValues };;
+        let fieldToSet;
+        let sampleInput: typeof schemaInput.schema | typeof inputDescriptorsInput;
+        if (step() === 2) {
+            fieldToSet = 'schema';
+            sampleInput = schemaInput.schema;
+        }
+        if (step() === 3) {
+            fieldToSet = 'inputDescriptors';
+            sampleInput = inputDescriptorsInput;
+        }
+        insertSampleInput(event, setters, fieldToSet, sampleInput);
     }
 
     return (
@@ -109,7 +167,11 @@ const Modal: Component<{ content }> = (props) => {
                                             id="name" 
                                             name="name"
                                             placeholder="Employment Credential" 
-                                            class="input-container" />
+                                            class="input-container"
+                                            value={formValues().name} 
+                                            onInput={handleInput}
+                                            spellcheck={false}
+                                            required />
                                     </div>
                                     <div class="field-container">
                                         <label for="description">Description</label>
@@ -117,7 +179,11 @@ const Modal: Component<{ content }> = (props) => {
                                             id="description" 
                                             name="description"
                                             placeholder="Proof of employment" 
-                                            class="input-container" />
+                                            class="input-container"
+                                            value={formValues().description} 
+                                            onInput={handleInput}
+                                            spellcheck={false}
+                                            required />
                                     </div>
                                     <div class="button-row">
                                         <button class="secondary-button" onClick={() => dialog.close()}>
@@ -131,7 +197,7 @@ const Modal: Component<{ content }> = (props) => {
 
                                 <Show when={step() === 2}>
                                     <div class="field-container">
-                                        <label for="json">Schema</label>
+                                        <label for="schema">Fields and types</label>
                                         <div class="textarea-container">
                                             <textarea 
                                                 id="schema" 
@@ -142,8 +208,7 @@ const Modal: Component<{ content }> = (props) => {
                                                 spellcheck={false}
                                                 autocomplete="off"
                                                 rows={3}
-                                                required
-                                            />
+                                                required />
                                             <button class="tiny-ghost-button" onclick={populateSampleInput}>
                                                 <Icon svg={Beaker} />
                                                 Try sample input
@@ -165,38 +230,108 @@ const Modal: Component<{ content }> = (props) => {
 
                                 <Show when={step() === 3}>
                                     <div class="field-container">
-                                        <label for="json">Output Descriptors</label>
+                                        <label for="inputDescriptors">Requirements</label>
                                         <div class="textarea-container">
                                             <textarea 
-                                                id="json" 
-                                                name="json" 
-                                                value={formValues().json} 
+                                                id="inputDescriptors" 
+                                                name="inputDescriptors" 
+                                                value={formValues().inputDescriptors} 
                                                 onInput={handleInput}
                                                 onkeydown={handleKeyDown}
                                                 spellcheck={false}
                                                 autocomplete="off"
                                                 rows={3}
-                                                required
-                                            />
+                                                required />
                                             <button class="tiny-ghost-button" onclick={populateSampleInput}>
                                                 <Icon svg={Beaker} />
                                                 Try sample input
                                             </button>
                                         </div>
                                     </div>
+
+                                    <div class="field-container checkbox-container">
+                                        <input id="includeSubmissionRequirements" 
+                                            name="includeSubmissionRequirements"
+                                            checked={formValues().includeSubmissionRequirements}
+                                            onInput={handleInput}
+                                            type="checkbox"
+                                            class="checkbox-container" />
+                                        <label for="includeSubmissionRequirements">Include submission requirements?</label>
+                                    </div>
+
+                                    {formValues().includeSubmissionRequirements && (
+                                        <div class="field-container">
+                                            <label for="submission_requirements">Rules</label>
+                                            <div class="textarea-container">
+                                                <textarea 
+                                                    id="submissionRequirements" 
+                                                    name="submissionRequirements" 
+                                                    value={formValues().submissionRequirements} 
+                                                    onInput={handleInput}
+                                                    onkeydown={handleKeyDown}
+                                                    spellcheck={false}
+                                                    autocomplete="off"
+                                                    rows={3}
+                                                    required />
+                                            </div>
+                                        </div>
+                                    )}
                                 
-                                {/* {renderFormFromJSON(manifestInput.outputDescriptors[0], { setFormValues })} */}
-                                <div class="button-row">
-                                    <button class="secondary-button" onClick={() => dialog.close()}>
-                                        Cancel
-                                    </button>
-                                    <button class="secondary-button" onClick={goToPrevStep}>
-                                        Back
-                                    </button>
-                                    <button class="primary-button" type="submit" disabled={!isFormValid()}>
-                                        Submit
-                                    </button>
-                                </div>
+                                    <div class="button-row">
+                                        <button class="secondary-button" onClick={() => dialog.close()}>
+                                            Cancel
+                                        </button>
+                                        <button class="secondary-button" onClick={goToPrevStep}>
+                                            Back
+                                        </button>
+                                        <button class="primary-button" disabled={!isFormValid()} onClick={goToNextStep}>
+                                            Next
+                                        </button>
+                                    </div>
+                                </Show>
+
+                                <Show when={step() === 4} >
+                                    <div class="field-container">
+                                        <label for="issuer">Issuer</label>
+                                        <div class="select-container">
+                                            <select 
+                                                id="issuer" 
+                                                name="issuer" 
+                                                value={formValues().issuer} 
+                                                onInput={handleInput}
+                                                required
+                                            >
+                                                {Object.values(store.user) && Object.values(store.user).map(issuer => 
+                                                    <option value={issuer["did"]}>{issuer["metadata"]?.label || issuer["did"]}</option>
+                                                )}
+                                            </select>
+                                            <Icon svg={ArrowUpDown} />
+                                        </div>
+                                    </div>
+                                    <div class="field-container">
+                                        <label for="issuerName">Issuer Name</label>
+                                        <input type="text" 
+                                            id="issuerName" 
+                                            name="issuerName"
+                                            placeholder="ACME Inc." 
+                                            class="input-container"
+                                            value={formValues().issuerName} 
+                                            onInput={handleInput}
+                                            onkeydown={handleKeyDown}
+                                            spellcheck={false}
+                                            required />
+                                    </div>
+                                    <div class="button-row">
+                                        <button class="secondary-button" onClick={() => dialog.close()}>
+                                            Cancel
+                                        </button>
+                                        <button class="secondary-button" onClick={goToPrevStep}>
+                                            Back
+                                        </button>
+                                        <button class="primary-button" type="submit" disabled={!isFormValid()}>
+                                            Submit
+                                        </button>
+                                    </div>
                                 </Show>
                             </>
                         )}
