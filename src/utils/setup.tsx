@@ -32,6 +32,9 @@ const setupStore = async () => {
     if (store.schemas.length === 0) {
         await hydrateSchemaStore();
     }
+    if (store.deletedDIDs.length === 0) {
+        await hydrateDeletedDIDsStore();
+    }
     // we hydrate these because there may be objects not issued by a newly set did
     // after all dids were soft deleted
     // but we dont hydrate credentials outside of our did logic 
@@ -102,8 +105,13 @@ export const hydrateSchemaStore = async () => {
     updateStore("schemas", await SSI.getSchemas());
 }
 
+export const hydrateDeletedDIDsStore = async () => {
+    updateStore("deletedDIDs", await SSI.getDeletedDIDs());
+}
+
 export const deleteDIDFromStore = async (method: DIDMethods, id: string) => {
     const response = await SSI.deleteDID(method, id); 
     await hydrateDIDStore();
+    await hydrateDeletedDIDsStore();
     return response;
 }

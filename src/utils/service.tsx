@@ -64,6 +64,17 @@ export class SSIService {
         ];
     }
 
+    async getDeletedDIDs(): Promise<any> {
+        const { dids: dids_ion } = await this.sendRequest(`${GET_SSI.DIDS.replace("{method}", "ion")}?deleted=true`);
+        const { dids: dids_web } = await this.sendRequest(`${GET_SSI.DIDS.replace("{method}", "web")}?deleted=true`);
+        const { dids: dids_key } = await this.sendRequest(`${GET_SSI.DIDS.replace("{method}", "key")}?deleted=true`);
+        return [
+            ...(dids_ion?.length ? dids_ion : []),
+            ...(dids_web?.length ? dids_web : []),
+            ...(dids_key?.length ? dids_key : [])
+        ];
+    }
+
     async getDID(method: DIDMethods, id: string): Promise<any> {
         const url = GET_SSI.DID.replace("{method}", method).replace('{id}', id);
         return this.sendRequest(url);

@@ -7,11 +7,13 @@ import { store } from "../../../../utils/store";
 import { dids } from "./samples/mocks";
 import { deleteDIDFromStore } from "../../../../utils/setup";
 import ConfirmationModal from "../../../../components/ConfirmationModal/ConfirmationModal";
+import SSI from "../../../../utils/service";
 
 const MyDIDs: Component = () => {
     let confirmDialog;
     const [ item, setItem ] = createSignal();
-    const [ content, setContent ] = createSignal([]);
+    const [ dids, setDIDs ] = createSignal(transformDIDs(store.user));
+    const [ deletedDids, setDeletedDIDs ] = createSignal(transformDIDs(store.deletedDIDs));
     
     const confirmDelete = async (item) => {
         await deleteDIDFromStore(item.type, item.id);
@@ -20,11 +22,20 @@ const MyDIDs: Component = () => {
 
     createEffect(() => {
         const storeDIDs = store.user;
-        setContent(Object.values({
+        setDIDs(transformDIDs(storeDIDs));
+    })
+
+    createEffect(() => {
+        const storeDeletedDIDs = store.deletedDIDs;
+        setDeletedDIDs(transformDIDs(storeDeletedDIDs));
+    })
+
+    const content = () => {
+        return {
             all: {
                 id: "all",
                 title: "All DIDs",
-                listItems: transformDIDs(storeDIDs),
+                listItems: dids(),
                 footer: <a href="" target="_blank">Learn about DIDs <Icon svg={ExternalArrow} /></a>,
                 fallback: "You don't have any DIDs in use here. Try creating one.",
                 action: <Modal content={{
@@ -37,7 +48,7 @@ const MyDIDs: Component = () => {
                     {
                         label: "Archive",
                         className: "danger-button",
-                        disabled: Object.values(storeDIDs).length < 2,
+                        disabled: dids().length < 2,
                         onClick: (item) => { setItem(item); confirmDialog.showModal()}
                     }
                 ]
@@ -45,13 +56,11 @@ const MyDIDs: Component = () => {
             archived: {
                 id: "archived",
                 title: "Archived",
-                listItems: [],
+                listItems: deletedDids(),
                 fallback: "You haven't archived any DIDs yet, so there's nothing here.",
             },
-        }))
-    })
+        }}
 
-    
     return (
         <>
             {Object.values(content()).map(content => 
@@ -72,11 +81,15 @@ const MyDIDs: Component = () => {
 export default MyDIDs;
 
 const transformDIDs = (userDIDs) => {
-    return Object.values(userDIDs).map((userDID: { did, kid }) => {
+    if (typeof userDIDs === "object") {
+        userDIDs = Object.values(userDIDs);
+    }
+    return userDIDs.map((userDID: { did, kid, id }) => {
+        const didId = userDID.did || userDID.id;
         return {
-            name: `****-${userDID.did.slice(-4)}`,
-            id: userDID.did,
-            type: getDIDMethodFromID(userDID.did),
+            name: `****-${didId?.slice(-4)}`,
+            id: didId,
+            type: getDIDMethodFromID(didId),
         }
     })
 }
