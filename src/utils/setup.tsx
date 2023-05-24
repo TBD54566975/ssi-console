@@ -90,11 +90,11 @@ export const hydrateDefinitionStore = async () => {
     updateStore("definitions", await SSI.getDefinitions());
 }
 
-export const hydrateSubmissionStore = async (key: "pending" | "approved" | "denied" | "cancelled") => {
-    const submissions = await SSI.getSubmissions(key);
+export const hydrateSubmissionStore = async (status: "pending" | "approved" | "denied" | "cancelled") => {
+    const submissions = await SSI.getSubmissions(status);
     const updateValue = {
         ...store.submissions,
-        [key]: [
+        [status]: [
             ...(submissions?.length ? submissions : [])
         ]
     }

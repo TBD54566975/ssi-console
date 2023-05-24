@@ -149,10 +149,10 @@ export class SSIService {
         const url = GET_SSI.DEFINITION.replace('{id}', id);
         return this.sendRequest(url);
     }
-    
+
     async getSubmissions(status: "pending" | "approved" | "denied" | "cancelled"): Promise<any> {
         const data = {
-            "filter": `status = ${status}`
+            "filter": `status='${status}'`
         }
         const { submissions } = await this.sendRequest(`${GET_SSI.SUBMISSIONS}`);
         return submissions;

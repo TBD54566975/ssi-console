@@ -10,8 +10,8 @@ import SSI from "../../../../utils/service";
 
 const IssuedCredentials: Component = () => {
     const [ activeCredentials, setActiveCredentials ] = createSignal(transformCredentials(store.credentials, "active"))
-    const [ suspendedCredentials, setSuspendedCredentials ] = createSignal(transformCredentials(store.credentials, "active"))
-    const [ revokedCredentials, setRevokedCredentials ] = createSignal(transformCredentials(store.credentials, "active"))
+    const [ suspendedCredentials, setSuspendedCredentials ] = createSignal(transformCredentials(store.credentials, "suspended"))
+    const [ revokedCredentials, setRevokedCredentials ] = createSignal(transformCredentials(store.credentials, "revoked"))
 
     
     createEffect(() => {
@@ -107,10 +107,12 @@ const formatCredentialData = (credentialSubject) => {
 const transformCredentials = (credentials, status: "active" | "suspended" | "revoked") => {
     return Object.values(credentials).flatMap((credentialSet: []) => {
         return [
-            ...credentialSet.map((credential : { Credential })  => {
-                if (status === "active" && (credential["Suspended"] || credential["Revoked"])) return [];
-                if (status === "suspended" && (!credential["Suspended"])) return [];
-                if (status === "revoked" && (!credential["Revoked"])) return [];
+            ...credentialSet.filter(credential => {
+                if (status === "active" && (!credential["Suspended"] && !credential["Revoked"])) return true;
+                if (status === "suspended" && (credential["Suspended"])) return true;
+                if (status === "revoked" && (credential["Revoked"])) return true;
+                return false;
+            }).map((credential : { Credential })  => {
                 return {
                     name: `****-${credential.Credential.id.slice(-4)}`,
                     subjectId: credential.Credential.credentialSubject.id,

@@ -49,11 +49,14 @@ const Submissions: Component = () => {
 export default Submissions;
 
 const transformSubmissions = (submissions) => {
-    return Object.values(submissions).map((submission: { verifiablePresentation, status, }) => {
-        return {
-            name: `****-${submission.verifiablePresentation.id.slice(-4)}`,
-            id: store.definitions.find(definition => definition.id === submission.verifiablePresentation.presentation_submission.definitionID)?.name,
-            type: submission.status
-        }
+    return Object.values(submissions).flatMap((submissionSet: []) => {
+        return [...submissionSet.map((submission: { verifiablePresentation, status })  => {
+            return {
+                name: `****-${submission.verifiablePresentation.id.slice(-4)}`,
+                id: store.definitions.find(definition => definition.id === submission.verifiablePresentation.presentation_submission.definitionID)?.name,
+                type: submission.status
+            }
+        })]
+
     })
 }
