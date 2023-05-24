@@ -7,6 +7,7 @@ export const [store, setStore] = createStore({
   applications: [],
   definitions: [],
   submissions: {},
+  schemas: []
 });
 
 export const updateStore = (store, value) => {

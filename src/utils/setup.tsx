@@ -29,6 +29,9 @@ const setupStore = async () => {
         await hydrateSubmissionStore("approved");
         await hydrateSubmissionStore("denied");
     }
+    if (store.schemas.length === 0) {
+        await hydrateSchemaStore();
+    }
     // we hydrate these because there may be objects not issued by a newly set did
     // after all dids were soft deleted
     // but we dont hydrate credentials outside of our did logic 
@@ -93,6 +96,10 @@ export const hydrateSubmissionStore = async (key: "pending" | "approved" | "deni
         ]
     }
     updateStore("submissions", updateValue);
+}
+
+export const hydrateSchemaStore = async () => {
+    updateStore("schemas", await SSI.getSchemas());
 }
 
 export const deleteDIDFromStore = async (method: DIDMethods, id: string) => {

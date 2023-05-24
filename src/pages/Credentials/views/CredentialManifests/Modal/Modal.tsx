@@ -5,7 +5,7 @@ import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, renderFormFr
 import { inputDescriptorsInput, manifestInput, schemaInput } from "./samples/mock";
 import SSI from "../../../../../utils/service";
 import { store } from "../../../../../utils/store";
-import { hydrateCredentialsStore, hydrateManifestStore } from "../../../../../utils/setup";
+import { hydrateCredentialsStore, hydrateManifestStore, hydrateSchemaStore } from "../../../../../utils/setup";
 
 const Modal: Component<{ content }> = (props) => {
     let initialFormValues = { 
@@ -16,7 +16,8 @@ const Modal: Component<{ content }> = (props) => {
         description: '',
         issuerName: '',
         issuer: Object.keys(store.user)[0],
-        includeSubmissionRequirements: null
+        includeSubmissionRequirements: null,
+        schemaId: ''
     }
 
     // the component
@@ -64,17 +65,24 @@ const Modal: Component<{ content }> = (props) => {
     //actual form calls
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // first get schemaID
-        const schemaPayload = {
-            "author": store.user[formValues().issuer]["did"],
-            "authorKid": store.user[formValues().issuer]["kid"],
-            "name": formValues().name,
-            "schema": JSON.parse(formValues().schema),
-            "sign": true
+        // if no existing schemaID, first get schemaID
+        let schemaId;
+        if (formValues().schemaId === '') {
+            const schemaPayload = {
+                "author": store.user[formValues().issuer]["did"],
+                "authorKid": store.user[formValues().issuer]["kid"],
+                "name": formValues().name,
+                "schema": JSON.parse(formValues().schema),
+                "sign": true
+            }
+            const schemaResponse = await SSI.putSchema(schemaPayload);
+            const { id } = await schemaResponse.json();
+            schemaId = id;
+            hydrateSchemaStore();
+        } else {
+            schemaId = formValues().schemaId;
         }
-        const schemaResponse = await SSI.putSchema(schemaPayload);
-        const { id: schemaId } = await schemaResponse.json();
-        
+
         // then let's map the fields to the expected payload
         const credentialPayload = {
             "name": formValues().name,
@@ -113,13 +121,14 @@ const Modal: Component<{ content }> = (props) => {
     };
 
     const handleKeyDown = (event) => {
+        if (event.currentTarget.readOnly) return;
         formatTextAreaOnKeyDown(event, { setFormValues });
     }
 
     const isFormValid = () => {
         let isComplete;
         if (step() === 1) isComplete = formValues().name.trim() !== '' && formValues().description.trim() !== ''
-        if (step() === 2) isComplete = formValues().schema.trim() !== ''
+        if (step() === 2) isComplete = formValues().schema.trim() !== '' || formValues().schemaId.trim() !== ''
         if (step() === 3) isComplete = true;
         if (step() === 4) isComplete = formValues().issuerName.trim() !== ''
         return isComplete && !isError();
@@ -202,18 +211,43 @@ const Modal: Component<{ content }> = (props) => {
 
                                 <Show when={step() === 2}>
                                     <div class="field-container">
-                                        <label for="schema">Fields and types</label>
+                                        <label for="schemaId">Data set</label>
+                                        <div class="select-container">
+                                            <select 
+                                                id="schemaId" 
+                                                name="schemaId" 
+                                                value={formValues().schemaId} 
+                                                onInput={handleInput}
+                                                required
+                                            >
+                                                <option value={''}>New data set</option>
+                                                {Object.values(store.schemas) && Object.values(store.schemas).map(({schema}) => 
+                                                    <option value={schema["id"]}>{schema["name"]}</option>
+                                                )}
+                                            </select>
+                                            <Icon svg={ArrowUpDown} />
+                                        </div>
+                                    </div>
+                                    <div class="field-container">
+                                        <label for="schema">Data set</label>
                                         <div class="textarea-container">
                                             <textarea 
                                                 id="schema" 
                                                 name="schema" 
-                                                value={formValues().schema} 
+                                                value={
+                                                    formValues().schemaId.trim() !== '' ? 
+                                                    JSON.stringify(store.schemas.find(({schema}) => 
+                                                        schema.id === formValues().schemaId).schema.schema, null, 2) :
+                                                    formValues().schema
+                                                    }
                                                 onInput={handleInput}
                                                 onkeydown={handleKeyDown}
                                                 spellcheck={false}
                                                 autocomplete="off"
                                                 rows={3}
-                                                required />
+                                                required 
+                                                readonly={formValues().schemaId.trim() !== ''}
+                                                />
                                             <button class="tiny-ghost-button" type="button" onclick={populateSampleInput}>
                                                 <Icon svg={Beaker} />
                                                 Try sample input
