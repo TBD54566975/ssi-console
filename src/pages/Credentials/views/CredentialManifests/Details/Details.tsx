@@ -16,7 +16,6 @@ const Details: Component<{ credential }> = (props) => {
     const navigate = useNavigate();
 
     const { credential_manifest } = store.manifests.find(manifest =>  manifest.id === params.id);
-    console.log(credential_manifest)
     const { schema } = store.schemas.find(({schema}) => schema.id ===  credential_manifest.output_descriptors[0].schema);
     const { schema: schemaDetails, ...schemaMeta } = schema;
     const { $id, $schema, description, ...schemaData } = schemaDetails

@@ -1,8 +1,10 @@
-import { Component, createSignal } from "solid-js";
+import { Component, createSignal, onMount } from "solid-js";
 import "./Apply.scss";
 import { updateFormOnInput, formatTextAreaOnKeyDown, handleRequest } from "../../../utils/helpers";
 import Icon, { DangerAlert } from "../../../icons/Icon";
 import SSI from "../../../utils/service";
+import { useLocation, useParams } from "@solidjs/router";
+import { store } from "../../../utils/store";
 
 const Apply: Component = () => {
     let endpoint = `/v1/manifests/applications/`;
@@ -14,6 +16,15 @@ const Apply: Component = () => {
     const [isLoading, setIsLoading] = createSignal(false);
     const [isSuccess, setIsSuccess] = createSignal(false);
     const [isError, setIsError] = createSignal(false);
+
+    const params = useParams<{ id }>();
+
+    const [ manifest, setManifest ] = createSignal();
+
+    onMount(async () => {
+        const { credential_manifest } = await SSI.getManifest(params.id);
+        setManifest(credential_manifest);
+    })
 
     const resetForm = () => {
         setFormValues(initialFormValues);
@@ -50,7 +61,7 @@ const Apply: Component = () => {
                         <summary>Credential Details</summary>
                         <h3>KYC VC</h3>
                         <pre>
-                            details here
+                            {JSON.stringify(manifest(), null, 2)}
                         </pre>
                     </details>
                 </div>
@@ -88,7 +99,7 @@ const Apply: Component = () => {
                     {isSuccess() && (
                         <>
                             <div class="banner banner-success">
-                                <p>🎉 Success - Your application ID is 1234-12345-123456.</p>
+                                <p>🎉 Success - Your application is submitted.</p>
                                 <p>You'll be contacted shortly with next steps. You can now exit this window.</p>
                             </div>
                         </>
