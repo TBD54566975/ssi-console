@@ -185,7 +185,8 @@ const Modal: Component<{ content }> = (props) => {
                                             value={formValues().name} 
                                             onInput={handleInput}
                                             spellcheck={false}
-                                            required />
+                                            required
+                                            autocomplete="off" />
                                     </div>
                                     <div class="field-container">
                                         <label for="description">Description</label>
@@ -197,7 +198,8 @@ const Modal: Component<{ content }> = (props) => {
                                             value={formValues().description} 
                                             onInput={handleInput}
                                             spellcheck={false}
-                                            required />
+                                            required
+                                            autocomplete="off" />
                                     </div>
                                     <div class="button-row">
                                         <button class="secondary-button" type="button" onClick={() => dialog.close()}>
@@ -357,7 +359,8 @@ const Modal: Component<{ content }> = (props) => {
                                             value={formValues().issuerName} 
                                             onInput={handleInput}
                                             spellcheck={false}
-                                            required />
+                                            required
+                                            autocomplete="off" />
                                     </div>
                                     <div class="button-row">
                                         <button class="secondary-button" type="button" onClick={() => dialog.close()}>

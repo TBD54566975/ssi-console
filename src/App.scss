@@ -408,6 +408,11 @@ input[type="radio"]:checked ~ label {
         input[type="checkbox"] {
             appearance: none;
             margin-inline-end: 0.5rem;
+
+            &:disabled,
+            &:disabled ~ label {
+                opacity: 0.5;
+            }
     
             ~ label {
                 flex: auto;
@@ -422,7 +427,7 @@ input[type="radio"]:checked ~ label {
                 border-radius: 0.125rem;
             }
     
-            &:hover {
+            &:hover:not(:disabled) {
                 &::before {
                     border-color: var(--color-white);
                 }

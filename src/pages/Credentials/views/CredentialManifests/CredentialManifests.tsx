@@ -46,8 +46,8 @@ const CredentialManifests: Component = () => {
                                 className: "item-panel-card-button secondary-button",
                                 label: "Issue"
                             },
-                            manifest_id: manifest.id,
-                            schema_id: manifest.schemaId
+                            manifestId: manifest.id,
+                            schemaId: manifest.schemaId
                         }} />
                         <button onClick={() => navigate(manifest.id)}
                             class="item-panel-card-button secondary-button">

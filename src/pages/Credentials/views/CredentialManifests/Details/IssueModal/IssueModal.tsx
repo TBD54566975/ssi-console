@@ -4,11 +4,25 @@ import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../.
 import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "../../../../../../utils/helpers";
 import { credentialInputJson } from "./samples/mock";
 import SSI from "../../../../../../utils/service";
+import { store } from "../../../../../../utils/store";
+import { hydrateCredentialsStore } from "../../../../../../utils/setup";
+
+
 
 const IssueModal: Component<{ content }> = (props) => {
     //pass in these props
 
-    let initialFormValues = { properties: '', expires: null, status: null, expiry: '' }
+    const schemaProperties = JSON.stringify(getSchemaForSubject(props.content.schemaId), null, 2);
+
+    let initialFormValues = { 
+        properties: schemaProperties,
+        expires: null, 
+        suspendable: null, 
+        revocable: null,
+        expiry: '',
+        issuer: Object.keys(store.user)[0],
+        subject: ''
+    }
 
     // the component
     
@@ -42,18 +56,17 @@ const IssueModal: Component<{ content }> = (props) => {
     //actual form calls
     const handleSubmit = async (event) => {
         const data = {
-            "@context": [
-                "https://www.w3.org/2018/credentials/v1"
-            ],
-            "data": formValues().properties,
-            "expiry": formValues().expiry,
-            "issuer": "did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp",
-            "issuerKid": "#z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp",
-            "revocable": formValues().status,
-            "schemaId": "string",
-            "subject": "did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp",
-            "suspendable": formValues().status
+            "@context": "https://www.w3.org/2018/credentials/v1",
+            "data": JSON.parse(formValues().properties),
+            "issuer": store.user[formValues().issuer]["did"],
+            "issuerKid": store.user[formValues().issuer]["kid"],
+            "schemaId": props.content.schemaId,
+            "subject": formValues().subject,
+            ...formValues().expiry && { "expiry": new Date(formValues().expiry).toISOString() },
+            ...formValues().revocable && { "revocable": formValues().revocable },
+            ...formValues().suspendable && { "suspendable": formValues().suspendable }
         }
+        console.log(data)
         const request = SSI.putCredential(data);
         const setters = { setIsLoading, setIsSuccess, setIsError };
         handleRequest(event, request, setters);
@@ -68,13 +81,10 @@ const IssueModal: Component<{ content }> = (props) => {
     }
 
     const isFormValid = () => {
-        return formValues().properties.trim() !== '' && !isError();
-    }
-
-    //populate textarea field with sample input
-    const populateSampleInput = (event) => {
-        const setters = { setIsError, setFormValues };
-        insertSampleInput(event, setters, 'json', credentialInputJson);
+        const isExpiryValid = formValues().expires ? formValues().expiry !== '' : true;
+        const isSubjectValid = formValues().subject !== '';
+        const isSubjectDataValid = formValues().properties.trim() !== '' && formValues().properties.trim() !== schemaProperties;
+        return isExpiryValid && isSubjectValid && isSubjectDataValid && !isError();
     }
 
     return (
@@ -100,6 +110,20 @@ const IssueModal: Component<{ content }> = (props) => {
                                         Error issuing credential. Try again
                                     </div> 
                                 }
+
+                                <div class="field-container">
+                                    <label for="subject">Subject DID</label>
+                                    <input type="text" 
+                                        id="subject" 
+                                        name="subject"
+                                        placeholder="did:xxx:xxxxxx" 
+                                        class="input-container"
+                                        value={formValues().subject} 
+                                        onInput={handleInput}
+                                        spellcheck={false}
+                                        required
+                                        autocomplete="off" />
+                                </div>
                                 <div class="field-container">
                                     <label for="properties">Subject data</label>
                                     <div class="textarea-container">
@@ -114,20 +138,28 @@ const IssueModal: Component<{ content }> = (props) => {
                                             rows={3}
                                             required
                                         />
-                                        <button class="tiny-ghost-button" onclick={populateSampleInput}>
-                                            <Icon svg={Beaker} />
-                                            Try sample input
-                                        </button>
                                     </div>
                                 </div>
+
                                 <div class="field-container checkbox-container">
-                                    <input id="status" 
-                                        name="status"
-                                        checked={formValues().status}
+                                    <input id="revocable" 
+                                        name="revocable"
+                                        checked={formValues().revocable}
                                         onInput={handleInput}
                                         type="checkbox"
-                                        class="checkbox-container" />
-                                    <label for="revocable">Allow status changes?</label>
+                                        class="checkbox-container"
+                                        disabled={formValues().suspendable} />
+                                    <label for="revocable">Revocable?</label>
+                                </div>
+                                <div class="field-container checkbox-container">
+                                    <input id="suspendable" 
+                                        name="suspendable"
+                                        checked={formValues().suspendable}
+                                        onInput={handleInput}
+                                        type="checkbox"
+                                        class="checkbox-container" 
+                                        disabled={formValues().revocable} />
+                                    <label for="suspendable">Suspendable?</label>
                                 </div>
                                 <div class="field-container checkbox-container">
                                     <input id="expires"
@@ -139,7 +171,7 @@ const IssueModal: Component<{ content }> = (props) => {
                                     <label for="expires">Expires?</label>
                                 </div>
                                 {formValues().expires && <div class="field-container">
-                                    <label for="expiry">Expiry</label>
+                                    <label for="expiry">Expiry date</label>
                                     <input id="expiry"
                                         name="expiry"
                                         value={formValues().expiry}
@@ -147,9 +179,28 @@ const IssueModal: Component<{ content }> = (props) => {
                                         type="datetime-local"
                                         class="input-container" />
                                 </div>}
+
+                                <div class="field-container">
+                                    <label for="issuer">Issuer</label>
+                                    <div class="select-container">
+                                        <select 
+                                            id="issuer" 
+                                            name="issuer" 
+                                            value={formValues().issuer} 
+                                            onInput={handleInput}
+                                            required
+                                        >
+                                            {Object.values(store.user) && Object.values(store.user).map(issuer => 
+                                                <option value={issuer["did"]}>{issuer["did"]}</option>
+                                            )}
+                                        </select>
+                                        <Icon svg={ArrowUpDown} />
+                                    </div>
+                                </div>
+
                                 {/* {renderFormFromJSON(manifestInput.outputDescriptors[0], { setFormValues })} */}
                                 <div class="button-row">
-                                    <button class="secondary-button" onClick={() => dialog.close()}>
+                                    <button class="secondary-button" type="button" onClick={() => dialog.close()}>
                                         Cancel
                                     </button>
                                     <button class="primary-button" type="submit" disabled={!isFormValid()}>
@@ -164,10 +215,10 @@ const IssueModal: Component<{ content }> = (props) => {
                         {isSuccess() && (
                             <>
                                 <div class="banner banner-success">
-                                    🎉 Success - Credential ID 12345-134546-1232456
+                                    🎉 Successfully issued credential
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" onClick={closeModal}>
+                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); hydrateCredentialsStore(formValues().issuer) }}>
                                         Done
                                     </button>
                                 </div>
@@ -181,3 +232,9 @@ const IssueModal: Component<{ content }> = (props) => {
 }
 
 export default IssueModal;
+
+const getSchemaForSubject = (schemaId) => {
+    const { schema } = store.schemas.find(({schema}) => schema.id === schemaId);
+    const { $id, $schema, description, ...properties } = schema.schema;
+    return properties;
+}
