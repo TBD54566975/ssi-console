@@ -143,7 +143,7 @@ export class SSIService {
         const data = {
             "filter": `status = ${status}`
         }
-        const { submissions } = await this.sendRequest(`${GET_SSI.SUBMISSIONS}?filter=`);
+        const { submissions } = await this.sendRequest(`${GET_SSI.SUBMISSIONS}`);
         return submissions;
     }
     

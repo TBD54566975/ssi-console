@@ -66,7 +66,6 @@ const IssueModal: Component<{ content }> = (props) => {
             ...formValues().revocable && { "revocable": formValues().revocable },
             ...formValues().suspendable && { "suspendable": formValues().suspendable }
         }
-        console.log(data)
         const request = SSI.putCredential(data);
         const setters = { setIsLoading, setIsSuccess, setIsError };
         handleRequest(event, request, setters);

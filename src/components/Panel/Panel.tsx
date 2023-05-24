@@ -29,6 +29,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
         return Object.keys(filteredItem).map(key => {
             if (key === "body") return;
             if (key === "status") return;
+            if (key === "metadata") return;
             if (key === "tag") return (
                 <p class={`chip chip-${filteredItem[key].type}`}>
                     {filteredItem[key].label}
@@ -90,7 +91,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                                             {props.content.buttons.map(button => 
                                                 <button 
                                                     class={button.className}
-                                                    disabled={button.disabled}
+                                                    disabled={button.disabled || filteredItem["metadata"]?.["buttonState"]?.[button.label]?.disabled}
                                                     onClick={() => button.onClick(filteredItem)}> 
                                                     {button.label} 
                                                 </button>

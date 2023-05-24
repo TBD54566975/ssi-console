@@ -19,6 +19,7 @@
     --grey-20: #333333;
     --grey-30: #4D4D4D;
     --grey-50: #868686;
+    --white-transparent: rgba(255,255,255,0.1);
     --site-margin: 0 1rem;
     --font-xs: 0.75rem;
     --font-sm: 1rem;
@@ -150,6 +151,21 @@ a.primary-button,
     &:hover,
     &:focus {
         border-color: var(--color-red);
+    }
+}
+
+.warn-button {
+    background: var(--orange-20);
+    color: var(--color-white);
+    padding: 8px 22px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--orange-20);
+    font-weight: 700;
+    justify-content: center;
+
+    &:hover,
+    &:focus {
+        border-color: var(--color-orange);
     }
 }
 
