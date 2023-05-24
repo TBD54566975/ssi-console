@@ -40,8 +40,9 @@ password = "default-password"
 
 [services.did]
 name = "did"
-methods = ["key", "web"]
-resolution_methods = ["key", "web", "pkh", "peer"]
+methods = ["key", "web", "ion"]
+ion_resolver_url = "https://ion.tbddev.org"
+local_resolution_methods = ["key", "web", "pkh", "peer"]
 
 [services.schema]
 name = "schema"

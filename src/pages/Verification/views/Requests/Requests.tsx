@@ -16,21 +16,21 @@ const Requests: Component = () => {
                     label: <> <Icon svg={Plus} /> <p>Create new</p> </>
                 }
             }} />
-            {store.definitions && transformDefinitions(store.definitions).map(credential => 
+            {store.definitions && transformDefinitions(store.definitions).map(definition => 
                 <div class="item-panel-card">
                     <div>
                         <div class="item-panel-card-header">
-                            <div class="item-panel-card-header-icon" data-icon={credential.name[0]}></div>
+                            <div class="item-panel-card-header-icon" data-icon={definition.name[0]}></div>
                             <p class="item-panel-card-header-title">
-                                {credential.name}
+                                {definition.name}
                             </p>
                         </div>
                         <p class="item-panel-card-body">
-                            {credential.description}
+                            {definition.description}
                         </p>
                     </div>
                     <div>
-                        <a class="item-panel-card-link" href={`${location.origin}/submit/${requestId}`}>
+                        <a class="item-panel-card-link" href={`${location.origin}/submit/${requestId}`} target="_blank">
                             Submission URL <Icon svg={ExternalArrow} />
                         </a>
                         <button onClick={() => navigate(requestId)}

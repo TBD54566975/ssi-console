@@ -10,7 +10,11 @@ export class SSIService {
             method,
             ...body && { body: JSON.stringify(body) }
         });
-        return response.json();
+        if (response.status == 200) {
+            const data = response.json();
+            return data;
+        }
+        return response;
     }
 
     // GET methods
@@ -54,9 +58,9 @@ export class SSIService {
         const { dids: dids_web } = await this.sendRequest(GET_SSI.DIDS.replace("{method}", "web"));
         const { dids: dids_key } = await this.sendRequest(GET_SSI.DIDS.replace("{method}", "key"));
         return [
-            ...dids_ion,
-            ...dids_web,
-            ...dids_key
+            ...(dids_ion?.length ? dids_ion : []),
+            ...(dids_web?.length ? dids_web : []),
+            ...(dids_key?.length ? dids_key : [])
         ];
     }
 
@@ -135,8 +139,11 @@ export class SSIService {
         return this.sendRequest(url);
     }
     
-    async getSubmissions(): Promise<any> {
-        const { submissions } = await this.sendRequest(GET_SSI.SUBMISSIONS);
+    async getSubmissions(status: "pending" | "approved" | "denied" | "cancelled"): Promise<any> {
+        const data = {
+            "filter": `status = ${status}`
+        }
+        const { submissions } = await this.sendRequest(`${GET_SSI.SUBMISSIONS}?filter=`);
         return submissions;
     }
     
@@ -162,9 +169,7 @@ export class SSIService {
 
     // PUT methods
     async putCredential(data): Promise<any> {
-        const { credential } = await this.sendRequest(PUT_SSI.CREDENTIAL, 'PUT', data);
-        await this.getCredentials("issuer", credential.issuer);
-        return credential;
+        return this.sendRequest(PUT_SSI.CREDENTIAL, 'PUT', data);
     }
     
     async putCredentialStatus(id: string, data): Promise<any> {
@@ -178,8 +183,7 @@ export class SSIService {
     
     async putDID(method: DIDMethods, data): Promise<any> {
         const url = PUT_SSI.DID.replace("{method}", method)
-        const { did } = await this.sendRequest(url, 'PUT', data);
-        return did;
+        return this.sendRequest(url, 'PUT', data);
     }
 
     async putDIDIon(serviceEndpoints: DIDIonServiceEndpoint[] = []): Promise<any> {
@@ -190,8 +194,7 @@ export class SSIService {
                 serviceEndpoints //empty array if none
             }
         }
-        const { did } = await this.sendRequest(url, 'PUT', data);
-        return did;
+        return this.sendRequest(url, 'PUT', data);
     }
 
     async putDIDWeb(didWebID: string): Promise<any> {
@@ -202,8 +205,7 @@ export class SSIService {
                 didWebID // should be did:web:xxxx
             }
         }
-        const { did } = await this.sendRequest(url, 'PUT', data);
-        return did;
+        return this.sendRequest(url, 'PUT', data);
     }
 
     async putDIDKey(): Promise<any> {
@@ -211,8 +213,7 @@ export class SSIService {
         const data = {
             "keyType": "Ed25519"
         }
-        const { did } = await this.sendRequest(url, 'PUT', data);
-        return did;
+        return this.sendRequest(url, 'PUT', data);
     }
     
     async putIssuanceTemplate(data): Promise<any> {
@@ -260,16 +261,12 @@ export class SSIService {
     // DELETE methods
     async deleteCredential(id: string, issuer: string): Promise<any> {
         const url = DELETE_SSI.CREDENTIAL.replace('{id}', id);
-        const response = await this.sendRequest(url, 'DELETE');
-        await this.getCredentials("issuer", issuer);
-        return response;
+        return this.sendRequest(url, 'DELETE');
     }
     
     async deleteDID(method: DIDMethods, id: string): Promise<any> {
         const url = DELETE_SSI.DID.replace('{method}', method).replace('{id}', id);
-        const response = await this.sendRequest(url, 'DELETE');
-        await this.getDIDs();
-        return response;
+        this.sendRequest(url, 'DELETE');
     }
     
     async deleteIssuanceTemplate(id: string): Promise<any> {
@@ -284,16 +281,12 @@ export class SSIService {
     
     async deleteManifest(id: string): Promise<any> {
         const url = DELETE_SSI.MANIFEST.replace('{id}', id);
-        const response = await this.sendRequest(url, 'DELETE');
-        await this.getManifests();
-        return response;
+        return this.sendRequest(url, 'DELETE');
     }
     
     async deleteApplication(id: string): Promise<any> {
         const url = DELETE_SSI.APPLICATION.replace('{id}', id);
-        const response = await this.sendRequest(url, 'DELETE');
-        await this.getApplications();
-        return response;
+        return this.sendRequest(url, 'DELETE');
     }
     
     async deleteResponse(id: string): Promise<any> {
@@ -303,9 +296,7 @@ export class SSIService {
     
     async deleteDefinition(id: string): Promise<any> {
         const url = DELETE_SSI.DEFINITION.replace('{id}', id);
-        const response = this.sendRequest(url, 'DELETE');
-        await this.getDefinitions();
-        return response;
+        return this.sendRequest(url, 'DELETE');
     }
     
     async deleteSchema(id: string): Promise<any> {

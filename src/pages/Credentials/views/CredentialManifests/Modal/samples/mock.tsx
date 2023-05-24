@@ -286,11 +286,19 @@ export const inputDescriptorsInput = [
         "constraints": {
             "fields": [
                 {
-                    "intent_to_retain": true,
-                    "path": "$.path, $.vc.path",
+                    "path": [
+                        "$.firstName", 
+                        "$.vc.firstName"
+                    ],
+                },
+                {
+                    "path": [
+                        "$.lastName", 
+                        "$.vc.lastName"
+                    ],
                 }
             ]
         },
-        "id": 0
+        "id": "0"
     }
 ]

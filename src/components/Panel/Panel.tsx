@@ -90,6 +90,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                                             {props.content.buttons.map(button => 
                                                 <button 
                                                     class={button.className}
+                                                    disabled={button.disabled}
                                                     onClick={() => button.onClick(filteredItem)}> 
                                                     {button.label} 
                                                 </button>

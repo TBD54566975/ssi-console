@@ -8,7 +8,7 @@ import SSI from "../../../../../../utils/service";
 const IssueModal: Component<{ content }> = (props) => {
     //pass in these props
 
-    let initialFormValues = { json: '' }
+    let initialFormValues = { properties: '', expires: null, status: null, expiry: '' }
 
     // the component
     
@@ -41,7 +41,20 @@ const IssueModal: Component<{ content }> = (props) => {
 
     //actual form calls
     const handleSubmit = async (event) => {
-        const request = SSI.putCredential(formValues().json);
+        const data = {
+            "@context": [
+                "https://www.w3.org/2018/credentials/v1"
+            ],
+            "data": formValues().properties,
+            "expiry": formValues().expiry,
+            "issuer": "did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp",
+            "issuerKid": "#z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp",
+            "revocable": formValues().status,
+            "schemaId": "string",
+            "subject": "did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp",
+            "suspendable": formValues().status
+        }
+        const request = SSI.putCredential(data);
         const setters = { setIsLoading, setIsSuccess, setIsError };
         handleRequest(event, request, setters);
     };
@@ -55,7 +68,7 @@ const IssueModal: Component<{ content }> = (props) => {
     }
 
     const isFormValid = () => {
-        return formValues().json.trim() !== '' && !isError();
+        return formValues().properties.trim() !== '' && !isError();
     }
 
     //populate textarea field with sample input
@@ -88,12 +101,12 @@ const IssueModal: Component<{ content }> = (props) => {
                                     </div> 
                                 }
                                 <div class="field-container">
-                                    <label for="json">JSON</label>
+                                    <label for="properties">Subject data</label>
                                     <div class="textarea-container">
                                         <textarea 
-                                            id="json" 
-                                            name="json" 
-                                            value={formValues().json} 
+                                            id="properties" 
+                                            name="properties" 
+                                            value={formValues().properties} 
                                             onInput={handleInput}
                                             onkeydown={handleKeyDown}
                                             spellcheck={false}
@@ -107,6 +120,33 @@ const IssueModal: Component<{ content }> = (props) => {
                                         </button>
                                     </div>
                                 </div>
+                                <div class="field-container checkbox-container">
+                                    <input id="status" 
+                                        name="status"
+                                        checked={formValues().status}
+                                        onInput={handleInput}
+                                        type="checkbox"
+                                        class="checkbox-container" />
+                                    <label for="revocable">Allow status changes?</label>
+                                </div>
+                                <div class="field-container checkbox-container">
+                                    <input id="expires"
+                                        name="expires"
+                                        checked={formValues().expires}
+                                        onInput={handleInput}
+                                        type="checkbox"
+                                        class="checkbox-container" />
+                                    <label for="expires">Expires?</label>
+                                </div>
+                                {formValues().expires && <div class="field-container">
+                                    <label for="expiry">Expiry</label>
+                                    <input id="expiry"
+                                        name="expiry"
+                                        value={formValues().expiry}
+                                        onInput={handleInput} 
+                                        type="datetime-local"
+                                        class="input-container" />
+                                </div>}
                                 {/* {renderFormFromJSON(manifestInput.outputDescriptors[0], { setFormValues })} */}
                                 <div class="button-row">
                                     <button class="secondary-button" onClick={() => dialog.close()}>

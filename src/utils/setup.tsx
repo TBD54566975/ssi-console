@@ -1,4 +1,4 @@
-import SSI from "./service";
+import SSI, { DIDMethods } from "./service";
 import { store, setStore, updateStore } from "./store";
 
 // On first start of the application
@@ -6,38 +6,15 @@ const setupStore = async () => {
     // Attempt to get DIDs to add to the store
     const dids = await SSI.getDIDs();
     
-    if (!dids) {
+    if (!dids.length) {
         // If no DIDs exist, create an ion DID and store it
-        const newDID = await SSI.putDIDIon();
-
-        const metadata = {
-            "type": "didMetadata",
-            "label": "Primary",
-            "styles": {
-                "background": {
-                    "color": '#000000'
-                },
-                "text": {
-                    "color": '#FFFFFF'
-                }
-            }
-        }
-
-        const updateValue = {
-            [newDID.id]: {
-                did: newDID.id,
-                kid: newDID.verificationMethod.find(method => method.controller === newDID.id).id,
-                metadata
-            }
-        }; 
-        updateStore("user", updateValue);
-
-        localStorage.setItem(newDID.id, JSON.stringify(metadata))
-    } else {
-        // there are store dids, so lets store our metadata with them
-        await hydrateDIDStore(dids);
+        await SSI.putDIDIon();
     }
-    // hydrate the rest of the store
+
+    // hydrate the store
+    if (Object.values(store.user).length === 0) {
+        await hydrateDIDStore();
+    }
     if (store.manifests.length === 0) {
         await hydrateManifestStore();
     }
@@ -47,8 +24,10 @@ const setupStore = async () => {
     if (store.definitions.length === 0) {
         await hydrateDefinitionStore();
     }
-    if (store.submissions.length === 0) {
-        await hydrateSubmissionStore();
+    if (Object.values(store.submissions).length === 0) {
+        await hydrateSubmissionStore("pending");
+        await hydrateSubmissionStore("approved");
+        await hydrateSubmissionStore("denied");
     }
     // we hydrate these because there may be objects not issued by a newly set did
     // after all dids were soft deleted
@@ -59,37 +38,37 @@ const setupStore = async () => {
 
 export default setupStore;
 
-export const hydrateDIDStore = async (dids?) => {
-    if (!dids) {
-        dids = await SSI.getDIDs();
-    }
-
-    for (const did of dids) {
-        const updateValue = {
-            [did.id] : {
-                did: did.id,
-                kid: did.verificationMethod.find(method => method.controller === did.id).id,
+export const hydrateDIDStore = async () => {
+    const dids = await SSI.getDIDs();
+    if (dids.length) {
+        for (const did of dids) {
+            const updateValue = {
+                ...store.user,
+                [did.id] : {
+                    did: did.id,
+                    kid: did.verificationMethod.find(method => method.controller === did.id).id,
+                }
+            }
+            updateStore("user", updateValue);
+    
+            // make sure to hydrate the store with credentials we have access to
+            if (Object.values(store.credentials).length === 0) {
+                await hydrateCredentialsStore(did.id);
             }
         }
-        // include metadata if available in localstorage
-        if (localStorage.getItem(did.id)) {
-            updateValue[did.id]["metadata"] = JSON.parse(localStorage.getItem(did.id));
-        }
-        updateStore("user", updateValue);
-
-        // make sure to hydrate the store with credentials we have access to
-        if (store.credentials.length === 0) {
-            await hydrateCredentialsStore(did.id);
-        }
+    } else {
+        updateStore("user", {});
     }
 }
 
 export const hydrateCredentialsStore = async (issuerId) => {
     const credentials = await SSI.getCredentials("issuer", issuerId);
-    const updateValue = [
+    const updateValue = {
         ...store.credentials,
-        ...credentials
-    ]
+        [issuerId] : [
+            ...(credentials?.length ? credentials: [])
+        ]
+    }
     updateStore("credentials", updateValue);
 }
 
@@ -105,6 +84,19 @@ export const hydrateDefinitionStore = async () => {
     updateStore("definitions", await SSI.getDefinitions());
 }
 
-export const hydrateSubmissionStore = async () => {
-    updateStore("submissions", await SSI.getSubmissions());
+export const hydrateSubmissionStore = async (key: "pending" | "approved" | "denied" | "cancelled") => {
+    const submissions = await SSI.getSubmissions(key);
+    const updateValue = {
+        ...store.submissions,
+        [key]: [
+            ...(submissions?.length ? submissions : [])
+        ]
+    }
+    updateStore("submissions", updateValue);
+}
+
+export const deleteDIDFromStore = async (method: DIDMethods, id: string) => {
+    const response = await SSI.deleteDID(method, id); 
+    await hydrateDIDStore();
+    return response;
 }

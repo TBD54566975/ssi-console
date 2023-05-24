@@ -389,6 +389,7 @@ input[type="radio"]:checked ~ label {
 
         select {
             appearance: none;
+            padding-right: 3rem;
     
             + .icon-container {
                 position: absolute;
@@ -465,4 +466,13 @@ input[type="radio"]:checked ~ label {
     position: absolute;
     white-space: nowrap; 
     width: 1px;
+}
+
+.loading {
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }

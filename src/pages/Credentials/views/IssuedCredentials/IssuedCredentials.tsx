@@ -81,14 +81,17 @@ const formatCredentialData = (credentialSubject) => {
     )
 }
 
-const transformCredentials = (credentials) => {
-    return Object.values(credentials).map((vc: { credential }) => {
-        const { credential } = vc;
-        return {
-            name: `****-${credential.id.slice(-4)}`,
-            id: credential.credentialSubject.id,
-            type: credential.issuanceDate,
-            body: formatCredentialData(credential.credentialSubject)
-        }
-    })
+const transformCredentials = (credentialsByDID) => {
+    return Object.values(credentialsByDID).flatMap((credentialSet: []) => {
+        return [
+            ...credentialSet.map((credential: { id, credentialSubject, issuanceDate }) => {
+                return {
+                    name: `****-${credential.id.slice(-4)}`,
+                    id: credential.credentialSubject.id,
+                    type: credential?.issuanceDate,
+                    body: formatCredentialData(credential?.credentialSubject)
+                }
+            })
+        ];
+    });
 }

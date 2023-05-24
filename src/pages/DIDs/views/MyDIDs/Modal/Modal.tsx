@@ -46,9 +46,9 @@ const Modal: Component<{ content }> = (props) => {
 
     //actual form calls
     const handleSubmit = async (event) => {
-        const request = SSI.putDID(formValues().didType, formValues().json);
+        const request = SSI.putDID(formValues().didType, JSON.parse(formValues().json));
         const setters = { setIsLoading, setIsSuccess, setIsError };
-        handleRequest(event, request, setters, hydrateDIDStore);
+        handleRequest(event, request, setters);
     };
 
     const handleInput = (event) => {
@@ -68,17 +68,11 @@ const Modal: Component<{ content }> = (props) => {
     const populateSampleInput = (event) => {
         if (formValues().didType === "web") {
             didInput["options"]  = {
-                "didWebID": "example.com"
+                "didWebID": "did:web:example.com"
             }
         } else if (formValues().didType === "ion") {
             didInput["options"]  = {
-                "serviceEndpoints": [
-                    {
-                        "id": "",
-                        "type": "",
-                        "serviceEndpoint": "" // all fields must have a value or array should be empty
-                    }
-                ]
+                "serviceEndpoints": []
             }
         } else {
             delete didInput["options"]
@@ -92,7 +86,7 @@ const Modal: Component<{ content }> = (props) => {
 
     return (
         <div>
-            <button class={props.content.button.className} onclick={showModal}>
+            <button class={props.content.button.className} disabled={props.content.button.disabled} onclick={showModal}>
                 {props.content.button.label}
             </button>
             <dialog class="dialog" ref={dialog}>
@@ -124,7 +118,7 @@ const Modal: Component<{ content }> = (props) => {
                                             required
                                         >
                                             {options && options.map(option => 
-                                                <option value={option.toLowerCase()}>{option}</option>
+                                                <option value={option}>{option[0].toUpperCase() + option.substring(1)}</option>
                                             )}
                                         </select>
                                         <Icon svg={ArrowUpDown} />
@@ -144,14 +138,14 @@ const Modal: Component<{ content }> = (props) => {
                                             rows={3}
                                             required
                                         />
-                                        <button class="tiny-ghost-button" onclick={populateSampleInput}>
+                                        <button class="tiny-ghost-button" type="button" onclick={populateSampleInput}>
                                             <Icon svg={Beaker} />
                                             Try sample input
                                         </button>
                                     </div>
                                 </div>
                                 <div class="button-row">
-                                    <button class="secondary-button" onClick={() => dialog.close()}>
+                                    <button class="secondary-button" type="button" onClick={() => dialog.close()}>
                                         Cancel
                                     </button>
                                     <button class="primary-button" type="submit" disabled={!isFormValid()}>
@@ -166,10 +160,10 @@ const Modal: Component<{ content }> = (props) => {
                         {isSuccess() && (
                             <>
                                 <div class="banner banner-success">
-                                    🎉 Success - did is: 34567
+                                    🎉 Successfully created
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" onClick={closeModal}>
+                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); hydrateDIDStore() }}>
                                         Done
                                     </button>
                                 </div>

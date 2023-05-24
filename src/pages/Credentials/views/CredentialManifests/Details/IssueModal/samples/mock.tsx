@@ -1,5 +1,7 @@
 export const credentialInputJson = {
-    "@context": "string",
+    "@context": [
+        "https://www.w3.org/2018/credentials/v1"
+    ],
     "data": {
         "property1": null,
         "property2": null

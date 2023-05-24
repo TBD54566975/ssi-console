@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Component, createEffect, createSignal } from "solid-js";
 import "./CredentialManifests.scss";
 import Icon, { ExternalArrow, Plus } from "../../../../icons/Icon";
 import Modal from "./Modal/Modal";
@@ -9,7 +9,13 @@ import { store } from "../../../../utils/store";
 
 const CredentialManifests: Component = () => {
     const navigate = useNavigate();
-    const credentialId = '123';
+    const [ manifests, setManifests ] = createSignal(transformManifests(store.manifests));
+    
+    createEffect(() => {
+        const storeManifests = store.manifests;
+        setManifests(transformManifests(storeManifests));
+    })
+    
     return (
         <section class="item-panel">
             <Modal content={{
@@ -18,30 +24,32 @@ const CredentialManifests: Component = () => {
                     label: <> <Icon svg={Plus} /> <p>Create new</p> </>
                 }
             }} />
-            {store.manifests && transformManifests(store.manifests).map(credential => 
+            {manifests() && manifests().map(manifest => 
                 <div class="item-panel-card">
                     <div>
                         <div class="item-panel-card-header">
-                            <div class="item-panel-card-header-icon" data-icon={credential.name[0]}></div>
+                            <div class="item-panel-card-header-icon" data-icon={manifest.name?.[0]}></div>
                             <p class="item-panel-card-header-title">
-                                {credential.name}
+                                {manifest.name}
                             </p>
                         </div>
                         <p class="item-panel-card-body">
-                            {credential.description}
+                            {manifest.description}
                         </p>
                     </div>
                     <div>
-                        <a class="item-panel-card-link" href={`${location.origin}/apply/${credentialId}`} target="blank">
+                        <a class="item-panel-card-link" href={`${location.origin}/apply/${manifest.id}`} target="_blank">
                             Application URL <Icon svg={ExternalArrow} />
                         </a>
                         <IssueModal content={{
                             button: {
                                 className: "item-panel-card-button secondary-button",
                                 label: "Issue"
-                            }
+                            },
+                            manifest_id: manifest.id,
+                            schema_id: manifest.schemaId
                         }} />
-                        <button onClick={() => navigate(credentialId)}
+                        <button onClick={() => navigate(manifest.id)}
                             class="item-panel-card-button secondary-button">
                             Details
                         </button>
@@ -59,8 +67,9 @@ const transformManifests = (manifests) => {
         const { credential_manifest } = manifest;
         return {
             name: credential_manifest.name,
-            description: credential_manifest.description
-
+            description: credential_manifest.description,
+            id: credential_manifest.id,
+            schemaId: credential_manifest.output_descriptors[0].schema
         }
     })
 }

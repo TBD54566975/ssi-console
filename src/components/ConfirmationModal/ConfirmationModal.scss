@@ -1,0 +1,14 @@
+.confirmation-modal {
+    background: var(--grey-10);
+    color: var(--color-white);
+    border: 1px solid var(--grey-20);
+    box-shadow: 0 0 20px var(--color-black);
+    padding: 2rem;
+    border-radius: var(--radius-sm);
+    max-width: 600px;
+
+    p {
+        font-size: var(--font-sm);
+        margin-block-end: 2rem;
+    }
+}

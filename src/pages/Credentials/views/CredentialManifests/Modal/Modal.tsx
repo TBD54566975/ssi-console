@@ -5,6 +5,7 @@ import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, renderFormFr
 import { inputDescriptorsInput, manifestInput, schemaInput } from "./samples/mock";
 import SSI from "../../../../../utils/service";
 import { store } from "../../../../../utils/store";
+import { hydrateCredentialsStore, hydrateManifestStore } from "../../../../../utils/setup";
 
 const Modal: Component<{ content }> = (props) => {
     let initialFormValues = { 
@@ -14,7 +15,7 @@ const Modal: Component<{ content }> = (props) => {
         name: '', 
         description: '',
         issuerName: '',
-        issuer: '',
+        issuer: Object.keys(store.user)[0],
         includeSubmissionRequirements: null
     }
 
@@ -62,15 +63,17 @@ const Modal: Component<{ content }> = (props) => {
 
     //actual form calls
     const handleSubmit = async (event) => {
+        event.preventDefault();
         // first get schemaID
         const schemaPayload = {
             "author": store.user[formValues().issuer]["did"],
             "authorKid": store.user[formValues().issuer]["kid"],
             "name": formValues().name,
-            "schema": formValues().schema,
+            "schema": JSON.parse(formValues().schema),
             "sign": true
         }
-        const { id: schemaId } = await SSI.putSchema(schemaPayload);
+        const schemaResponse = await SSI.putSchema(schemaPayload);
+        const { id: schemaId } = await schemaResponse.json();
         
         // then let's map the fields to the expected payload
         const credentialPayload = {
@@ -84,23 +87,25 @@ const Modal: Component<{ content }> = (props) => {
                 {
                     "name": formValues().name,
                     "description": formValues().description,
-                    "id": 0,
+                    "id": "0",
                     "schema": schemaId
                 }
             ],
-            "presentationDefinition": {
-                "format": vpJWTFormat,
-                "name": `${formValues().name} Application Requirements`,
-                "description": `Some information is requireed in order to issue ${formValues().description}`,
-                "input_descriptors": formValues().inputDescriptors,
-                ...formValues().submissionRequirements !== '' &&  { "submission_requirements": formValues().submissionRequirements }
+            ...formValues().inputDescriptors !== '' && {
+                "presentationDefinition": {
+                    "id": "0",
+                    "name": `${formValues().name} Application Requirements`,
+                    "purpose": `Some information is required in order to issue ${formValues().description}`,
+                    "input_descriptors": JSON.parse(formValues().inputDescriptors),
+                    ...formValues().submissionRequirements !== '' &&  { "submission_requirements": JSON.parse(formValues().submissionRequirements) }
+                }
             }
         }
 
         // in future we prob also want a step for styles and issuance template, but backlog for now
         const request = SSI.putManifest(credentialPayload);
         const setters = { setIsLoading, setIsSuccess, setIsError };
-        handleRequest(event, request, setters);
+        const res = handleRequest(event, request, setters);
     };
 
     const handleInput = (event) => {
@@ -115,7 +120,7 @@ const Modal: Component<{ content }> = (props) => {
         let isComplete;
         if (step() === 1) isComplete = formValues().name.trim() !== '' && formValues().description.trim() !== ''
         if (step() === 2) isComplete = formValues().schema.trim() !== ''
-        if (step() === 3) isComplete = formValues().inputDescriptors.trim() !== ''
+        if (step() === 3) isComplete = true;
         if (step() === 4) isComplete = formValues().issuerName.trim() !== ''
         return isComplete && !isError();
     }
@@ -149,14 +154,14 @@ const Modal: Component<{ content }> = (props) => {
                 </div>
 
                 <div class="dialog-body">
-                    <h2>New Verifiable Credential</h2>
+                    <h2>New Verifiable Credential Template</h2>
                     <form onSubmit={handleSubmit}>
                         {!isLoading() && !isSuccess() && (
                             <>
                                 {isError() && 
                                     <div class="banner banner-danger">
                                         <Icon svg={DangerAlert} />
-                                        Error creating DID. Try again
+                                        Error creating credential. Try again
                                     </div> 
                                 }
 
@@ -186,10 +191,10 @@ const Modal: Component<{ content }> = (props) => {
                                             required />
                                     </div>
                                     <div class="button-row">
-                                        <button class="secondary-button" onClick={() => dialog.close()}>
+                                        <button class="secondary-button" type="button" onClick={() => dialog.close()}>
                                             Cancel
                                         </button>
-                                        <button class="primary-button" disabled={!isFormValid()} onClick={goToNextStep}>
+                                        <button class="primary-button" type="button" disabled={!isFormValid()} onClick={goToNextStep}>
                                             Next
                                         </button>
                                     </div>
@@ -209,20 +214,20 @@ const Modal: Component<{ content }> = (props) => {
                                                 autocomplete="off"
                                                 rows={3}
                                                 required />
-                                            <button class="tiny-ghost-button" onclick={populateSampleInput}>
+                                            <button class="tiny-ghost-button" type="button" onclick={populateSampleInput}>
                                                 <Icon svg={Beaker} />
                                                 Try sample input
                                             </button>
                                         </div>
                                     </div>
                                     <div class="button-row">
-                                        <button class="secondary-button" onClick={() => dialog.close()}>
+                                        <button class="secondary-button" type="button" onClick={() => dialog.close()}>
                                             Cancel
                                         </button>
-                                        <button class="secondary-button" onClick={goToPrevStep}>
+                                        <button class="secondary-button" type="button" onClick={goToPrevStep}>
                                             Back
                                         </button>
-                                        <button class="primary-button" disabled={!isFormValid()} onClick={goToNextStep}>
+                                        <button class="primary-button" type="button" disabled={!isFormValid()} onClick={goToNextStep}>
                                             Next
                                         </button>
                                     </div>
@@ -242,7 +247,7 @@ const Modal: Component<{ content }> = (props) => {
                                                 autocomplete="off"
                                                 rows={3}
                                                 required />
-                                            <button class="tiny-ghost-button" onclick={populateSampleInput}>
+                                            <button class="tiny-ghost-button" type="button" onclick={populateSampleInput}>
                                                 <Icon svg={Beaker} />
                                                 Try sample input
                                             </button>
@@ -278,13 +283,13 @@ const Modal: Component<{ content }> = (props) => {
                                     )}
                                 
                                     <div class="button-row">
-                                        <button class="secondary-button" onClick={() => dialog.close()}>
+                                        <button class="secondary-button" type="button" onClick={() => dialog.close()}>
                                             Cancel
                                         </button>
-                                        <button class="secondary-button" onClick={goToPrevStep}>
+                                        <button class="secondary-button" type="button" onClick={goToPrevStep}>
                                             Back
                                         </button>
-                                        <button class="primary-button" disabled={!isFormValid()} onClick={goToNextStep}>
+                                        <button class="primary-button" type="button" disabled={!isFormValid()} onClick={goToNextStep}>
                                             Next
                                         </button>
                                     </div>
@@ -302,7 +307,7 @@ const Modal: Component<{ content }> = (props) => {
                                                 required
                                             >
                                                 {Object.values(store.user) && Object.values(store.user).map(issuer => 
-                                                    <option value={issuer["did"]}>{issuer["metadata"]?.label || issuer["did"]}</option>
+                                                    <option value={issuer["did"]}>{issuer["did"]}</option>
                                                 )}
                                             </select>
                                             <Icon svg={ArrowUpDown} />
@@ -317,15 +322,14 @@ const Modal: Component<{ content }> = (props) => {
                                             class="input-container"
                                             value={formValues().issuerName} 
                                             onInput={handleInput}
-                                            onkeydown={handleKeyDown}
                                             spellcheck={false}
                                             required />
                                     </div>
                                     <div class="button-row">
-                                        <button class="secondary-button" onClick={() => dialog.close()}>
+                                        <button class="secondary-button" type="button" onClick={() => dialog.close()}>
                                             Cancel
                                         </button>
-                                        <button class="secondary-button" onClick={goToPrevStep}>
+                                        <button class="secondary-button" type="button" onClick={goToPrevStep}>
                                             Back
                                         </button>
                                         <button class="primary-button" type="submit" disabled={!isFormValid()}>
@@ -341,10 +345,10 @@ const Modal: Component<{ content }> = (props) => {
                         {isSuccess() && (
                             <>
                                 <div class="banner banner-success">
-                                    🎉 Success - did is: 34567
+                                    🎉 Successfully created credential
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" onClick={closeModal}>
+                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); hydrateManifestStore()}}>
                                         Done
                                     </button>
                                 </div>
