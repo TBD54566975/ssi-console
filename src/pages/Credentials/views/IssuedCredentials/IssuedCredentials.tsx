@@ -91,7 +91,9 @@ const formatCredentialData = (credentialSubject) => {
         return (
             <div class="entry-row">
                 <div class="key-entry">{entry[0]}</div>
-                <div class="value-entry">{JSON.stringify(entry[1], null, 2)}</div>
+                <div class="value-entry">
+                    <p>{JSON.stringify(entry[1], null, 2)}</p>
+                </div>
             </div>
         )
     });
@@ -99,7 +101,9 @@ const formatCredentialData = (credentialSubject) => {
         <div class="entry-container">
             <div class="entry-row">
                 <div class="key-entry">Subject DID</div>
-                <div class="value-entry">{JSON.stringify(id, null, 2)}</div>
+                <div class="value-entry">
+                    <p>{id}</p>
+                </div>
             </div>
             {data}
         </div>

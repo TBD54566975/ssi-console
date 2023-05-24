@@ -118,10 +118,11 @@
 
                 p {
                     word-break: break-all;
+                    color: var(--color-white);
 
                     &:first-child {
                         font-weight: 700;
-                        color: var(--color-white);
+                        color: var(--grey-50);
                         flex: 0 0 8rem;
                         line-break: anywhere;
                     }

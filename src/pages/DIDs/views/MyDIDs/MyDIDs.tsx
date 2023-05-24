@@ -10,11 +10,11 @@ import ConfirmationModal from "../../../../components/ConfirmationModal/Confirma
 import SSI from "../../../../utils/service";
 
 const MyDIDs: Component = () => {
-    let confirmDialog;
     const [ item, setItem ] = createSignal();
     const [ dids, setDIDs ] = createSignal(transformDIDs(store.user));
     const [ deletedDids, setDeletedDIDs ] = createSignal(transformDIDs(store.deletedDIDs));
     
+    let confirmDialog;
     const confirmDelete = async (item) => {
         await deleteDIDFromStore(item.type, item.id);
         confirmDialog.close();

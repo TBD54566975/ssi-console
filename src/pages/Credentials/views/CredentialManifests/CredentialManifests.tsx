@@ -65,7 +65,6 @@ export default CredentialManifests;
 const transformManifests = (manifests) => {
     return Object.values(manifests).map((manifest: { credential_manifest }) => {
         const { credential_manifest } = manifest;
-        console.log(credential_manifest)
         return {
             name: credential_manifest.name,
             description: credential_manifest.description,
