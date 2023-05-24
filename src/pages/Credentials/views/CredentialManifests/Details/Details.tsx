@@ -3,24 +3,38 @@ import "./Details.scss";
 import "../../../../../components/Panel/Panel.scss";
 import { credentialOutput } from "./samples/mock";
 import IssueModal from "./IssueModal/IssueModal";
+import { useLocation, useParams, useSearchParams } from "@solidjs/router";
+import { store } from "../../../../../utils/store";
+import Icon, { ExternalArrow } from "../../../../../icons/Icon";
 
 const Details: Component<{ credential }> = (props) => {
-    const { credential_manifest } = credentialOutput;
+    const params = useParams<{ id }>();
+    const [searchParams] = useSearchParams<{ schema, issuer }>();
+
+    const { credential_manifest } = store.manifests.find(manifest =>  manifest.id === params.id);
+    console.log(credential_manifest);
+
     return (
         <div class="details-page">
             <section class="details-page-hero panel">
                 <div class="details-page-hero-content">
-                    <h1>credname //{credential_manifest.name}</h1>
-                    <p>cred link mysite.com/12345678 //</p>
-                    <p>credid //{credential_manifest.id}</p>
-                    <p>Issuing from issuername// {credential_manifest.issuer.name}</p>
-                    <p>issuerdid // {credential_manifest.issuer.id}</p>
+                    <h1>{credential_manifest.name}</h1>
+                    <p>
+                        <a class="item-panel-card-link" href={`${location.origin}/apply/${credential_manifest.id}`} target="_blank">
+                            Application URL <Icon svg={ExternalArrow} />
+                        </a>
+                    </p>
+                    <p>{credential_manifest.id}</p>
+                    <p>{credential_manifest.issuer.name}</p>
+                    <p>{credential_manifest.issuer.id}</p>
                     <div class="details-page-hero-content-actions button-row">
                         <IssueModal content={{
                             button: {
                                 className: "secondary-button",
                                 label: "Issue"
-                            }
+                            },
+                            manifestId: params.id,
+                            schemaId: searchParams.schema
                         }} />
                         <button class="danger-button">Delete</button>
                     </div>
@@ -28,8 +42,8 @@ const Details: Component<{ credential }> = (props) => {
                 <div class="details-page-hero-card">
                     <div class="details-page-hero-card-content"
                         style={{
-                            background: credential_manifest.issuer.styles.background.color,
-                            color: credential_manifest.issuer.styles.text.color
+                            background: credential_manifest.issuer.styles?.background.color,
+                            color: credential_manifest.issuer.styles?.text.color
                         }}
                     >
                         <div class="details-page-hero-card-content-header">{credential_manifest.name}131231311231231</div>

@@ -49,7 +49,7 @@ const CredentialManifests: Component = () => {
                             manifestId: manifest.id,
                             schemaId: manifest.schemaId
                         }} />
-                        <button onClick={() => navigate(manifest.id)}
+                        <button onClick={() => navigate(`${manifest.id}?schema=${manifest.schemaId}`)}
                             class="item-panel-card-button secondary-button">
                             Details
                         </button>
@@ -65,11 +65,13 @@ export default CredentialManifests;
 const transformManifests = (manifests) => {
     return Object.values(manifests).map((manifest: { credential_manifest }) => {
         const { credential_manifest } = manifest;
+        console.log(credential_manifest)
         return {
             name: credential_manifest.name,
             description: credential_manifest.description,
             id: credential_manifest.id,
-            schemaId: credential_manifest.output_descriptors[0].schema
+            schemaId: credential_manifest.output_descriptors[0].schema,
+            issuer: credential_manifest.issuer
         }
     })
 }
