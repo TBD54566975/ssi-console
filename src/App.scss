@@ -80,6 +80,7 @@ button {
     &:hover,
     &:focus {
         opacity: 0.9;
+        cursor: pointer;
     }
 
     &:active {

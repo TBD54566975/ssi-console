@@ -96,11 +96,13 @@ const formatCredentialData = (credentialSubject) => {
         )
     });
     return (
-        <pre>
-            <code class="entry-container">
-                {data}
-            </code>
-        </pre>
+        <div class="entry-container">
+            <div class="entry-row">
+                <div class="key-entry">Subject DID</div>
+                <div class="value-entry">{JSON.stringify(id, null, 2)}</div>
+            </div>
+            {data}
+        </div>
     )
 }
 
@@ -113,9 +115,14 @@ const transformCredentials = (credentials, status: "active" | "suspended" | "rev
                 if (status === "revoked" && (credential["Revoked"])) return true;
                 return false;
             }).map((credential : { Credential })  => {
+            const manifestName = store.manifests.find(manifest => { 
+                if (credential.Credential.credentialSchema) {
+                    return manifest.credential_manifest.output_descriptors.find(output => output.schema === credential.Credential.credentialSchema.id);
+                }
+                })?.credential_manifest?.name || "Verifiable Credential";
                 return {
                     name: `****-${credential.Credential.id.slice(-4)}`,
-                    subjectId: credential.Credential.credentialSubject.id,
+                    credentialName: manifestName,
                     type: credential.Credential.issuanceDate,
                     body: formatCredentialData(credential.Credential.credentialSubject),
                     metadata: {
