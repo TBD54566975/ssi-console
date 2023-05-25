@@ -2,7 +2,7 @@ import { Component, JSX, Show, createSignal, onCleanup } from "solid-js";
 import "./Modal.scss";
 import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../icons/Icon";
 import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, renderFormFromJSON, updateFormOnInput, vcJWTFormat, vpJWTFormat } from "../../../../../utils/helpers";
-import { inputDescriptorsInput, manifestInput, schemaInput } from "./samples/mock";
+import { inputDescriptorsInput, manifestInput, schemaInput, stylesInput } from "./samples/mock";
 import SSI from "../../../../../utils/service";
 import { store } from "../../../../../utils/store";
 import { hydrateCredentialsStore, hydrateManifestStore, hydrateSchemaStore } from "../../../../../utils/setup";
@@ -17,7 +17,11 @@ const Modal: Component<{ content }> = (props) => {
         issuerName: '',
         issuer: Object.keys(store.user)[0],
         includeSubmissionRequirements: null,
-        schemaId: ''
+        schemaId: '',
+        includeStyles: null,
+        styles: '',
+        includeDisplay: null,
+        display: ''
     }
 
     // the component
@@ -96,7 +100,9 @@ const Modal: Component<{ content }> = (props) => {
                     "name": formValues().name,
                     "description": formValues().description,
                     "id": "0",
-                    "schema": schemaId
+                    "schema": schemaId,
+                    // ...formValues().styles !== '' && { "styles": formValues().styles },
+                    // ...formValues().display !== '' && { "display": formValues().display }
                 }
             ],
             ...formValues().inputDescriptors !== '' && {
@@ -130,6 +136,7 @@ const Modal: Component<{ content }> = (props) => {
         if (step() === 1) isComplete = formValues().name.trim() !== '' && formValues().description.trim() !== ''
         if (step() === 2) isComplete = formValues().schema.trim() !== '' || formValues().schemaId.trim() !== ''
         if (step() === 3) isComplete = true;
+        // if (step() === 4) isComplete = true;
         if (step() === 4) isComplete = formValues().issuerName.trim() !== ''
         return isComplete && !isError();
     }
@@ -138,7 +145,7 @@ const Modal: Component<{ content }> = (props) => {
     const populateSampleInput = (event) => {
         const setters = { setIsError, setFormValues };;
         let fieldToSet;
-        let sampleInput: typeof schemaInput.schema | typeof inputDescriptorsInput;
+        let sampleInput: typeof schemaInput.schema | typeof inputDescriptorsInput | typeof stylesInput;
         if (step() === 2) {
             fieldToSet = 'schema';
             sampleInput = schemaInput.schema;
@@ -147,6 +154,10 @@ const Modal: Component<{ content }> = (props) => {
             fieldToSet = 'inputDescriptors';
             sampleInput = inputDescriptorsInput;
         }
+        // if (step() === 4) {
+        //     fieldToSet = 'styles';
+        //     sampleInput = stylesInput;
+        // }
         insertSampleInput(event, setters, fieldToSet, sampleInput);
     }
 
@@ -223,7 +234,7 @@ const Modal: Component<{ content }> = (props) => {
                                                 required
                                             >
                                                 <option value={''}>New data set</option>
-                                                {Object.values(store.schemas) && Object.values(store.schemas).map(({schema}) => 
+                                                {store.schemas && Object.values(store.schemas).map(({schema}) => 
                                                     <option value={schema["id"]}>{schema["name"]}</option>
                                                 )}
                                             </select>
@@ -297,7 +308,7 @@ const Modal: Component<{ content }> = (props) => {
                                             onInput={handleInput}
                                             type="checkbox"
                                             class="checkbox-container" />
-                                        <label for="includeSubmissionRequirements">Include submission requirements?</label>
+                                        <label for="includeSubmissionRequirements">Include submission rules?</label>
                                     </div>
 
                                     {formValues().includeSubmissionRequirements && (
@@ -330,6 +341,68 @@ const Modal: Component<{ content }> = (props) => {
                                         </button>
                                     </div>
                                 </Show>
+
+                                {/* <Show when={step() === 4}>
+                                    <div class="field-container">
+                                        <label for="styles">Styles</label>
+                                        <div class="textarea-container">
+                                            <textarea 
+                                                id="styles" 
+                                                name="styles" 
+                                                value={formValues().styles} 
+                                                onInput={handleInput}
+                                                onkeydown={handleKeyDown}
+                                                spellcheck={false}
+                                                autocomplete="off"
+                                                rows={3}
+                                                required />
+                                            <button class="tiny-ghost-button" type="button" onclick={populateSampleInput}>
+                                                <Icon svg={Beaker} />
+                                                Try sample input
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="field-container checkbox-container">
+                                        <input id="includeDisplay" 
+                                            name="includeDisplay"
+                                            checked={formValues().includeDisplay}
+                                            onInput={handleInput}
+                                            type="checkbox"
+                                            class="checkbox-container" />
+                                        <label for="includeDisplay">Include display properties?</label>
+                                    </div>
+
+                                    {formValues().includeDisplay && (
+                                        <div class="field-container">
+                                            <label for="submission_requirements">Display properties</label>
+                                            <div class="textarea-container">
+                                                <textarea 
+                                                    id="submissionRequirements" 
+                                                    name="submissionRequirements" 
+                                                    value={formValues().submissionRequirements} 
+                                                    onInput={handleInput}
+                                                    onkeydown={handleKeyDown}
+                                                    spellcheck={false}
+                                                    autocomplete="off"
+                                                    rows={3}
+                                                    required />
+                                            </div>
+                                        </div>
+                                    )}
+                                
+                                    <div class="button-row">
+                                        <button class="secondary-button" type="button" onClick={() => dialog.close()}>
+                                            Cancel
+                                        </button>
+                                        <button class="secondary-button" type="button" onClick={goToPrevStep}>
+                                            Back
+                                        </button>
+                                        <button class="primary-button" type="button" disabled={!isFormValid()} onClick={goToNextStep}>
+                                            Next
+                                        </button>
+                                    </div>
+                                </Show> */}
 
                                 <Show when={step() === 4} >
                                     <div class="field-container">

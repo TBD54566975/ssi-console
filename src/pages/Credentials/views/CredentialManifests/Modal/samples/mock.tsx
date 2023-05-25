@@ -302,3 +302,20 @@ export const inputDescriptorsInput = [
         "id": "0"
     }
 ]
+
+export const stylesInput = {
+    "background": {
+      "color": "#FFEC19"
+    },
+    "hero": {
+      "alt": "My hero image",
+      "uri": "http://mysite.com/image"
+    },
+    "text": {
+      "color": "#000000"
+    },
+    "thumbnail": {
+      "alt": "My thumbnail",
+      "uri": "http://mysite.com/image"
+    }
+  }

@@ -119,6 +119,5 @@ export const deleteDIDFromStore = async (method: DIDMethods, id: string) => {
 export const deleteManifestFromStore = async (id: string) => {
     const response = await SSI.deleteManifest(id); 
     await hydrateManifestStore();
-    console.log(response)
     return response;
 }

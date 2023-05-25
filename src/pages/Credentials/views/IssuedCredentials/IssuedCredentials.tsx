@@ -114,30 +114,31 @@ const transformCredentials = (credentials, status: "active" | "suspended" | "rev
     return Object.values(credentials).flatMap((credentialSet: []) => {
         return [
             ...credentialSet.filter(credential => {
-                if (status === "active" && (!credential["Suspended"] && !credential["Revoked"])) return true;
-                if (status === "suspended" && (credential["Suspended"])) return true;
-                if (status === "revoked" && (credential["Revoked"])) return true;
+                if (status === "active" && (!credential["suspended"] && !credential["revoked"])) return true;
+                if (status === "suspended" && (credential["suspended"])) return true;
+                if (status === "revoked" && (credential["revoked"])) return true;
                 return false;
-            }).map((credential : { Credential })  => {
-            const manifestName = store.manifests.find(manifest => { 
-                if (credential.Credential.credentialSchema) {
-                    return manifest.credential_manifest.output_descriptors.find(output => output.schema === credential.Credential.credentialSchema.id);
+            }).map((cred : { credential })  => {
+            const { credential } = cred;
+                const manifestName = store.manifests.find(manifest => { 
+                if (credential.credentialSchema) {
+                    return manifest.credential_manifest.output_descriptors.find(output => output.schema === credential.credentialSchema.id);
                 }
                 })?.credential_manifest?.name || "Verifiable Credential";
                 return {
-                    name: `****-${credential.Credential.id.slice(-4)}`,
+                    name: `****-${credential.id.slice(-4)}`,
                     credentialName: manifestName,
-                    type: credential.Credential.issuanceDate,
-                    body: formatCredentialData(credential.Credential.credentialSubject),
+                    type: credential.issuanceDate,
+                    body: formatCredentialData(credential.credentialSubject),
                     metadata: {
-                        id: credential.Credential.id,
-                        issuerId: credential.Credential.issuer,
+                        id: credential.id,
+                        issuerId: credential.issuer,
                         buttonState: {
                             "Suspend": {
-                                disabled: credential.Credential.credentialStatus?.statusPurpose !== "suspension"
+                                disabled: credential.credentialStatus?.statusPurpose !== "suspension"
                             },
                             "Revoke": {
-                                disabled: credential.Credential.credentialStatus?.statusPurpose !== "revocation"
+                                disabled: credential.credentialStatus?.statusPurpose !== "revocation"
                             }  
                         }
                     }
