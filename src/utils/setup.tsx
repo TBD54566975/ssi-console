@@ -47,6 +47,7 @@ export default setupStore;
 export const hydrateDIDStore = async () => {
     const dids = await SSI.getDIDs();
     if (dids.length) {
+        updateStore("user", {});
         for (const did of dids) {
             const updateValue = {
                 ...store.user,
