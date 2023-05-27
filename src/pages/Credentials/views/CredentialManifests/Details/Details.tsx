@@ -135,7 +135,7 @@ const Details: Component<{ credential }> = (props) => {
                         <h2>Requirements</h2>
                     </div>
                     <div class="entry-container panel-body">
-                        {Object.entries(credential_manifest.presentation_definition).map(entry => {
+                        {credential_manifest.presentation_definition && Object.entries(credential_manifest.presentation_definition).map(entry => {
                             return (
                                 <div class="entry-row">
                                     <div class="key-entry">{entry[0]}</div>
