@@ -12,16 +12,16 @@ const setupStore = async () => {
     }
 
     // hydrate the store
-    if (Object.values(store.user).length === 0) {
+    if (store.user && Object.values(store.user).length === 0) {
         await hydrateDIDStore();
     }
-    if (store.manifests.length === 0) {
+    if (store.manifests?.length === 0) {
         await hydrateManifestStore();
     }
-    if (store.applications.length === 0) {
+    if (store.applications?.length === 0) {
         await hydrateApplicationStore();
     }
-    if (store.definitions.length === 0) {
+    if (store.definitions?.length === 0) {
         await hydrateDefinitionStore();
     }
     if (Object.values(store.submissions).length === 0) {
@@ -29,10 +29,10 @@ const setupStore = async () => {
         await hydrateSubmissionStore("approved");
         await hydrateSubmissionStore("denied");
     }
-    if (store.schemas.length === 0) {
+    if (store.schemas?.length === 0) {
         await hydrateSchemaStore();
     }
-    if (store.deletedDIDs.length === 0) {
+    if (store.deletedDIDs?.length === 0) {
         await hydrateDeletedDIDsStore();
     }
     // we hydrate these because there may be objects not issued by a newly set did

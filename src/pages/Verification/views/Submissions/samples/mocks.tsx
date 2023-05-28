@@ -19,7 +19,7 @@ export const submissions = [
     },
     {
         "reason": "good reasons",
-        "status": "approved",
+        "status": "pending",
         "verifiablePresentation": {
             "holder": "did:key:1234567",
             "id": "12345-123456-123456",

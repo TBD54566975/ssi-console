@@ -82,7 +82,7 @@ const IssueModal: Component<{ content }> = (props) => {
     const isFormValid = () => {
         const isExpiryValid = formValues().expires ? formValues().expiry !== '' : true;
         const isSubjectValid = formValues().subject !== '';
-        const isSubjectDataValid = formValues().properties.trim() !== '' && formValues().properties.trim() !== schemaProperties;
+        const isSubjectDataValid = formValues().properties.trim() !== '' && formValues().properties.trim() !== schemaProperties
         return isExpiryValid && isSubjectValid && isSubjectDataValid && !isError();
     }
 

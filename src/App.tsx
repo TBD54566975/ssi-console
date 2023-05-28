@@ -11,7 +11,7 @@ import setupStore from './utils/setup';
 
 
 const App: Component = () => {
-    let username = "kirahsapong";
+    let username = "tbd";
     const { pathname } = useLocation();
     const [ isLoading, setIsLoading ] = createSignal(true);
 

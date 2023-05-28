@@ -8,7 +8,7 @@ const Submissions: Component = () => {
         "for-review": {
             id: "for-review",
             title: "For Review",
-            listItems: transformSubmissions(store.submissions),
+            listItems: transformSubmissions(store.submissions["pending"]),
             fallback: "You have no new Submissions to review, so there's nothing here.",
             buttons: [
                 {
@@ -49,14 +49,20 @@ const Submissions: Component = () => {
 export default Submissions;
 
 const transformSubmissions = (submissions) => {
-    return Object.values(submissions).flatMap((submissionSet: []) => {
-        return [...submissionSet.map((submission: { verifiablePresentation, status })  => {
+    if (typeof submissions === "object") {
+        submissions = Object.values(submissions);
+    }
+    if (submissions) {
+        return submissions.map((submission: { verifiablePresentation, status })  => {
             return {
                 name: `****-${submission.verifiablePresentation.id.slice(-4)}`,
-                id: store.definitions.find(definition => definition.id === submission.verifiablePresentation.presentation_submission.definitionID)?.name,
-                type: submission.status
+                id: store.definitions?.find(definition => definition.id === submission.verifiablePresentation.presentation_submission.definitionID)?.name,
+                tag: {
+                    type: "info",
+                    label: submission.status[0].toUpperCase() + submission.status.substring(1)
+                }
             }
-        })]
-
-    })
+        });
+    };
+    return [];
 }
