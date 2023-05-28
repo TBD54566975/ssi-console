@@ -9,7 +9,7 @@ const Applications: Component = () => {
         incoming: {
             id: "incoming",
             title: "Incoming",
-            listItems: transformApplications(store.applications),
+            listItems: transformApplications(applications),
             fallback: "You have no new Applications to review, so there's nothing here.",
             buttons: [
                 {
@@ -55,7 +55,10 @@ const transformApplications = (applications) => {
         return {
             name: `****-${application.id.slice(-4)}`,
             id: Object.values(store.credentials).find((credential : { id, name})  => credential.id === application.manifest_id)?.["name"],
-            type: "Needs Review"
+            tag: {
+                type: "info",
+                label: "Needs Review",
+            }
         }
     })
 }

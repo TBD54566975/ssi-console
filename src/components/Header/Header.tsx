@@ -5,6 +5,7 @@ import { A } from '@solidjs/router';
 import routes from '../../routes/routes';
 import Icon, { ArrowRight, Bell, ChevronDown, ExternalArrow, Plus } from '../../icons/Icon';
 import NotifyBlock, { NotifyBlockContent } from '../NotifyBlock/NotifyBlock';
+import { store } from '../../utils/store';
 
 const Header: Component<{ username: string }> = (props) => {
   return (
@@ -82,22 +83,24 @@ export const notifications: NotifyBlockContent[] = [
     {
         title: "View applications",
         href: "/credentials/applications",
-        hasNotify: true,
-        message: "You have pending applications to resolve"
+        hasNotify: !!store.applications?.length,
+        ...!!store.applications?.length && { message: "You have pending applications to resolve" }
     },
     {
         title: "View submissions",
-        href: "/verification/submissions"
+        href: "/verification/submissions",
+        hasNotify: store.submissions && !!Object.values(store.submissions)?.length,
+        ...store.submissions && !!Object.values(store.submissions)?.length && { message: "You have pending applications to resolve" }
     }
 ]
 
 const createMenu = [
     {
-        title: "new credential",
+        title: "New credential",
         href: "/credentials"
     },
     {
-        title: "new submission link",
+        title: "New submission link",
         href: "/verification"
     }
 ]

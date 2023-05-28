@@ -9,7 +9,7 @@
             "c c d"
             "c c e";
             grid-template-columns: 3fr 1fr 3fr;
-            grid-template-rows: 3fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
 
             & > :is(:nth-child(1)) {
                 grid-area: a;

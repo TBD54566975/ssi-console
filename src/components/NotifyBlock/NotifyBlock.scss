@@ -4,6 +4,7 @@
     color: var(--color-blue);
     border: 1px solid;
     padding: 1rem;
+    min-width: 300px;
 
     &-content {
         display: flex;
