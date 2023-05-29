@@ -12,7 +12,7 @@ const Modal: Component<{ content }> = (props) => {
 
     let initialFormValues = { 
         inputDescriptors: '', 
-        verifier: '',
+        verifier: Object.keys(store.user)[0],
         name: '',
         purpose: ''
     }
