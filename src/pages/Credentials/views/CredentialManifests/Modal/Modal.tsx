@@ -16,7 +16,6 @@ const Modal: Component<{ content }> = (props) => {
         description: '',
         issuerName: '',
         issuer: Object.keys(store.user)[0],
-        includeSubmissionRequirements: null,
         schemaId: '',
         includeStyles: null,
         styles: '',
@@ -224,7 +223,7 @@ const Modal: Component<{ content }> = (props) => {
 
                                 <Show when={step() === 2}>
                                     <div class="field-container">
-                                        <label for="schemaId">Data set</label>
+                                        <label for="schemaId">Schema</label>
                                         <div class="select-container">
                                             <select 
                                                 id="schemaId" 
@@ -300,34 +299,6 @@ const Modal: Component<{ content }> = (props) => {
                                             </button>
                                         </div>
                                     </div>
-
-                                    <div class="field-container checkbox-container">
-                                        <input id="includeSubmissionRequirements" 
-                                            name="includeSubmissionRequirements"
-                                            checked={formValues().includeSubmissionRequirements}
-                                            onInput={handleInput}
-                                            type="checkbox"
-                                            class="checkbox-container" />
-                                        <label for="includeSubmissionRequirements">Include submission rules?</label>
-                                    </div>
-
-                                    {formValues().includeSubmissionRequirements && (
-                                        <div class="field-container">
-                                            <label for="submission_requirements">Rules</label>
-                                            <div class="textarea-container">
-                                                <textarea 
-                                                    id="submissionRequirements" 
-                                                    name="submissionRequirements" 
-                                                    value={formValues().submissionRequirements} 
-                                                    onInput={handleInput}
-                                                    onkeydown={handleKeyDown}
-                                                    spellcheck={false}
-                                                    autocomplete="off"
-                                                    rows={3}
-                                                    required />
-                                            </div>
-                                        </div>
-                                    )}
                                 
                                     <div class="button-row">
                                         <button class="secondary-button" type="button" onClick={() => dialog.close()}>
