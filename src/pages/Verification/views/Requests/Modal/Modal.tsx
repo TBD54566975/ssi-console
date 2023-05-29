@@ -67,6 +67,8 @@ const Modal: Component<{ content }> = (props) => {
             const request = SSI.putDefinition(definitionPayload);
             const setters = { setIsLoading, setIsSuccess, setIsError };
             handleRequest(event, request, setters);
+            // Leaving this here for now, as we may want to create a presentation request immediately after creating its definition.
+
             // const definitionResponse = await SSI.putDefinition(definitionPayload);
             // const { presentation_definition } = await definitionResponse.json();
             // definitionId = presentation_definition.id

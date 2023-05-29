@@ -32,7 +32,7 @@ const Details: Component<{ request }> = (props) => {
                         <p class="details-description">{presentation_definition.purpose}</p>
                         <p>
                             <a class="item-panel-card-link" href={`${location.origin}/submit/${presentation_definition.id}`} target="_blank">
-                                Application URL <Icon svg={ExternalArrow} />
+                                Submission URL <Icon svg={ExternalArrow} />
                             </a>
                         </p>
                         <div class="details-page-hero-content-actions button-row">

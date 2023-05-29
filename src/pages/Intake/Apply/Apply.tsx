@@ -7,6 +7,7 @@ import { useLocation, useParams } from "@solidjs/router";
 import { store } from "../../../utils/store";
 
 const Apply: Component = () => {
+    const params = useParams<{ id }>();
     let initialFormValues = { json: '' }
 
     // the component
@@ -14,8 +15,6 @@ const Apply: Component = () => {
     const [isLoading, setIsLoading] = createSignal(false);
     const [isSuccess, setIsSuccess] = createSignal(false);
     const [isError, setIsError] = createSignal(false);
-
-    const params = useParams<{ id }>();
 
     const [ manifest, setManifest ] = createSignal();
 
