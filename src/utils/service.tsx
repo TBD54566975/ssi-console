@@ -150,6 +150,11 @@ export class SSIService {
         return this.sendRequest(url);
     }
 
+    async getRequest(id: string): Promise<any> {
+        const url = GET_SSI.REQUEST.replace('{id}', id);
+        return this.sendRequest(url);
+    }
+
     async getSubmissions(status: "pending" | "approved" | "denied" | "cancelled"): Promise<any> {
         const data = {
             "filter": `status='${status}'`
@@ -251,6 +256,10 @@ export class SSIService {
     async putDefinition(data): Promise<any> {
         return this.sendRequest(PUT_SSI.DEFINITION, 'PUT', data);
     }
+
+    async putRequest(data): Promise<any> {
+        return this.sendRequest(PUT_SSI.REQUEST, 'PUT', data);
+    }
     
     async putSubmission(data): Promise<any> {
         return this.sendRequest(PUT_SSI.SUBMISSION, 'PUT', data);
@@ -309,6 +318,11 @@ export class SSIService {
         const url = DELETE_SSI.DEFINITION.replace('{id}', id);
         return this.sendRequest(url, 'DELETE');
     }
+
+    async deleteRequest(id: string): Promise<any> {
+        const url = DELETE_SSI.REQUEST.replace('{id}', id);
+        return this.sendRequest(url, 'DELETE');
+    }
     
     async deleteSchema(id: string): Promise<any> {
         const url = DELETE_SSI.SCHEMA.replace('{id}', id);
@@ -339,6 +353,7 @@ enum GET_SSI {
     CANCEL_OPERATION = '/v1/operations/cancel/{id}',
     DEFINITIONS = '/v1/presentations/definitions',
     DEFINITION = '/v1/presentations/definitions/{id}',
+    REQUEST = '/v1/presentations/requests/{id}',
     SUBMISSIONS = '/v1/presentations/submissions',
     SUBMISSION = '/v1/presentations/submissions/{id}',
     SCHEMAS = '/v1/schemas',
@@ -357,6 +372,7 @@ enum PUT_SSI {
     APPLICATION = '/v1/manifests/applications',
     APPLICATION_REVIEW = '/v1/manifests/applications/{id}/review',
     DEFINITION = '/v1/presentations/definitions',
+    REQUEST = '/v1/presentations/requests',
     SUBMISSION = '/v1/presentations/submissions',
     SUBMISSION_REVIEW = '/v1/presentations/submissions/{id}/review',
     SCHEMA = '/v1/schemas',
@@ -372,6 +388,7 @@ enum DELETE_SSI {
     APPLICATION = '/v1/manifests/applications/{id}',
     RESPONSE = '/v1/manifests/responses/{id}',
     DEFINITION = '/v1/presentations/definitions/{id}',
+    REQUEST = '/v1/presentations/requests/{id}',
     SCHEMA = '/v1/schemas/{id}'
 }
 

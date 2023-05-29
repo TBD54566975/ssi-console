@@ -2,122 +2,69 @@ import { Component } from "solid-js";
 import "./Details.scss";
 import "../../../../../components/Panel/Panel.scss";
 import { credentialOutput } from "./samples/mock";
+import { useParams, useSearchParams, useNavigate } from "@solidjs/router";
+import ConfirmationModal from "../../../../../components/ConfirmationModal/ConfirmationModal";
+import Icon, { ExternalArrow } from "../../../../../icons/Icon";
+import { deleteDefinitionFromStore, deleteManifestFromStore, hydrateDefinitionStore, hydrateManifestStore } from "../../../../../utils/setup";
+import { store } from "../../../../../utils/store";
+import IssueModal from "../../../../Credentials/views/CredentialManifests/Details/IssueModal/IssueModal";
 
-const Details: Component<{ credential }> = (props) => {
-    const { credential_manifest } = credentialOutput;
+const Details: Component<{ request }> = (props) => {
+    const params = useParams<{ id }>();
+    const navigate = useNavigate();
+
+    const presentation_definition = store.definitions.find(definition =>  definition.id === params.id);
+
+    let confirmDialog;
+    const confirmDelete = async (item) => {
+        await deleteDefinitionFromStore(item.id);
+        await hydrateDefinitionStore();
+        confirmDialog.close();
+        navigate('/credentials', { replace: true });
+    }
+
     return (
         <div class="details-page">
-            <section class="details-page-hero panel">
-                <div class="details-page-hero-content">
-                    <h1>request name //{credential_manifest.name}</h1>
-                    <p>Link is : mysite.com/232435</p>
-                    <p>credid //{credential_manifest.id}</p>
-                    <p>Issuing from issuername// {credential_manifest.issuer.name}</p>
-                    <p>issuerdid // {credential_manifest.issuer.id}</p>
-                    <div class="details-page-hero-content-actions button-row">
-                        <button class="danger-button">Delete</button>
-                    </div>
-                </div>
-                <div class="details-page-hero-card">
-                    <div class="details-page-hero-card-content"
-                        style={{
-                            background: credential_manifest.issuer.styles.background.color,
-                            color: credential_manifest.issuer.styles.text.color
-                        }}
-                    >
-                        <div class="details-page-hero-card-content-header">{credential_manifest.name}131231311231231</div>
-                        <div class="details-page-hero-card-content-body">Verifiable Credential</div>
-                    </div>
-                </div>
-            </section>
             <div class="details-container">
-                <section class="panel">
-                    <div class="panel-header">
-                        <h2>Data</h2>
+                <section class="details-page-hero panel">
+                    <div class="details-page-hero-content">
+                        <h1>{presentation_definition.name}</h1>
+                        <p class="details-description">{presentation_definition.purpose}</p>
+                        <p>
+                            <a class="item-panel-card-link" href={`${location.origin}/submit/${presentation_definition.id}`} target="_blank">
+                                Submission URL <Icon svg={ExternalArrow} />
+                            </a>
+                        </p>
+                        <div class="details-page-hero-content-actions button-row">
+                            <button class="danger-button" onClick={() => confirmDialog.showModal()}>Delete</button>
+                        </div>
+                        <ConfirmationModal 
+                            ref={confirmDialog}
+                            onCancel={() => confirmDialog.close()}
+                            onConfirm={() => confirmDelete(presentation_definition)}
+                            message={"Are you sure you want to delete this credential? This action is irreversible."}
+                            cancelMessage={"No, cancel"}
+                            confirmMessage={"Yes, delete"}
+                            />
                     </div>
-                    <ul>
-                        <li class="panel-row">
-                            <div class="panel-row-header">
-                                schemaline 1
-                            </div>
-                        </li>
-                        <li class="panel-row">
-                            <div class="panel-row-header">
-                                schemaline 2
-                            </div>
-                        </li>
-                    </ul>
                 </section>
+                <div></div>
                 <section class="panel">
                     <div class="panel-header">
-                        <h2>Requirements</h2>
+                        <h2>Details</h2>
                     </div>
-                    <ul>
-                        <li class="panel-row">
-                            <div class="panel-row-header">
-                                group # 1
-                            </div>
-                        </li>
-                        <li class="panel-row">
-                            <div class="panel-row-header">
-                                group # 2
-                            </div>
-                        </li>
-                    </ul>
-                </section>
-                <section class="panel">
-                    <div class="panel-header">
-                        <h2>Display</h2>
+                    <div class="entry-container panel-body">
+                        {presentation_definition && Object.entries(presentation_definition).map(entry => {
+                            return (
+                                <div class="entry-row">
+                                    <div class="key-entry">{entry[0]}</div>
+                                    <div class="value-entry">
+                                        <p>{JSON.stringify(entry[1], null, 2)}</p>
+                                    </div>
+                                </div>
+                            )
+                        })}
                     </div>
-                    <ul>
-                        <li class="panel-row">
-                            <div class="panel-row-header">
-                                description
-                            </div>
-                        </li>
-                        <li class="panel-row">
-                            <div class="panel-row-header">
-                                properties
-                            </div>
-                        </li>
-                        <li class="panel-row">
-                            <div class="panel-row-header">
-                                subtitle
-                            </div>
-                        </li>
-                        <li class="panel-row">
-                            <div class="panel-row-header">
-                                title
-                            </div>
-                        </li>
-                    </ul>
-                </section>
-                <section class="panel">
-                    <div class="panel-header">
-                        <h2>Styles</h2>
-                    </div>
-                    <ul>
-                        <li class="panel-row">
-                            <div class="panel-row-header">
-                                background
-                            </div>
-                        </li>
-                        <li class="panel-row">
-                            <div class="panel-row-header">
-                                hero
-                            </div>
-                        </li>
-                        <li class="panel-row">
-                            <div class="panel-row-header">
-                                text
-                            </div>
-                        </li>
-                        <li class="panel-row">
-                            <div class="panel-row-header">
-                                thumbnail
-                            </div>
-                        </li>
-                    </ul>
                 </section>
             </div>
         </div>

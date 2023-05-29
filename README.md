@@ -37,7 +37,7 @@ If you get a Permission Error, it means that your system currently requires dock
 ## Scripts
 
 ### `npm start`
-Start the SSI Console in developer mode and SSI Service Docker container. 
+Start the SSI Console in developer mode and SSI Service Docker containers. 
 
 ### `npm run dev`
 Start the SSI Console in developer mode without also starting the SSI Service. Useful if the SSI Service is already running.
@@ -49,7 +49,7 @@ Create a production build of the SSI Console.
 After running `npm run build`, preview the production build of the SSI Console.
 
 ### `npm run cleanup`
-Stop the SSI Service Docker container.
+Stop and remove the SSI Service Docker containers.
 
 ### `docker pull ghcr.io/tbd54566975/ssi-service:main`
 Pull the latest SSI Service Docker container image.
