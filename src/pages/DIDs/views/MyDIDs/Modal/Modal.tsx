@@ -125,7 +125,7 @@ const Modal: Component<{ content }> = (props) => {
                                     </div>
                                 </div>
                                 <div class="field-container">
-                                    <label for="json">JSON</label>
+                                    <label for="json">Options</label>
                                     <div class="textarea-container">
                                         <textarea 
                                             id="json" 

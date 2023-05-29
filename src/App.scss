@@ -186,6 +186,10 @@ a.primary-button,
         opacity: 0.6;
     }
 
+    &:disabled {
+        background: transparent;
+    }
+
     .icon-container > svg {
         width: 10px;
     }
@@ -392,7 +396,7 @@ input[type="radio"]:checked ~ label {
     flex-wrap: wrap;
 
     label {
-        flex: 0 0 8rem;
+        flex: 100%;
     }
 
     .select-container,

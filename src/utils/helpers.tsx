@@ -8,19 +8,19 @@ export function formatTextAreaOnKeyDown(event, setters: Setters) {
     const end = event.target.selectionEnd;
     if (event.key === "Tab" && !event.altKey && !event.shiftKey) {
         event.preventDefault();
-        event.target.selectionStart = event.target.selectionEnd = start + 1;
         setFormValues((prev) => ({      
             ...prev, 
             [name]: `${value.substring(0, start)}\t${value.substring(end)}`
         }));
+        event.target.selectionStart = event.target.selectionEnd = start + 1;
     }
     if (event.key === "Enter") {
         event.preventDefault();
-        event.target.selectionEnd = end + 2; 
         setFormValues((prev) => ({      
             ...prev, 
             [name]: `${value.substring(0, start)}\n\t${value.substring(end)}`
         }));
+        event.target.selectionEnd = end + 2; 
     }
 }
 
