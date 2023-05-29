@@ -6,7 +6,6 @@ export function formatTextAreaOnKeyDown(event, setters: Setters) {
     const { name, value } = event.target;
     const start = event.target.selectionStart;
     const end = event.target.selectionEnd;
-    console.log(start,end)
     if (event.key === "Tab" && !event.altKey && !event.shiftKey) {
         event.preventDefault();
         setFormValues((prev) => ({      
