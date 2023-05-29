@@ -9,7 +9,7 @@ const Applications: Component = () => {
         incoming: {
             id: "incoming",
             title: "Incoming",
-            listItems: transformApplications(applications),
+            listItems: transformApplications(store.applications),
             fallback: "You have no new Applications to review, so there's nothing here.",
             buttons: [
                 {

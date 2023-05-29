@@ -4,11 +4,18 @@ import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../i
 import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "../../../../../utils/helpers";
 import { requestInput } from "./samples/mocks";
 import SSI from "../../../../../utils/service";
+import { inputDescriptorsInput } from "../../../../Credentials/views/CredentialManifests/Modal/samples/mock";
+import { store } from "../../../../../utils/store";
 
 const Modal: Component<{ content }> = (props) => {
     //pass in these props
 
-    let initialFormValues = { json: '' }
+    let initialFormValues = { 
+        inputDescriptors: '', 
+        verifier: '',
+        name: '',
+        purpose: ''
+    }
 
     // the component
     const [formValues, setFormValues] = createSignal(initialFormValues);
@@ -40,7 +47,21 @@ const Modal: Component<{ content }> = (props) => {
 
     //actual form calls
     const handleSubmit = async (event) => {
-        const request = SSI.putDefinition(formValues().json);
+        const data = {
+            "author": store.user[formValues().verifier]["did"],
+            "authorKid": store.user[formValues().verifier]["kid"],
+            "format": {
+              "jwt_vp": {
+                "alg": [
+                    "EdDSA"
+                ]
+              },
+            },
+            "input_descriptors": formValues().inputDescriptors,
+            "name": formValues().name,
+            "purpose": formValues().purpose
+        }
+        const request = SSI.putDefinition(data);
         const setters = { setIsLoading, setIsSuccess, setIsError };
         handleRequest(event, request, setters);
     };
@@ -54,13 +75,13 @@ const Modal: Component<{ content }> = (props) => {
     }
 
     const isFormValid = () => {
-        return formValues().json.trim() !== '' && !isError();
+        return formValues().inputDescriptors.trim() !== '' && !isError();
     }
 
     //populate textarea field with sample input
     const populateSampleInput = (event) => {
         const setters = { setIsError, setFormValues };
-        insertSampleInput(event, setters, 'json', requestInput);
+        insertSampleInput(event, setters, 'inputDescriptors', inputDescriptorsInput);
     }
 
     return (
@@ -87,12 +108,38 @@ const Modal: Component<{ content }> = (props) => {
                                     </div> 
                                 }
                                 <div class="field-container">
-                                    <label for="json">JSON</label>
+                                    <label for="name">Name</label>
+                                    <input type="text" 
+                                        id="name" 
+                                        name="name"
+                                        placeholder="KYC Presentation Request" 
+                                        class="input-container"
+                                        value={formValues().name} 
+                                        onInput={handleInput}
+                                        spellcheck={false}
+                                        required
+                                        autocomplete="off" />
+                                </div>
+                                <div class="field-container">
+                                    <label for="purpose">Purpose</label>
+                                    <input type="text" 
+                                        id="purpose" 
+                                        name="purpose"
+                                        placeholder="To help fulfill KYC requirements" 
+                                        class="input-container"
+                                        value={formValues().purpose} 
+                                        onInput={handleInput}
+                                        spellcheck={false}
+                                        required
+                                        autocomplete="off" />
+                                </div>
+                                <div class="field-container">
+                                    <label for="inputDescriptors">Input constraints</label>
                                     <div class="textarea-container">
                                         <textarea 
-                                            id="json" 
-                                            name="json" 
-                                            value={formValues().json} 
+                                            id="inputDescriptors" 
+                                            name="inputDescriptors" 
+                                            value={formValues().inputDescriptors} 
                                             onInput={handleInput}
                                             onkeydown={handleKeyDown}
                                             spellcheck={false}
@@ -104,6 +151,23 @@ const Modal: Component<{ content }> = (props) => {
                                             <Icon svg={Beaker} />
                                             Try sample input
                                         </button>
+                                    </div>
+                                </div>
+                                <div class="field-container">
+                                    <label for="verifier">Verifier</label>
+                                    <div class="select-container">
+                                        <select 
+                                            id="verifier" 
+                                            name="verifier" 
+                                            value={formValues().verifier} 
+                                            onInput={handleInput}
+                                            required
+                                        >
+                                            {Object.values(store.user) && Object.values(store.user).map(verifier => 
+                                                <option value={verifier["did"]}>{verifier["did"]}</option>
+                                            )}
+                                        </select>
+                                        <Icon svg={ArrowUpDown} />
                                     </div>
                                 </div>
                                 <div class="button-row">
@@ -122,7 +186,7 @@ const Modal: Component<{ content }> = (props) => {
                         {isSuccess() && (
                             <>
                                 <div class="banner banner-success">
-                                    🎉 Success - did is: 34567
+                                    🎉 Successfully created Submission Link
                                 </div>
                                 <div class="button-row"> 
                                     <button class="secondary-button" onClick={closeModal}>
