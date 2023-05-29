@@ -24,12 +24,6 @@ Design discussions and proposals take place on our [discord](https://discord.gg/
 
 We advocate an asynchronous, written debate model - so write up your thoughts and invite the community to join in!
 
-### Continuous Integration
-
-Build and Test cycles are run on every commit to every branch on [CircleCI](LINK_HERE).
-
- ___***FIX LINK ABOVE AND REMOVE THIS NOTICE***___
-
 ## Contribution
 
 We review contributions to the codebase via GitHub's Pull Request mechanism. We have 

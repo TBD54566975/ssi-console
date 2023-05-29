@@ -1,28 +1,58 @@
 # SSI Console
 
+## Introduction
+
 The SSI Console aims to provide a seamless experience for issuers and verifiers in the SSI ecosystem. With the SSI Console, issuers and verifiers can create and manage their DIDs, credential issuance flows, and presentation exchanges all in one place. 
 
 The SSI Console leverages the SSI Service API to simplify credential issuance and verification, and make both easy to do via a web interface.  
 
-## Introduction
+## Prerequisites
 
-Orient users to the project here. This is a good place to start with an assumption
-that the user knows very little - so start with the Big Picture and show how this
-project fits into it. It may be good to reference/link the broader architecture in the
-`collaboration` repo or the developer site here.
+* Node v19.4.0 and npm 9.2.0 or higher [Installation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+* Docker v20.10.24 or higher [Installation](https://docs.docker.com/get-docker/)
+* Docker Compose v.2.17.2  or higher [Installation](https://docker-docs.uclv.cu/compose/install/)
 
-Then maybe a dive into what this project does.
+Verify that `node` and `npm` commands are available:
 
-Diagrams and other visuals are helpful here. Perhaps code snippets showing usage.
+```
+node -v
+v19.4.0
 
-Project leads should complete, alongside this `README`:
-* [CODEOWNERS](./CODEOWNERS) - set project lead(s)
-* [CONTRIBUTING.md](./CONTRIBUTING.md) - Fill out how to: install prereqs, build, test, run, access CI, chat, discuss, file issues
+npm -v
+9.2.0
+```
 
-The other files in this template repo may be used as-is:
-* [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
-* [GOVERNANCE.md](./GOVERNANCE.md)
-* [LICENSE](./LICENSE)
+Verify that both `docker` and `docker-compose` commands are available:
+
+```
+docker --version
+Docker version 20.10.24, build 297e128
+
+docker-compose --version
+Docker Compose version v2.17.2
+```
+
+If you get a Permission Error, it means that your system currently requires docker to be executed as root, and the npm scripts won't work out-of-the-box unless you prefix docker commands with sudo or make it possible to run docker as a non-root user.
+
+## Scripts
+
+### `npm start`
+Start the SSI Console in developer mode and SSI Service Docker container. 
+
+### `npm run dev`
+Start the SSI Console in developer mode without also starting the SSI Service. Useful if the SSI Service is already running.
+
+### `npm run build`
+Create a production build of the SSI Console.
+
+### `npm run serve`
+After running `npm run build`, preview the production build of the SSI Console.
+
+### `npm run cleanup`
+Stop the SSI Service Docker container.
+
+### `docker pull ghcr.io/tbd54566975/ssi-service:main`
+Pull the latest SSI Service Docker container image.
 
 ## Project Resources
 
