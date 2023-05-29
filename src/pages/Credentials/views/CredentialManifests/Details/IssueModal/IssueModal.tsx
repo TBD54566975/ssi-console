@@ -134,7 +134,7 @@ const IssueModal: Component<{ content }> = (props) => {
                                             onkeydown={handleKeyDown}
                                             spellcheck={false}
                                             autocomplete="off"
-                                            rows={3}
+                                            rows={8}
                                             required
                                         />
                                     </div>
