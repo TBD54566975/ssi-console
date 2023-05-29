@@ -6,6 +6,7 @@ import { requestInput } from "./samples/mocks";
 import SSI from "../../../../../utils/service";
 import { inputDescriptorsInput } from "../../../../Credentials/views/CredentialManifests/Modal/samples/mock";
 import { store } from "../../../../../utils/store";
+import { hydrateDefinitionStore } from "../../../../../utils/setup";
 
 const Modal: Component<{ content }> = (props) => {
     //pass in these props
@@ -14,7 +15,8 @@ const Modal: Component<{ content }> = (props) => {
         inputDescriptors: '', 
         verifier: Object.keys(store.user)[0],
         name: '',
-        purpose: ''
+        purpose: '',
+        definitionId: '',
     }
 
     // the component
@@ -47,23 +49,36 @@ const Modal: Component<{ content }> = (props) => {
 
     //actual form calls
     const handleSubmit = async (event) => {
-        const data = {
-            "author": store.user[formValues().verifier]["did"],
-            "authorKid": store.user[formValues().verifier]["kid"],
-            "format": {
-              "jwt_vp": {
-                "alg": [
-                    "EdDSA"
-                ]
-              },
-            },
-            "input_descriptors": formValues().inputDescriptors,
-            "name": formValues().name,
-            "purpose": formValues().purpose
+        event.preventDefault();
+        let definitionId = formValues().definitionId;
+        if (definitionId === '') {
+            const definitionPayload = {
+                "format": {
+                "jwt_vp": {
+                    "alg": [
+                        "EdDSA"
+                    ]
+                },
+                },
+                "inputDescriptors": JSON.parse(formValues().inputDescriptors),
+                "name": formValues().name,
+                "purpose": formValues().purpose
+            }
+            const request = SSI.putDefinition(definitionPayload);
+            const setters = { setIsLoading, setIsSuccess, setIsError };
+            handleRequest(event, request, setters);
+            // const definitionResponse = await SSI.putDefinition(definitionPayload);
+            // const { presentation_definition } = await definitionResponse.json();
+            // definitionId = presentation_definition.id
         }
-        const request = SSI.putDefinition(data);
-        const setters = { setIsLoading, setIsSuccess, setIsError };
-        handleRequest(event, request, setters);
+        // const requestPayload = {
+        //     "issuerId": store.user[formValues().verifier]["did"],
+        //     "issuerKid": store.user[formValues().verifier]["kid"],
+        //     "presentationDefinitionId": definitionId
+        // }
+        // const request = SSI.putRequest(requestPayload);
+        // const setters = { setIsLoading, setIsSuccess, setIsError };
+        // handleRequest(event, request, setters);
     };
 
     const handleInput = (event) => {
@@ -189,7 +204,7 @@ const Modal: Component<{ content }> = (props) => {
                                     🎉 Successfully created Submission Link
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" onClick={closeModal}>
+                                    <button class="secondary-button" onClick={() => { closeModal(); hydrateDefinitionStore() }}>
                                         Done
                                     </button>
                                 </div>

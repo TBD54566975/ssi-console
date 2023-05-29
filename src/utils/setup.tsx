@@ -122,3 +122,9 @@ export const deleteManifestFromStore = async (id: string) => {
     await hydrateManifestStore();
     return response;
 }
+
+export const deleteDefinitionFromStore = async (id: string) => {
+    const response = await SSI.deleteDefinition(id); 
+    await hydrateDefinitionStore();
+    return response;
+}

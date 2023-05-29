@@ -7,8 +7,6 @@ import { useLocation, useParams } from "@solidjs/router";
 import { store } from "../../../utils/store";
 
 const Apply: Component = () => {
-    let endpoint = `/v1/manifests/applications/`;
-    let method = 'POST';
     let initialFormValues = { json: '' }
 
     // the component
@@ -34,7 +32,10 @@ const Apply: Component = () => {
     }
 
     const handleSubmit = async (event) => {
-        const request = SSI.putApplication(formValues().json);
+        const data = {
+            "applicationJwt": formValues().json
+        }
+        const request = SSI.putApplication(data);
         const setters = { setIsLoading, setIsSuccess, setIsError };
         handleRequest(event, request, setters);
     };
@@ -54,12 +55,12 @@ const Apply: Component = () => {
     return (
         <div class="intake-page">
             <section class="intake-page-section"> 
-                <h1>KYC Credential Application</h1>
-                <p>Review the credential details and ensure your application meets requirements. When you're ready, submit your application as a JSON.</p> 
+                <h1>{manifest() && manifest()["name"]} Application</h1>
+                <p>Review the credential details and ensure your application meets requirements. When you're ready, submit your application as a JSON Web Token (JWT).</p> 
                 <div class="details-container">
                     <details>
-                        <summary>Credential Details</summary>
-                        <h3>KYC VC</h3>
+                        <summary>Credential Application Details</summary>
+                        <h3>{manifest() && manifest()["name"]}</h3>
                         <pre>
                             {JSON.stringify(manifest(), null, 2)}
                         </pre>
@@ -76,7 +77,7 @@ const Apply: Component = () => {
                             }
                         
                         <div class="field-container">
-                            <label for="json">JSON</label>
+                            <label for="json">JWT</label>
                             <textarea 
                                 id="json" 
                                 name="json" 
@@ -99,7 +100,7 @@ const Apply: Component = () => {
                     {isSuccess() && (
                         <>
                             <div class="banner banner-success">
-                                <p>🎉 Success - Your application is submitted.</p>
+                                <p>🎉 Successfully submitted application.</p>
                                 <p>You'll be contacted shortly with next steps. You can now exit this window.</p>
                             </div>
                         </>

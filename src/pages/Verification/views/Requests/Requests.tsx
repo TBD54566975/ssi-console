@@ -7,7 +7,6 @@ import { store } from "../../../../utils/store";
 
 const Requests: Component = () => {
     const navigate = useNavigate();
-    const requestId = '123';
     return (
         <section class="item-panel">
             <Modal content={{
@@ -26,14 +25,14 @@ const Requests: Component = () => {
                             </p>
                         </div>
                         <p class="item-panel-card-body">
-                            {definition.description}
+                            {definition.purpose}
                         </p>
                     </div>
                     <div>
-                        <a class="item-panel-card-link" href={`${location.origin}/submit/${requestId}`} target="_blank">
+                        <a class="item-panel-card-link" href={`${location.origin}/submit/${definition.id}`} target="_blank">
                             Submission URL <Icon svg={ExternalArrow} />
                         </a>
-                        <button onClick={() => navigate(requestId)}
+                        <button onClick={() => navigate(definition.id)}
                             class="item-panel-card-button secondary-button">
                             Details
                         </button>
@@ -47,10 +46,11 @@ const Requests: Component = () => {
 export default Requests;
 
 const transformDefinitions = (definitions) => {
-    return Object.values(definitions).map((definition: { name, purpose }) => {
+    return Object.values(definitions).map((definition: { name, purpose, id }) => {
         return {
             name: definition.name,
-            description: definition.purpose
+            purpose: definition.purpose,
+            id: definition.id
         }
     })
 }

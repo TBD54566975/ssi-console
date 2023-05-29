@@ -69,8 +69,8 @@ const Modal: Component<{ content }> = (props) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         // if no existing schemaID, first get schemaID
-        let schemaId;
-        if (formValues().schemaId === '') {
+        let schemaId = formValues().schemaId;
+        if (schemaId === '') {
             const schemaPayload = {
                 "author": store.user[formValues().issuer]["did"],
                 "authorKid": store.user[formValues().issuer]["kid"],
@@ -82,8 +82,6 @@ const Modal: Component<{ content }> = (props) => {
             const { id } = await schemaResponse.json();
             schemaId = id;
             hydrateSchemaStore();
-        } else {
-            schemaId = formValues().schemaId;
         }
 
         // then let's map the fields to the expected payload
