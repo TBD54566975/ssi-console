@@ -258,7 +258,7 @@ const Modal: Component<{ content }> = (props) => {
                                                 required 
                                                 readonly={formValues().schemaId.trim() !== ''}
                                                 />
-                                            <button class="tiny-ghost-button" type="button" onclick={populateSampleInput}>
+                                            <button class="tiny-ghost-button" type="button" onclick={populateSampleInput} disabled={formValues().schemaId.trim() !== ''}>
                                                 <Icon svg={Beaker} />
                                                 Try sample input
                                             </button>
@@ -279,7 +279,7 @@ const Modal: Component<{ content }> = (props) => {
 
                                 <Show when={step() === 3}>
                                     <div class="field-container">
-                                        <label for="inputDescriptors">Requirements</label>
+                                        <label for="inputDescriptors">Input Descriptors (optional)</label>
                                         <div class="textarea-container">
                                             <textarea 
                                                 id="inputDescriptors" 
@@ -289,8 +289,7 @@ const Modal: Component<{ content }> = (props) => {
                                                 onkeydown={handleKeyDown}
                                                 spellcheck={false}
                                                 autocomplete="off"
-                                                rows={8}
-                                                required />
+                                                rows={8} />
                                             <button class="tiny-ghost-button" type="button" onclick={populateSampleInput}>
                                                 <Icon svg={Beaker} />
                                                 Try sample input

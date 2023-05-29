@@ -55,6 +55,7 @@ const IssueModal: Component<{ content }> = (props) => {
 
     //actual form calls
     const handleSubmit = async (event) => {
+        event.preventDefault();
         const data = {
             "@context": "https://www.w3.org/2018/credentials/v1",
             "data": JSON.parse(formValues().properties),
@@ -82,7 +83,12 @@ const IssueModal: Component<{ content }> = (props) => {
     const isFormValid = () => {
         const isExpiryValid = formValues().expires ? formValues().expiry !== '' : true;
         const isSubjectValid = formValues().subject !== '';
-        const isSubjectDataValid = formValues().properties.trim() !== '' && formValues().properties.trim() !== schemaProperties
+        const isSubjectDataValid = formValues().properties.trim() !== '' 
+        try {
+            JSON.parse(formValues().properties)
+        } catch {
+            return false;
+        }
         return isExpiryValid && isSubjectValid && isSubjectDataValid && !isError();
     }
 
