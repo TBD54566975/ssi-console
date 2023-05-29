@@ -125,6 +125,9 @@ const IssueModal: Component<{ content }> = (props) => {
                                 </div>
                                 <div class="field-container">
                                     <label for="properties">Subject data</label>
+                                    <p class="modal-input-note">
+                                        Make sure to update all prepopulated schema values with actual subject values before attempting to submit.
+                                    </p>
                                     <div class="textarea-container">
                                         <textarea 
                                             id="properties" 
