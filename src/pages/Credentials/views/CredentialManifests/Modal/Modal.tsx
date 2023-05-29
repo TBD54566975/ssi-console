@@ -256,7 +256,7 @@ const Modal: Component<{ content }> = (props) => {
                                                 onkeydown={handleKeyDown}
                                                 spellcheck={false}
                                                 autocomplete="off"
-                                                rows={3}
+                                                rows={8}
                                                 required 
                                                 readonly={formValues().schemaId.trim() !== ''}
                                                 />
@@ -291,7 +291,7 @@ const Modal: Component<{ content }> = (props) => {
                                                 onkeydown={handleKeyDown}
                                                 spellcheck={false}
                                                 autocomplete="off"
-                                                rows={3}
+                                                rows={8}
                                                 required />
                                             <button class="tiny-ghost-button" type="button" onclick={populateSampleInput}>
                                                 <Icon svg={Beaker} />
@@ -325,7 +325,7 @@ const Modal: Component<{ content }> = (props) => {
                                                 onkeydown={handleKeyDown}
                                                 spellcheck={false}
                                                 autocomplete="off"
-                                                rows={3}
+                                                rows={8}
                                                 required />
                                             <button class="tiny-ghost-button" type="button" onclick={populateSampleInput}>
                                                 <Icon svg={Beaker} />
@@ -356,7 +356,7 @@ const Modal: Component<{ content }> = (props) => {
                                                     onkeydown={handleKeyDown}
                                                     spellcheck={false}
                                                     autocomplete="off"
-                                                    rows={3}
+                                                    rows={8}
                                                     required />
                                             </div>
                                         </div>

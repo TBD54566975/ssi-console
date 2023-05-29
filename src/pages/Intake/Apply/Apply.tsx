@@ -85,7 +85,7 @@ const Apply: Component = () => {
                                 onkeydown={handleKeyDown}
                                 spellcheck={false}
                                 autocomplete="off"
-                                rows={3}
+                                rows={8}
                                 required
                                 class="textarea-container"></textarea>
                         </div>
