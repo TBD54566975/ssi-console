@@ -4,81 +4,101 @@ import Panel from "../../../../components/Panel/Panel";
 import Modal from "../../../DIDs/views/MyDIDs/Modal/Modal";
 import Icon, { ExternalArrow, Plus } from "../../../../icons/Icon";
 import { store } from "../../../../utils/store";
-import { hydrateCredentialsStore } from "../../../../utils/setup";
+import { hydrateCredentialsStore, updateCredentialStatusInStore } from "../../../../utils/setup";
 import { credentials } from "./samples/mocks";
 import SSI from "../../../../utils/service";
+import ConfirmationModal from "../../../../components/ConfirmationModal/ConfirmationModal";
 
 const IssuedCredentials: Component = () => {
     const [ activeCredentials, setActiveCredentials ] = createSignal(transformCredentials(store.credentials, "active"))
     const [ suspendedCredentials, setSuspendedCredentials ] = createSignal(transformCredentials(store.credentials, "suspended"))
     const [ revokedCredentials, setRevokedCredentials ] = createSignal(transformCredentials(store.credentials, "revoked"))
+    const [ item, setItem ] = createSignal();
+    const [ statusUpdate, setStatusUpdate ] = createSignal();
 
+    let confirmDialog;
+    const confirmStatusUpdate = async (item) => {
+        await updateCredentialStatusInStore(item.metadata.id, statusUpdate(), item.metadata.issuerId);
+        confirmDialog.close();
+    }
     
     createEffect(() => {
         const storeCredentials = store.credentials;
         setActiveCredentials(transformCredentials(storeCredentials, "active"));
         setSuspendedCredentials(transformCredentials(storeCredentials, "suspended"));
         setRevokedCredentials(transformCredentials(storeCredentials, "revoked"));
+        console.log(storeCredentials)
+        console.log(activeCredentials())
+        console.log(suspendedCredentials())
     })
 
-    const suspendCredential = async (credential) => {
-        await SSI.putCredentialStatus(credential.metadata.id, { "suspended": true });
-        await hydrateCredentialsStore(credential.metadata.issuerId);
-    }
-
-    const revokeCredential = async (credential) => {
-        await SSI.putCredentialStatus(credential.itemId, { "revoked": true });
-    }
-
-    const reinstateCredential = async (credential) => {
-        await SSI.putCredentialStatus(credential.itemId, { "suspended": false });
-    }
-
-    const content = {
-        active: {
-            id: "active",
-            title: "Active",
-            listItems: activeCredentials(),
-            footer: <a href="" target="_blank">Learn about Credentials <Icon svg={ExternalArrow} /></a>,
-            fallback: "You haven't issued any Credentials, so there's nothing here.",
-            buttons: [
-                {
-                    label: "Suspend",
-                    className: "warn-button",
-                    onClick: (item) => suspendCredential(item)
-                },
-                {
-                    label: "Revoke",
-                    className: "danger-button",
-                    onClick: (item) => revokeCredential(item)
-                }
-            ]
-        },
-        suspended: {
-            id: "suspended",
-            title: "Suspended",
-            listItems: suspendedCredentials(),
-            fallback: "You haven't suspended any Credentials yet, so there's nothing here.",
-            buttons: [
-                {
-                    label: "Reinstate",
-                    className: "secondary-button",
-                    onClick: (item) => reinstateCredential(item)
-                },
-            ]
-        },
-        revoked: {
-            id: "revoked",
-            title: "Revoked",
-            listItems: revokedCredentials(),
-            fallback: "You haven't revoked any Credentials yet, so there's nothing here.",
-        }
-    }
+    const content = () => {
+        return {
+            active: {
+                id: "active",
+                title: "Active",
+                listItems: activeCredentials(),
+                footer: <a href="" target="_blank">Learn about Credentials <Icon svg={ExternalArrow} /></a>,
+                fallback: "You haven't issued any Credentials, so there's nothing here.",
+                buttons: [
+                    {
+                        label: "Suspend",
+                        className: "warn-button",
+                        onClick: (item) => { setItem(item); setStatusUpdate({ "suspended": true }); confirmDialog.showModal()}
+                    },
+                    {
+                        label: "Revoke",
+                        className: "danger-button",
+                        onClick: (item) => { setItem(item); setStatusUpdate({ "revoked": true }); confirmDialog.showModal()}
+                    }
+                ]
+            },
+            suspended: {
+                id: "suspended",
+                title: "Suspended",
+                listItems: suspendedCredentials(),
+                fallback: "You haven't suspended any Credentials yet, so there's nothing here.",
+                buttons: [
+                    {
+                        label: "Reinstate",
+                        className: "warn-button",
+                        onClick: (item) => { setItem(item); setStatusUpdate({ "suspended": false }); confirmDialog.showModal()}
+                    },
+                ]
+            },
+            revoked: {
+                id: "revoked",
+                title: "Revoked",
+                listItems: revokedCredentials(),
+                fallback: "You haven't revoked any Credentials yet, so there's nothing here.",
+            }
+        }}
+    
     return (
         <>
-            {Object.keys(content).map(key => 
-                <Panel content={content[key]} />
+            {Object.keys(content()).map(key => 
+                <Panel content={content()[key]} />
             )}
+            <ConfirmationModal 
+                ref={confirmDialog}
+                onCancel={() => confirmDialog.close()}
+                onConfirm={() => confirmStatusUpdate(item())}
+                message={
+                    statusUpdate()?.["revoked"]
+                    ? "Are you sure you want to revoke this credential? This action is irreversible."
+                    : statusUpdate()?.["suspended"] === true
+                    ? "Are you sure you want to suspend this credential?"
+                    :"Are you sure you want to reinstate this credential?"
+                }
+                cancelMessage={"No, cancel"}
+                confirmMessage={
+                    statusUpdate()?.["revoked"]
+                    ? "Yes, revoke"
+                    : statusUpdate()?.["suspended"] === true
+                    ? "Yes, suspend"
+                    : "Yes, reinstate"
+                }
+                />
         </>
     )
 }
@@ -129,7 +149,8 @@ const transformCredentials = (credentials, status: "active" | "suspended" | "rev
                     name: `****-${credential.id.slice(-4)}`,
                     credentialName: manifestName,
                     type: credential.issuanceDate,
-                    body: formatCredentialData(credential.credentialSubject),
+                    body: formatCredentialData(credential.credentialSubject), 
+                    statusPurpose: credential.credentialStatus?.statusPurpose,
                     metadata: {
                         id: credential.id,
                         issuerId: credential.issuer,
