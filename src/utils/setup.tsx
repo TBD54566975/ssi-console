@@ -128,3 +128,9 @@ export const deleteDefinitionFromStore = async (id: string) => {
     await hydrateDefinitionStore();
     return response;
 }
+
+export const updateCredentialStatusInStore = async (id: string, data, issuerId: string) => {
+    const response = await SSI.putCredentialStatus(id, data); 
+    await hydrateCredentialsStore(issuerId);
+    return response;
+}
