@@ -150,7 +150,6 @@ const transformCredentials = (credentials, status: "active" | "suspended" | "rev
                     credentialName: manifestName,
                     type: credential.issuanceDate,
                     body: formatCredentialData(credential.credentialSubject), 
-                    statusPurpose: credential.credentialStatus?.statusPurpose,
                     metadata: {
                         id: credential.id,
                         issuerId: credential.issuer,
