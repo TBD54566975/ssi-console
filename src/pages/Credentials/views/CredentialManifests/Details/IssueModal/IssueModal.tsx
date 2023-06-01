@@ -242,7 +242,7 @@ const IssueModal: Component<{ content }> = (props) => {
 export default IssueModal;
 
 const getSchemaForSubject = (schemaId) => {
-    const { schema } = store.schemas.find(({schema}) => schema.id === schemaId);
-    const { $id, $schema, description, ...properties } = schema.schema;
+    const schema = store.schemas.find(({schema}) => schema["$id"].endsWith(`/v1/schemas/${schemaId}`));
+    const { $id, $schema, description, name, ...properties } = schema.schema;
     return properties;
 }
