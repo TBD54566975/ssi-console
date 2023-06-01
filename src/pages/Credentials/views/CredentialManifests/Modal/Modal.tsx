@@ -72,11 +72,11 @@ const Modal: Component<{ content }> = (props) => {
         let schemaId = formValues().schemaId;
         if (schemaId === '') {
             const schemaPayload = {
-                "author": store.user[formValues().issuer]["did"],
-                "authorKid": store.user[formValues().issuer]["kid"],
                 "name": formValues().name,
-                "schema": JSON.parse(formValues().schema),
-                "sign": true
+                "schema": {
+                    ...JSON.parse(formValues().schema),
+                    "$schema": "https://json-schema.org/draft/2020-12/schema"
+                }
             }
             const schemaResponse = await SSI.putSchema(schemaPayload);
             const { id } = await schemaResponse.json();
