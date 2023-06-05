@@ -12,7 +12,7 @@ import { hydrateCredentialsStore } from "../../../../../../utils/setup";
 const IssueModal: Component<{ content }> = (props) => {
     //pass in these props
 
-    const schemaProperties = JSON.stringify(getSchemaForSubject(props.content.schemaId), null, 2);
+    const schemaProperties = JSON.stringify(getSchemaForSubject(props.content.schemaId).properties, null, 2);
 
     let initialFormValues = { 
         properties: schemaProperties,
@@ -241,8 +241,16 @@ const IssueModal: Component<{ content }> = (props) => {
 
 export default IssueModal;
 
-const getSchemaForSubject = (schemaId) => {
+export const getSchemaForSubject = (schemaId) => {
     const schema = store.schemas.find(({schema}) => schema["$id"].endsWith(`/v1/schemas/${schemaId}`));
     const { $id, $schema, description, name, ...properties } = schema.schema;
-    return properties;
+    return {
+        properties,
+        meta: {
+            $id, 
+            $schema, 
+            description, 
+            name
+        }
+    };
 }

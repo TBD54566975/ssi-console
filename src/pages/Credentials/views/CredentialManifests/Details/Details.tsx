@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 import "./Details.scss";
 import "../../../../../components/Panel/Panel.scss";
 import { credentialOutput } from "./samples/mock";
-import IssueModal from "./IssueModal/IssueModal";
+import IssueModal, { getSchemaForSubject } from "./IssueModal/IssueModal";
 import { useLocation, useNavigate, useParams, useSearchParams } from "@solidjs/router";
 import { store } from "../../../../../utils/store";
 import Icon, { ExternalArrow } from "../../../../../icons/Icon";
@@ -16,9 +16,9 @@ const Details: Component<{ credential }> = (props) => {
     const navigate = useNavigate();
 
     const { credential_manifest } = store.manifests.find(manifest =>  manifest.id === params.id);
-    const { schema } = store.schemas.find(({schema}) => schema.id ===  credential_manifest.output_descriptors[0].schema);
-    const { schema: schemaDetails, ...schemaMeta } = schema;
-    const { $id, $schema, description, ...schemaData } = schemaDetails
+    const schema = getSchemaForSubject(credential_manifest.output_descriptors[0].schema);
+    const schemaData = schema.properties;
+    const schemaMeta = schema.meta;
 
     let confirmDialog;
     const confirmDelete = async (item) => {

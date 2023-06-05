@@ -53,7 +53,7 @@ export const hydrateDIDStore = async () => {
                 ...store.user,
                 [did.id] : {
                     did: did.id,
-                    kid: did.verificationMethod.find(method => method.controller === did.id).id,
+                    kid: did.verificationMethod.find(method => method.controller === did.id)?.id,
                 }
             }
             updateStore("user", updateValue);
