@@ -6,6 +6,7 @@ import { inputDescriptorsInput, manifestInput, schemaInput, stylesInput } from "
 import SSI from "../../../../../utils/service";
 import { store } from "../../../../../utils/store";
 import { hydrateCredentialsStore, hydrateManifestStore, hydrateSchemaStore } from "../../../../../utils/setup";
+import { getSchemaForSubject } from "../Details/IssueModal/IssueModal";
 
 const Modal: Component<{ content }> = (props) => {
     let initialFormValues = { 
@@ -245,10 +246,9 @@ const Modal: Component<{ content }> = (props) => {
                                                 id="schema" 
                                                 name="schema" 
                                                 value={
-                                                    formValues().schemaId.trim() !== '' ? 
-                                                    JSON.stringify(store.schemas.find(({schema}) => 
-                                                        schema.id === formValues().schemaId).schema.schema, null, 2) :
-                                                    formValues().schema
+                                                    formValues().schemaId.trim() !== '' 
+                                                    ? JSON.stringify(getSchemaForSubject(formValues().schemaId).properties, null, 2)
+                                                    : formValues().schema
                                                     }
                                                 onInput={handleInput}
                                                 onkeydown={handleKeyDown}
