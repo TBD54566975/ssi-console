@@ -5,7 +5,7 @@ server {
     index   index.html index.htm;
     location /v1 {
       proxy_redirect off;
-      proxy_pass http://${SSI_SERVICE}:8080/v1;
+      proxy_pass ${SSI_SERVICE};
     }
     location / {
         root /usr/share/nginx/html;
