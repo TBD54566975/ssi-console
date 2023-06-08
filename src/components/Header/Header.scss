@@ -7,6 +7,7 @@ header {
         justify-content: space-between;
         gap: 2rem;
         flex-wrap: wrap;
+        position: relative;
     
         &-logo {
             display: flex;
@@ -35,6 +36,10 @@ header {
             &-menu {
                 display: inline-flex;
                 position: relative;
+
+                @media screen and (max-width: 997px) {
+                    position: initial;
+                }
 
                 &-icon {
                     display: inline-flex;
@@ -76,6 +81,11 @@ header {
                     width: max-content;
                     background: var(--grey-5);
                     border: 1px solid var(--grey-50);
+
+                    @media screen and (max-width: 997px) {
+                        left: 0;
+                        max-width: 100%;
+                    }
 
                     &:hover,
                     &:active,

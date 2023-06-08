@@ -7,7 +7,8 @@
     "build": "vite build",
     "serve": "vite preview",
     "start": "docker-compose -f ssi-service-compose/ssi-service-compose.yml up & npm run dev",
-    "cleanup": "docker-compose -f ssi-service-compose/ssi-service-compose.yml down"
+    "cleanup": "docker-compose -f ssi-service-compose/ssi-service-compose.yml down",
+    "pull-service": "docker pull ghcr.io/tbd54566975/ssi-service:main"
   },
   "license": "MIT",
   "devDependencies": {
