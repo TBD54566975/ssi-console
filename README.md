@@ -51,8 +51,8 @@ After running `npm run build`, preview the production build of the SSI Console.
 ### `npm run cleanup`
 Stop and remove the SSI Service Docker containers.
 
-### `docker pull ghcr.io/tbd54566975/ssi-service:main`
-Pull the latest SSI Service Docker container image.
+### `npm run pull-service`
+Pull the latest SSI Service Docker container image. Runs `docker pull ghcr.io/tbd54566975/ssi-service:main`. 
 
 ## Project Resources
 

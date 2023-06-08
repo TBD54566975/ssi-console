@@ -12,7 +12,7 @@ import { hydrateCredentialsStore } from "../../../../../../utils/setup";
 const IssueModal: Component<{ content }> = (props) => {
     //pass in these props
 
-    const schemaProperties = JSON.stringify(getSchemaForSubject(props.content.schemaId).properties, null, 2);
+    const schemaProperties = JSON.stringify(getSchemaForSubject(props.content.schemaId)?.properties, null, 2);
 
     let initialFormValues = { 
         properties: schemaProperties,
@@ -83,7 +83,7 @@ const IssueModal: Component<{ content }> = (props) => {
     const isFormValid = () => {
         const isExpiryValid = formValues().expires ? formValues().expiry !== '' : true;
         const isSubjectValid = formValues().subject !== '';
-        const isSubjectDataValid = formValues().properties.trim() !== '' 
+        const isSubjectDataValid = formValues().properties?.trim() !== '' 
         try {
             JSON.parse(formValues().properties)
         } catch {
@@ -242,15 +242,18 @@ const IssueModal: Component<{ content }> = (props) => {
 export default IssueModal;
 
 export const getSchemaForSubject = (schemaId) => {
-    const schema = store.schemas.find(({schema}) => schema["$id"].endsWith(`/v1/schemas/${schemaId}`));
-    const { $id, $schema, description, name, ...properties } = schema.schema;
-    return {
-        properties,
-        meta: {
-            $id, 
-            $schema, 
-            description, 
-            name
-        }
-    };
+    if (store.schemas?.length) {
+        const schema = store.schemas.find(({schema}) => schema["$id"]?.endsWith(`/v1/schemas/${schemaId}`));
+        const { $id, $schema, description, name, ...properties } = schema.schema;
+        return {
+            properties,
+            meta: {
+                $id, 
+                $schema, 
+                description, 
+                name
+            }
+        };
+    }
+    return null
 }

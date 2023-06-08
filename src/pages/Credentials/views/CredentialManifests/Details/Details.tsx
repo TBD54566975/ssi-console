@@ -17,8 +17,8 @@ const Details: Component<{ credential }> = (props) => {
 
     const { credential_manifest } = store.manifests.find(manifest =>  manifest.id === params.id);
     const schema = getSchemaForSubject(credential_manifest.output_descriptors[0].schema);
-    const schemaData = schema.properties;
-    const schemaMeta = schema.meta;
+    const schemaData = schema?.properties;
+    const schemaMeta = schema?.meta;
 
     let confirmDialog;
     const confirmDelete = async (item) => {
@@ -101,7 +101,7 @@ const Details: Component<{ credential }> = (props) => {
                         <h2>Details</h2>
                     </div>
                     <div class="entry-container panel-body">
-                        {Object.entries(schemaMeta).map(entry => {
+                        {schemaMeta && Object.entries(schemaMeta).map(entry => {
                             return (
                                 <div class="entry-row">
                                     <div class="key-entry">{entry[0]}</div>
@@ -118,7 +118,7 @@ const Details: Component<{ credential }> = (props) => {
                         <h2>Data</h2>
                     </div>
                     <div class="entry-container panel-body">
-                        {Object.entries(schemaData).map(entry => {
+                        {schemaData && Object.entries(schemaData).map(entry => {
                             return (
                                 <div class="entry-row">
                                     <div class="key-entry">{entry[0]}</div>

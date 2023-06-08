@@ -247,7 +247,7 @@ const Modal: Component<{ content }> = (props) => {
                                                 name="schema" 
                                                 value={
                                                     formValues().schemaId.trim() !== '' 
-                                                    ? JSON.stringify(getSchemaForSubject(formValues().schemaId).properties, null, 2)
+                                                    ? JSON.stringify(getSchemaForSubject(formValues().schemaId)?.properties, null, 2)
                                                     : formValues().schema
                                                     }
                                                 onInput={handleInput}

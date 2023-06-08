@@ -27,9 +27,6 @@ const IssuedCredentials: Component = () => {
         setActiveCredentials(transformCredentials(storeCredentials, "active"));
         setSuspendedCredentials(transformCredentials(storeCredentials, "suspended"));
         setRevokedCredentials(transformCredentials(storeCredentials, "revoked"));
-        console.log(storeCredentials)
-        console.log(activeCredentials())
-        console.log(suspendedCredentials())
     })
 
     const content = () => {
