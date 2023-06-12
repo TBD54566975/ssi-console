@@ -243,17 +243,19 @@ export default IssueModal;
 
 export const getSchemaForSubject = (schemaId) => {
     if (store.schemas?.length) {
-        const schema = store.schemas.find(({schema}) => schema["$id"]?.endsWith(`/v1/schemas/${schemaId}`) || schema["id"]?.endsWith(`/v1/schemas/${schemaId}`));
-        const { $id, $schema, description, name, ...properties } = schema.schema;
-        return {
-            properties,
-            meta: {
-                $id, 
-                $schema, 
-                description, 
-                name
+        const schema = store.schemas.find(({schema}) => schema["$id"]?.endsWith(schemaId) || schema["id"]?.endsWith(schemaId));
+        if (schema) {
+            const { $id, $schema, description, name, ...properties } = schema.schema;
+            return {
+                properties,
+                meta: {
+                    $id, 
+                    $schema, 
+                    description, 
+                    name
+                }
             }
-        };
+        }
     }
     return null
 }
