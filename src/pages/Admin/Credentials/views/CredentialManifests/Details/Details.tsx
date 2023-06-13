@@ -1,13 +1,13 @@
 import { Component } from "solid-js";
 import "./Details.scss";
-import "@components/Panel/Panel.scss";
+import "@/components/Panel/Panel.scss";
 import IssueModal, { getSchemaForSubject } from "./IssueModal/IssueModal";
 import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
 import { store } from "@/utils/store";
 import Icon, { ExternalArrow } from "@/icons/Icon";
 import { deleteManifestFromStore, hydrateManifestStore } from "@/utils/setup";
 import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
-import TBDLogoSquare from "@assets/tbd-logo-square.svg";
+import TBDLogoSquare from "@/assets/tbd-logo-square.svg";
 
 const Details: Component<{ credential }> = (props) => {
     const params = useParams<{ id }>();
