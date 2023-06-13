@@ -1,10 +1,10 @@
 import { Component, createEffect, createSignal } from "solid-js";
 import "./CredentialManifests.scss";
-import Icon, { ExternalArrow, Plus } from "../../../../../icons/Icon";
+import Icon, { ExternalArrow, Plus } from "@/icons/Icon";
 import Modal from "./Modal/Modal";
 import { useNavigate } from "@solidjs/router";
 import IssueModal from "./Details/IssueModal/IssueModal";
-import { store } from "../../../../../utils/store";
+import { store } from "@/utils/store";
 
 const CredentialManifests: Component = () => {
     const navigate = useNavigate();

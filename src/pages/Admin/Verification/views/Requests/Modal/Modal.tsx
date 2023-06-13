@@ -1,12 +1,11 @@
-import { Component, createSignal, onCleanup } from "solid-js";
+import { Component, createSignal } from "solid-js";
 import "./Modal.scss";
-import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../../icons/Icon";
-import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "../../../../../../utils/helpers";
-import { requestInput } from "./samples/mocks";
-import SSI from "../../../../../../utils/service";
-import { inputDescriptorsInput } from "../../../../Credentials/views/CredentialManifests/Modal/samples/mock";
-import { store } from "../../../../../../utils/store";
-import { hydrateDefinitionStore } from "../../../../../../utils/setup";
+import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "@/icons/Icon";
+import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "@/utils/helpers";
+import SSI from "@/utils/service";
+import { inputDescriptorsInput } from "@/pages/Admin/Credentials/views/CredentialManifests/Modal/samples/mock";
+import { store } from "@/utils/store";
+import { hydrateDefinitionStore } from "@/utils/setup";
 
 const Modal: Component<{ content }> = (props) => {
     //pass in these props

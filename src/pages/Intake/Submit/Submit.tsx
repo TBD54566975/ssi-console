@@ -1,8 +1,8 @@
 import { Component, createSignal, onMount } from "solid-js";
 import "./Submit.scss";
-import { updateFormOnInput, formatTextAreaOnKeyDown, handleRequest } from "../../../utils/helpers";
-import Icon, { DangerAlert } from "../../../icons/Icon";
-import SSI from "../../../utils/service";
+import { updateFormOnInput, formatTextAreaOnKeyDown, handleRequest } from "@/utils/helpers";
+import Icon, { DangerAlert } from "@/icons/Icon";
+import SSI from "@/utils/service";
 import { useParams } from "@solidjs/router";
 
 const Submit: Component = () => {

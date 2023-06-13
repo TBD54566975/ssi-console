@@ -1,9 +1,9 @@
 import { Component, Show } from "solid-js";
 import "./Intake.scss";
 import { useMatch, useRoutes } from "@solidjs/router";
-import { intakeRoutes } from "../../routes/routes";
-import TBDBrackets from '../../assets/tbd-brackets.svg';
-import Footer from "../../components/Footer/Footer";
+import { intakeRoutes } from "@/routes/routes";
+import TBDBrackets from '@/assets/tbd-brackets.svg';
+import Footer from "@/components/Footer/Footer";
 
 
 const Intake: Component = () => {

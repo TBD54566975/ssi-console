@@ -1,9 +1,9 @@
 import { Component, JSX, createSignal, onCleanup } from "solid-js";
 import "./IssueModalWithRender.scss";
-import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../../../icons/Icon";
-import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, renderFormFromJSON, updateFormOnInput } from "../../../../../../../utils/helpers";
+import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "@/icons/Icon";
+import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, renderFormFromJSON, updateFormOnInput } from "@/utils/helpers";
 import { credentialInput } from "./samples/mock";
-import SSI from "../../../../../../../utils/service";
+import SSI from "@/utils/service";
 
 const IssueModalWithRender: Component<{ content }> = (props) => {
     //pass in these props

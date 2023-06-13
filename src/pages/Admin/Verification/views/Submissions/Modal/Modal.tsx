@@ -1,8 +1,8 @@
-import { Component, createSignal, onCleanup } from "solid-js";
+import { Component, createSignal } from "solid-js";
 import "./Modal.scss";
-import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../../icons/Icon";
-import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "../../../../../../utils/helpers";
-import SSI from "../../../../../../utils/service";
+import Icon, { Beaker, DangerAlert, XCross } from "@/icons/Icon";
+import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "@/utils/helpers";
+import SSI from "@/utils/service";
 
 const Modal: Component<{ content }> = (props) => {
     //pass in these props

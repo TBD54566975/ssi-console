@@ -1,11 +1,11 @@
 import { Component, JSX, createSignal, onCleanup } from "solid-js";
 import "./IssueModal.scss";
-import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../../../icons/Icon";
-import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "../../../../../../../utils/helpers";
+import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "@/icons/Icon";
+import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "@/utils/helpers";
 import { credentialInputJson } from "./samples/mock";
-import SSI from "../../../../../../../utils/service";
-import { store } from "../../../../../../../utils/store";
-import { hydrateCredentialsStore } from "../../../../../../../utils/setup";
+import SSI from "@/utils/service";
+import { store } from "@/utils/store";
+import { hydrateCredentialsStore } from "@/utils/setup";
 
 
 

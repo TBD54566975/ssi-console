@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
 import "./Credentials.scss";
-import * as baseRoutes from "../../../routes/routes";
+import * as baseRoutes from "@/routes/routes";
 import { useRoutes } from "@solidjs/router";
-import NavSidebar from "../../../components/NavSidebar/NavSidebar";
+import NavSidebar from "@/components/NavSidebar/NavSidebar";
 
 
 const Credentials: Component = () => {

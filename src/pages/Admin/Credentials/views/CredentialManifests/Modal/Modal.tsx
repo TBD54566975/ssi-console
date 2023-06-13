@@ -1,11 +1,11 @@
 import { Component, JSX, Show, createSignal, onCleanup } from "solid-js";
 import "./Modal.scss";
-import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../../icons/Icon";
+import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "@/icons/Icon";
 import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, renderFormFromJSON, updateFormOnInput, vcJWTFormat, vpJWTFormat } from "../../../../../../utils/helpers";
 import { inputDescriptorsInput, manifestInput, schemaInput, stylesInput } from "./samples/mock";
-import SSI from "../../../../../../utils/service";
-import { store } from "../../../../../../utils/store";
-import { hydrateCredentialsStore, hydrateManifestStore, hydrateSchemaStore } from "../../../../../../utils/setup";
+import SSI from "@/utils/service";
+import { store } from "@/utils/store";
+import { hydrateCredentialsStore, hydrateManifestStore, hydrateSchemaStore } from "@/utils/setup";
 import { getSchemaForSubject } from "../Details/IssueModal/IssueModal";
 
 const Modal: Component<{ content }> = (props) => {

@@ -1,7 +1,7 @@
 import { A, useRoutes } from "@solidjs/router";
 import { Component } from "solid-js";
-import * as baseRoutes from "../../../routes/routes";
-import NavSidebar from "../../../components/NavSidebar/NavSidebar";
+import * as baseRoutes from "@/routes/routes";
+import NavSidebar from "@/components/NavSidebar/NavSidebar";
 import "./DIDs.scss";
 
 

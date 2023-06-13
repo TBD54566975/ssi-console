@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
-import NavSidebar from "../../../components/NavSidebar/NavSidebar";
-import * as baseRoutes from "../../../routes/routes";
+import NavSidebar from "@/components/NavSidebar/NavSidebar";
+import * as baseRoutes from "@/routes/routes";
 import { useRoutes } from "@solidjs/router";
 
 const Verification: Component = () => {

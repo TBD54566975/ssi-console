@@ -1,10 +1,9 @@
 import { Component, createSignal, onMount } from "solid-js";
 import "./Apply.scss";
-import { updateFormOnInput, formatTextAreaOnKeyDown, handleRequest } from "../../../utils/helpers";
-import Icon, { DangerAlert } from "../../../icons/Icon";
-import SSI from "../../../utils/service";
-import { useLocation, useParams } from "@solidjs/router";
-import { store } from "../../../utils/store";
+import { updateFormOnInput, formatTextAreaOnKeyDown, handleRequest } from "@/utils/helpers";
+import Icon, { DangerAlert } from "@/icons/Icon";
+import SSI from "@/utils/service";
+import { useParams } from "@solidjs/router";
 
 const Apply: Component = () => {
     const params = useParams<{ id }>();
