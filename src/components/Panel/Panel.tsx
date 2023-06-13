@@ -1,6 +1,6 @@
 import { Component, createSignal } from "solid-js";
 import "./Panel.scss";
-import Icon, { ChevronDown } from "../../icons/Icon";
+import Icon, { ChevronDown } from "@/icons/Icon";
 
 export interface PanelContent {
     id?,
@@ -16,13 +16,39 @@ export interface PanelContent {
 
 const Panel: Component<{ content: PanelContent }> = (props) => {
     const [ query, setQuery ] = createSignal('');
+    const [ page, setPage ] = createSignal(1);
+    const [ listLength, setListLength ] = createSignal(props.content.listItems.length);
+    const itemsPerPage = 12;
 
-    const getQueryResults = (listItem) => {
-        return Object.values(listItem).some((el) => { 
-            if (typeof el === "string") {
-                return el.toLowerCase().includes(query().toLowerCase())
+    const filterForResults = (listItem) => {
+        return Object.values(listItem).some((candidate) => { 
+            if (typeof candidate === "string") {
+                return candidate.toLowerCase().includes(query().toLowerCase())
             }
         })
+    }
+
+    const getQueryResults = (listItems) => {
+        const filteredList = listItems.filter(filterForResults);
+        setListLength(filteredList.length);
+        return filteredList;
+    }
+
+    const setPageItems = (listItems) => {
+        const filteredList = getQueryResults(listItems);
+        const startIndex = (page() - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return filteredList.slice(startIndex, endIndex);
+    }
+
+    const goPrevPage = () => {
+        if (page() - 1 < 1) return;
+        setPage(page => page - 1);
+    }
+
+    const goNextPage = () => {
+        if (page() >= (listLength() / itemsPerPage)) return;
+        setPage(page => page + 1);
     }
 
     const getPanelRowHeader = (filteredItem) => {
@@ -60,7 +86,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                             id="search" 
                             placeholder="Search"
                             value={query()}
-                            onInput={(e) => setQuery(e.currentTarget.value)}
+                            onInput={(e) => {setQuery(e.currentTarget.value); setPage(1)}}
                             />
                     </div>
                     {props.content.action && 
@@ -72,7 +98,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
             </div>
             {props.content.listItems.length ?
                 <ul>
-                    {props.content.listItems.filter(listItem => getQueryResults(listItem)).map(filteredItem => 
+                    { setPageItems(props.content.listItems).map(filteredItem => 
                         <li class="panel-row">
                             <details>
                                 <summary class="panel-row-header">
@@ -114,9 +140,9 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                 </div>
                 {props.content.listItems.length > 6 && 
                     <div class="panel-footer-buttons">
-                        <button class="secondary-button" disabled={true}>Prev</button>
-                        Page 1
-                        <button class="secondary-button">Next</button>
+                        <button class="secondary-button" onclick={goPrevPage} disabled={page() - 1 < 1}>Prev</button>
+                        Page {page()}
+                        <button class="secondary-button" onclick={goNextPage} disabled={page() >= (listLength() / itemsPerPage)}>Next</button>
                     </div>
                 }
             </div>
