@@ -4,7 +4,7 @@ There are many ways to be an open source contributor, and we're here to help you
 
 * Propose ideas in our 
   [discord](https://discord.gg/tbd) 
-* Raise an issue or feature request in our [issue tracker](https://github.com/kirahsapong/ssi-console/issues)
+* Raise an issue or feature request in our [issue tracker](https://github.com/TBD54566975/ssi-console/issues)
 * Help another contributor with one of their questions, or a code review
 * Suggest improvements to our Getting Started documentation by supplying a Pull Request
 * Evangelize our work together in conferences, podcasts, and social media spaces.
@@ -16,7 +16,7 @@ This guide is for you.
 ### Issues
 
 Anyone from the community is welcome (and encouraged!) to raise issues via 
-[GitHub Issues](https://github.com/kirahsapong/ssi-console/issues)
+[GitHub Issues](https://github.com/TBD54566975/ssi-console/issues)
 
 ### Discussions
 
