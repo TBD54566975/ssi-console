@@ -1,9 +1,9 @@
 import { Component } from 'solid-js';
 import './App.scss';
 import { Router, useLocation, useMatch } from '@solidjs/router';
-import { intakeRoutes } from './routes/routes';
-import Intake from './pages/Intake/Intake';
-import Admin from './pages/Admin/Admin';
+import { intakeRoutes } from '@/routes/routes';
+import Intake from '@/pages/Intake/Intake';
+import Admin from '@/pages/Admin/Admin';
 
 const App: Component = () => {
     const isIntakeRoute = () => {

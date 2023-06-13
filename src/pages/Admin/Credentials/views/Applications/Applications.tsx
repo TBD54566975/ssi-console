@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 import "./Applications.scss";
-import Panel from "../../../../../components/Panel/Panel";
-import { store } from "../../../../../utils/store";
+import Panel from "@/components/Panel/Panel";
+import { store } from "@/utils/store";
 import { applications } from "./samples/mocks";
 
 const Applications: Component = () => {

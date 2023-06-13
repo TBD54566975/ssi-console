@@ -1,10 +1,10 @@
 import { Component, createEffect, createSignal } from "solid-js";
 import "./IssuedCredentials.scss";
-import Panel from "../../../../../components/Panel/Panel";
-import Icon, { ExternalArrow } from "../../../../../icons/Icon";
-import { store } from "../../../../../utils/store";
-import { updateCredentialStatusInStore } from "../../../../../utils/setup";
-import ConfirmationModal from "../../../../../components/ConfirmationModal/ConfirmationModal";
+import Panel from "@/components/Panel/Panel";
+import Icon, { ExternalArrow } from "@/icons/Icon";
+import { store } from "@/utils/store";
+import { updateCredentialStatusInStore } from "@/utils/setup";
+import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
 
 const IssuedCredentials: Component = () => {
     const [ activeCredentials, setActiveCredentials ] = createSignal(transformCredentials(store.credentials, "active"))

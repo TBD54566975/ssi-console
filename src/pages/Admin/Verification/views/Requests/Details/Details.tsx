@@ -1,13 +1,11 @@
 import { Component } from "solid-js";
 import "./Details.scss";
-import "../../../../../components/Panel/Panel.scss";
-import { credentialOutput } from "./samples/mock";
-import { useParams, useSearchParams, useNavigate } from "@solidjs/router";
-import ConfirmationModal from "../../../../../../components/ConfirmationModal/ConfirmationModal";
-import Icon, { ExternalArrow } from "../../../../../../icons/Icon";
-import { deleteDefinitionFromStore, deleteManifestFromStore, hydrateDefinitionStore, hydrateManifestStore } from "../../../../../../utils/setup";
-import { store } from "../../../../../../utils/store";
-import IssueModal from "../../../../Credentials/views/CredentialManifests/Details/IssueModal/IssueModal";
+import "@/components/Panel/Panel.scss";
+import { useParams, useNavigate } from "@solidjs/router";
+import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
+import Icon, { ExternalArrow } from "@/icons/Icon";
+import { deleteDefinitionFromStore, hydrateDefinitionStore } from "@/utils/setup";
+import { store } from "@/utils/store";
 
 const Details: Component<{ request }> = (props) => {
     const params = useParams<{ id }>();

@@ -1,9 +1,9 @@
 import { Component } from "solid-js";
 import "./Requests.scss";
-import Icon, { ExternalArrow, Plus } from "../../../../../icons/Icon";
+import Icon, { ExternalArrow, Plus } from "@/icons/Icon";
 import Modal from "./Modal/Modal";
 import { useNavigate } from "@solidjs/router";
-import { store } from "../../../../../utils/store";
+import { store } from "@/utils/store";
 
 const Requests: Component = () => {
     const navigate = useNavigate();

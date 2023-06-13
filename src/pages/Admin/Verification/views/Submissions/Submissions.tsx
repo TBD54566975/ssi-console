@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
-import Panel from "../../../../../components/Panel/Panel";
-import { store } from "../../../../../utils/store";
+import Panel from "@/components/Panel/Panel";
+import { store } from "@/utils/store";
 import { submissions } from "./samples/mocks";
 
 const Submissions: Component = () => {
