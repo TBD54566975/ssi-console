@@ -1,6 +1,6 @@
-import { Component, Show, onMount } from "solid-js";
+import { Component, Show } from "solid-js";
 import "./Intake.scss";
-import { Navigate, useLocation, useMatch, useRoutes } from "@solidjs/router";
+import { useMatch, useRoutes } from "@solidjs/router";
 import { intakeRoutes } from "../../routes/routes";
 import TBDBrackets from '../../assets/tbd-brackets.svg';
 import Footer from "../../components/Footer/Footer";
@@ -8,8 +8,6 @@ import Footer from "../../components/Footer/Footer";
 
 const Intake: Component = () => {
     const Routes = useRoutes(intakeRoutes);
-
-    // const { pathname } = useLocation();
 
     const isValidRoute = () => {
         for (let route of intakeRoutes) {
