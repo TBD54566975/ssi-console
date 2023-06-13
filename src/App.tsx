@@ -1,28 +1,13 @@
-import { Component, Match, Switch, createEffect, createSignal, onMount } from 'solid-js';
+import { Component } from 'solid-js';
 import './App.scss';
-import ExternalArrow from './icons/external-arrow.svg';
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
-import Main from './components/Main/Main';
-import Intake from './pages/Intake/Intake';
-import { useLocation, useMatch } from '@solidjs/router';
+import { Router, useLocation, useMatch } from '@solidjs/router';
 import { intakeRoutes } from './routes/routes';
-import setupStore from './utils/setup';
-
+import Intake from './pages/Intake/Intake';
+import Admin from './pages/Admin/Admin';
 
 const App: Component = () => {
-    let username = "tbd";
-    const { pathname } = useLocation();
-    const [ isLoading, setIsLoading ] = createSignal(true);
-
-    onMount( async () => {
-        setTimeout( async () => {
-            await setupStore();
-            setIsLoading(false);
-        }, 500);
-    });
-
     const isIntakeRoute = () => {
+        const { pathname } = useLocation();
         for (const route of intakeRoutes) {
             if (useMatch(() => route.path)() || route.path.includes(pathname) && pathname !== "/") return true;
         }
@@ -30,20 +15,12 @@ const App: Component = () => {
     }
 
     return (
-        <Switch fallback={
-            <>
-                <Header username={username} />
-                { isLoading()
-                    ? <div class="loading">Loading</div>
-                    : <Main /> 
+        <Router>
+                { isIntakeRoute()
+                    ? <Intake />
+                    : <Admin />
                 }
-                <Footer />
-            </>
-        }>
-            <Match when={isIntakeRoute()}>
-                <Intake />
-            </Match>
-        </Switch>
+        </Router>
     );
 };
 
