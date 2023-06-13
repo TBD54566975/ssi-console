@@ -1,9 +1,9 @@
-import { Component, createSignal, onCleanup } from "solid-js";
+import { Component, createSignal } from "solid-js";
 import "./Modal.scss";
-import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "../../../../../../icons/Icon";
-import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "../../../../../../utils/helpers";
-import SSI, { DIDMethods } from "../../../../../../utils/service";
-import { hydrateDIDStore } from "../../../../../../utils/setup";
+import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "@/icons/Icon";
+import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "@/utils/helpers";
+import SSI, { DIDMethods } from "@/utils/service";
+import { hydrateDIDStore } from "@/utils/setup";
 
 const Modal: Component<{ content }> = (props) => {
     let options: DIDMethods[] = [

@@ -1,13 +1,11 @@
-import { Component, For, createEffect, createSignal } from "solid-js";
-import Icon, { ExternalArrow, Plus, XCross } from "../../../../../icons/Icon";
+import { Component, createEffect, createSignal } from "solid-js";
+import Icon, { ExternalArrow, Plus } from "@/icons/Icon";
 import "./MyDIDs.scss";
-import Panel from "../../../../../components/Panel/Panel";
+import Panel from "@/components/Panel/Panel";
 import Modal from "./Modal/Modal";
-import { store } from "../../../../../utils/store";
-import { dids } from "./samples/mocks";
-import { deleteDIDFromStore } from "../../../../../utils/setup";
-import ConfirmationModal from "../../../../../components/ConfirmationModal/ConfirmationModal";
-import SSI from "../../../../../utils/service";
+import { store } from "@/utils/store";
+import { deleteDIDFromStore } from "@/utils/setup";
+import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
 
 const MyDIDs: Component = () => {
     const [ item, setItem ] = createSignal();
@@ -89,12 +87,12 @@ const transformDIDs = (userDIDs) => {
         return {
             name: `****-${didId?.slice(-4)}`,
             id: didId,
-            type: getDIDMethodFromID(didId),
+            type: getDIDMethodFromDID(didId),
         }
     })
 }
 
-const getDIDMethodFromID = (did) => {
+const getDIDMethodFromDID = (did) => {
     const regex = /:(\w+):/;
     const match = regex.exec(did);
     if (match && match.length >= 2) {
