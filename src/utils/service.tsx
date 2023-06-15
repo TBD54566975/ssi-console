@@ -47,7 +47,7 @@ export class SSIService {
         return method;
     }
 
-    async getDIDsByMethod(method?: DIDMethods): Promise<any> {
+    async getDIDsByMethod(method?: DIDMethod): Promise<any> {
         const url = GET_SSI.DIDS.replace("{method}", method);
         const { dids } = await this.sendRequest(url);
         return dids;
@@ -75,7 +75,7 @@ export class SSIService {
         ];
     }
 
-    async getDID(method: DIDMethods, id: string): Promise<any> {
+    async getDID(method: DIDMethod, id: string): Promise<any> {
         const url = GET_SSI.DID.replace("{method}", method).replace('{id}', id);
         return this.sendRequest(url);
     }
@@ -197,7 +197,7 @@ export class SSIService {
         return this.sendRequest(PUT_SSI.VERIFY_CREDENTIAL, 'PUT', data);
     }
     
-    async putDID(method: DIDMethods, data): Promise<any> {
+    async putDID(method: DIDMethod, data): Promise<any> {
         const url = PUT_SSI.DID.replace("{method}", method)
         return this.sendRequest(url, 'PUT', data);
     }
@@ -284,7 +284,7 @@ export class SSIService {
         return this.sendRequest(url, 'DELETE');
     }
     
-    async deleteDID(method: DIDMethods, id: string): Promise<any> {
+    async deleteDID(method: DIDMethod, id: string): Promise<any> {
         const url = DELETE_SSI.DID.replace('{method}', method).replace('{id}', id);
         this.sendRequest(url, 'DELETE');
     }
@@ -392,11 +392,36 @@ enum DELETE_SSI {
     SCHEMA = '/v1/schemas/{id}'
 }
 
-export type DIDMethods = "ion" | "web" | "key";
+
+export const didMethods = [
+    "ion",
+    "web",
+    "key"
+] as const;
+export type DIDMethod = (typeof didMethods)[number];
+export const keyTypes = [
+    "Ed25519",
+    "X25519",
+    "secp256k1",
+    "secp256k1-ECDSA",
+    "P-224",
+    "P-256",
+    "P-384",
+    "P-521",
+    "RSA",
+    // "BLS12381G1",
+    // "BLS12381G2",
+    // "Dilithium2",
+    // "Dilithium3",
+    // "Dilithium5"
+] as const;
+export type KeyType = (typeof keyTypes)[number];
 export type DIDIonServiceEndpoint = {
     "id",
     "type",
     "serviceEndpoint",
+    "routingKeys"?,
+    "accept"?
 }
 
 const SSI = new SSIService();

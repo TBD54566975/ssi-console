@@ -1,4 +1,4 @@
-import SSI, { DIDMethods } from "./service";
+import SSI, { DIDMethod } from "./service";
 import { store, setStore, updateStore } from "./store";
 
 // On first start of the application
@@ -53,7 +53,7 @@ export const hydrateDIDStore = async () => {
                 ...store.user,
                 [did.id] : {
                     did: did.id,
-                    kid: did.verificationMethod.find(method => method.controller === did.id)?.id,
+                    kid: did.verificationMethod.find(method => method.id === did.id)?.id || did.verificationMethod.find(method => method.controller === did.id)?.id,
                 }
             }
             updateStore("user", updateValue);
@@ -110,7 +110,7 @@ export const hydrateDeletedDIDsStore = async () => {
     updateStore("deletedDIDs", await SSI.getDeletedDIDs());
 }
 
-export const deleteDIDFromStore = async (method: DIDMethods, id: string) => {
+export const deleteDIDFromStore = async (method: DIDMethod, id: string) => {
     const response = await SSI.deleteDID(method, id); 
     await hydrateDIDStore();
     await hydrateDeletedDIDsStore();

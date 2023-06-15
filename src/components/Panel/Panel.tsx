@@ -81,9 +81,9 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                 </div>
                 <div class="panel-header-end">
                     <div class="field-container">
-                        <label for="search" class="sr-only">Search</label>
+                        <label for={`${props.content.title.replace(" ","")}_search`} class="sr-only">Search</label>
                         <input type="search"
-                            id="search" 
+                            id={`${props.content.title.replace(" ","")}_search`}
                             placeholder="Search"
                             value={query()}
                             onInput={(e) => {setQuery(e.currentTarget.value); setPage(1)}}

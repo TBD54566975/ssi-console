@@ -25,6 +25,10 @@
     "vitest": "^0.32.0"
   },
   "dependencies": {
+    "@codemirror/commands": "^6.2.4",
+    "@codemirror/lang-json": "^6.0.1",
+    "@codemirror/state": "^6.2.1",
+    "@codemirror/view": "github:codemirror/view",
     "@solidjs/router": "^0.8.2",
     "solid-js": "^1.6.10"
   }
