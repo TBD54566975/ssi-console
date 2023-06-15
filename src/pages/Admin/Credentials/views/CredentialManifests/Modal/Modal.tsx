@@ -123,6 +123,7 @@ const Modal: Component<{ content }> = (props) => {
         const setters = { setIsLoading, setIsSuccess, setIsError };
         const res = await handleRequest(event, request, setters);
         setManifestId((await res.json()).credential_manifest.id);
+        hydrateManifestStore(); 
     };
 
     const handleInput = (event) => {
@@ -431,7 +432,7 @@ const Modal: Component<{ content }> = (props) => {
                                     🎉 Successfully created credential
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); hydrateManifestStore(); navigate(`/credentials/${manifestId()}`) }}>
+                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); navigate(`/credentials/${manifestId()}`) }}>
                                         Done
                                     </button>
                                 </div>
