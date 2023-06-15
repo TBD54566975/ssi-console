@@ -10,6 +10,7 @@ import TBDLogoSquare from "@/assets/tbd-logo-square.svg";
 import TBDWordmark from "@/assets/tbd-wordmark.svg";
 import Editor from "@/utils/editor";
 import { getSchemaForSubject } from "../../CredentialManifests/Details/IssueModal/IssueModal";
+import { parseDateFromIssuanceDate } from "@/utils/helpers";
 
 const Details: Component<{ credential }> = (props) => {
     const params = useParams<{ id }>();
@@ -18,7 +19,6 @@ const Details: Component<{ credential }> = (props) => {
     const { credential, ...credentialMeta } = store.credentials.find(credential => credential.id.endsWith(params.id));
     const { id: subjectId, ...subjectData } = credential.credentialSubject;
     const schema = getSchemaForSubject(credential.credentialSchema.id);
-    const issuanceDate = new Date(credential.issuanceDate);
 
     const [ statusUpdate, setStatusUpdate ] = createSignal();
     
@@ -60,7 +60,7 @@ const Details: Component<{ credential }> = (props) => {
                                 })}
                                 <div class="info-entry">
                                     <div class="info-entry-label">Issued on</div>
-                                    <div class="info-entry-data">{issuanceDate.toLocaleDateString('en-US', { dateStyle: "medium" })}</div>
+                                    <div class="info-entry-data">{parseDateFromIssuanceDate(credential.issuanceDate)}</div>
                                 </div>
                             </div>
                         </div>

@@ -170,3 +170,11 @@ export function parseIDFromUrl(url) {
     const pathSegments = path.split("/");
     return pathSegments[pathSegments.length - 1];
 }
+
+export function parseDateFromIssuanceDate(issuanceDate, dateStyle: "medium" | "full" = "medium") {
+    const date = new Date(issuanceDate);
+    return new Intl.DateTimeFormat('en-US', { 
+        dateStyle, 
+        ...dateStyle === "full" && { timeStyle: "long" }
+    }).format(date);
+}

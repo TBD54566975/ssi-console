@@ -6,7 +6,7 @@ import { store } from "@/utils/store";
 import { updateCredentialStatusInStore } from "@/utils/setup";
 import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
 import { useNavigate } from "@solidjs/router";
-import { parseIDFromUrl } from "@/utils/helpers";
+import { parseDateFromIssuanceDate, parseIDFromUrl } from "@/utils/helpers";
 
 const IssuedCredentials: Component = () => {
     const [ activeCredentials, setActiveCredentials ] = createSignal(transformCredentials(store.credentials, "active"))
@@ -69,7 +69,7 @@ const transformCredentials = (credentials, status: "active" | "suspended" | "rev
                 return {
                     name: `****-${credential.id.slice(-4)}`,
                     credentialName: manifestName,
-                    type: credential.issuanceDate,
+                    type: parseDateFromIssuanceDate(credential.issuanceDate, "full"),
                     ...credential.credentialStatus?.statusPurpose === "suspension" && { tag: {
                         type: "warn",
                         label: "Suspendable"
@@ -79,9 +79,11 @@ const transformCredentials = (credentials, status: "active" | "suspended" | "rev
                         label: "Revocable"
                         }},
                     navigation: parseIDFromUrl(credential.id),
+                    body: JSON.stringify(credential.credentialSubject),
                     metadata: {
                         id: credential.id,
-                        issuerId: credential.issuer
+                        issuerId: credential.issuer,
+                        
                     }
                 }
             });
