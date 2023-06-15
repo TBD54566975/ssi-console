@@ -6,6 +6,8 @@ import { credentialInputJson } from "./samples/mock";
 import SSI from "@/utils/service";
 import { store } from "@/utils/store";
 import { hydrateCredentialsStore } from "@/utils/setup";
+import { useNavigate } from "@solidjs/router";
+import { parseIDFromUrl } from "@/utils/helpers";
 
 
 
@@ -53,6 +55,9 @@ const IssueModal: Component<{ content }> = (props) => {
         return dialog.close();
     }
 
+    const navigate = useNavigate();
+    const [credentialId, setCredentialId] = createSignal();
+
     //actual form calls
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -69,7 +74,8 @@ const IssueModal: Component<{ content }> = (props) => {
         }
         const request = SSI.putCredential(data);
         const setters = { setIsLoading, setIsSuccess, setIsError };
-        handleRequest(event, request, setters);
+        const res = await handleRequest(event, request, setters);
+        setCredentialId(parseIDFromUrl((await res.json()).id));
     };
 
     const handleInput = (event) => {
@@ -226,7 +232,7 @@ const IssueModal: Component<{ content }> = (props) => {
                                     🎉 Successfully issued credential
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); hydrateCredentialsStore() }}>
+                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); hydrateCredentialsStore(); navigate(`/credentials/history/${credentialId()}`)}}>
                                         Done
                                     </button>
                                 </div>

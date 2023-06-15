@@ -7,6 +7,7 @@ import SSI from "@/utils/service";
 import { store } from "@/utils/store";
 import { hydrateManifestStore, hydrateSchemaStore } from "@/utils/setup";
 import { getSchemaForSubject } from "../Details/IssueModal/IssueModal";
+import { useNavigate } from "@solidjs/router";
 
 const Modal: Component<{ content }> = (props) => {
     let initialFormValues = { 
@@ -66,6 +67,9 @@ const Modal: Component<{ content }> = (props) => {
         setStep(step() - 1);
     }
 
+    const navigate = useNavigate();
+    const [manifestId, setManifestId] = createSignal();
+
     //actual form calls
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -117,7 +121,8 @@ const Modal: Component<{ content }> = (props) => {
         // in future we prob also want a step for styles and issuance template, but backlog for now
         const request = SSI.putManifest(credentialPayload);
         const setters = { setIsLoading, setIsSuccess, setIsError };
-        const res = handleRequest(event, request, setters);
+        const res = await handleRequest(event, request, setters);
+        setManifestId((await res.json()).credential_manifest.id);
     };
 
     const handleInput = (event) => {
@@ -426,7 +431,7 @@ const Modal: Component<{ content }> = (props) => {
                                     🎉 Successfully created credential
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); hydrateManifestStore()}}>
+                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); hydrateManifestStore(); navigate(`/credentials/${manifestId()}`) }}>
                                         Done
                                     </button>
                                 </div>
