@@ -226,7 +226,7 @@ const IssueModal: Component<{ content }> = (props) => {
                                     🎉 Successfully issued credential
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); hydrateCredentialsStore(formValues().issuer) }}>
+                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); hydrateCredentialsStore() }}>
                                         Done
                                     </button>
                                 </div>

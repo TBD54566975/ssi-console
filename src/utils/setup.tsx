@@ -15,6 +15,9 @@ const setupStore = async () => {
     if (store.user && Object.values(store.user).length === 0) {
         await hydrateDIDStore();
     }
+    if (store.credentials?.length === 0) {
+        await hydrateCredentialsStore();
+    }
     if (store.manifests?.length === 0) {
         await hydrateManifestStore();
     }
@@ -57,26 +60,14 @@ export const hydrateDIDStore = async () => {
                 }
             }
             updateStore("user", updateValue);
-    
-            // make sure to hydrate the store with credentials we have access to
-            if (Object.values(store.credentials).length === 0) {
-                await hydrateCredentialsStore(did.id);
-            }
         }
     } else {
         updateStore("user", {});
     }
 }
 
-export const hydrateCredentialsStore = async (issuerId) => {
-    const credentials = await SSI.getCredentials("issuer", issuerId);
-    const updateValue = {
-        ...store.credentials,
-        [issuerId] : [
-            ...(credentials?.length ? credentials: [])
-        ]
-    }
-    updateStore("credentials", updateValue);
+export const hydrateCredentialsStore = async () => {
+    updateStore("credentials", await SSI.getCredentials());
 }
 
 export const hydrateManifestStore = async () => {
@@ -129,8 +120,8 @@ export const deleteDefinitionFromStore = async (id: string) => {
     return response;
 }
 
-export const updateCredentialStatusInStore = async (id: string, data, issuerId: string) => {
+export const updateCredentialStatusInStore = async (id: string, data) => {
     const response = await SSI.putCredentialStatus(id, data); 
-    await hydrateCredentialsStore(issuerId);
+    await hydrateCredentialsStore();
     return response;
 }

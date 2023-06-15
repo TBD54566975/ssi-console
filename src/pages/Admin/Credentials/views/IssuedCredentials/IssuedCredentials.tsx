@@ -15,7 +15,7 @@ const IssuedCredentials: Component = () => {
 
     let confirmDialog;
     const confirmStatusUpdate = async (item) => {
-        await updateCredentialStatusInStore(item.metadata.id, statusUpdate(), item.metadata.issuerId);
+        await updateCredentialStatusInStore(item.metadata.id, statusUpdate());
         confirmDialog.close();
     }
     
@@ -125,15 +125,12 @@ const formatCredentialData = (credentialSubject) => {
 }
 
 const transformCredentials = (credentials, status: "active" | "suspended" | "revoked") => {
-    return Object.values(credentials).flatMap((credentialSet: []) => {
-        return [
-            ...credentialSet.filter(credential => {
+        return credentials.filter(credential => {
                 if (status === "active" && (!credential["suspended"] && !credential["revoked"])) return true;
-                if (status === "suspended" && (credential["suspended"])) return true;
-                if (status === "revoked" && (credential["revoked"])) return true;
+                if (credential[status]) return true;
                 return false;
             }).map((cred : { credential })  => {
-            const { credential } = cred;
+                const { credential } = cred;
                 const manifestName = store.manifests.find(manifest => { 
                 if (credential.credentialSchema) {
                     return manifest.credential_manifest.output_descriptors.find(output => output.schema === credential.credentialSchema.id);
@@ -157,7 +154,5 @@ const transformCredentials = (credentials, status: "active" | "suspended" | "rev
                         }
                     }
                 }
-            })
-        ];
-    });
+            });
 }

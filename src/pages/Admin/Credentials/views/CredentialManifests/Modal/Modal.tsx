@@ -5,7 +5,7 @@ import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, renderFormFr
 import { inputDescriptorsInput, manifestInput, schemaInput, stylesInput } from "./samples/mock";
 import SSI from "@/utils/service";
 import { store } from "@/utils/store";
-import { hydrateCredentialsStore, hydrateManifestStore, hydrateSchemaStore } from "@/utils/setup";
+import { hydrateManifestStore, hydrateSchemaStore } from "@/utils/setup";
 import { getSchemaForSubject } from "../Details/IssueModal/IssueModal";
 
 const Modal: Component<{ content }> = (props) => {
