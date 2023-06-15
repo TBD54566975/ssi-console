@@ -73,13 +73,13 @@ const Modal: Component<{ content }> = (props) => {
 
     const isFormValid = () => {
         // check that ion is valid
-        const serviceEndpointsisValid = formValues().serviceEndpoints && formValues().serviceEndpoints.every(obj =>
+        const serviceEndpointsisValid = formValues().serviceEndpoints && formValues().serviceEndpoints.length && formValues().serviceEndpoints.every(obj =>
             {console.log(obj);
                 return obj.hasOwnProperty("id") &&
             obj.hasOwnProperty("type") &&
             obj.hasOwnProperty("serviceEndpoint")}
-        ) && formValues().serviceEndpoints.isArray();
-        // if (formValues().didMethod === "ion" && (serviceEndpointsisValid || (!formValues().serviceEndpoints && !editor.state.doc.toString()))) return true;
+        );
+        if (formValues().didMethod === "ion" && (serviceEndpointsisValid || (!formValues().serviceEndpoints && !editor.state.doc.toString()))) return true;
         
         // check that web is valid
         const didWebIdPattern = /^did:web:(https?:\/\/)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/\S*)?$/;
@@ -91,15 +91,16 @@ const Modal: Component<{ content }> = (props) => {
     }
 
     const serviceEndpointsExample = [{ 
-        'id': 'did:ion:example#test', 
-        'type': 'CredentialRegistry', 
-        'serviceEndpoint': 'https://test.example.com' 
+        'id': 'example', 
+        'type': 'example', 
+        'serviceEndpoint': 'https://example.com' 
     }];
 
     const editor = Editor({
         id: "serviceEndpoints",
         onInput: (e) => handleInput(e),
-        placeholder: <div>// Example: <br />{JSON.stringify(serviceEndpointsExample, null, 4)}</div>
+        doc: JSON.stringify(serviceEndpointsExample, null, 2),
+        placeholder: <div>// Example: <br />{JSON.stringify(serviceEndpointsExample, null, 2)}</div>
     });
 
     return (
