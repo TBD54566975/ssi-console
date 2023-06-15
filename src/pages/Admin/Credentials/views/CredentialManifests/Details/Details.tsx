@@ -8,6 +8,8 @@ import Icon, { ExternalArrow } from "@/icons/Icon";
 import { deleteManifestFromStore, hydrateManifestStore } from "@/utils/setup";
 import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
 import TBDLogoSquare from "@/assets/tbd-logo-square.svg";
+import TBDWordmark from "@/assets/tbd-wordmark.svg";
+import Editor from "@/utils/editor";
 
 const Details: Component<{ credential }> = (props) => {
     const params = useParams<{ id }>();
@@ -27,21 +29,41 @@ const Details: Component<{ credential }> = (props) => {
         navigate('/credentials', { replace: true });
     }
 
+
+    const editor = Editor({
+        readOnly: true,
+        doc: JSON.stringify({...credential_manifest, "test": 2, "again": true}, null, 2)
+    });
+
     return (
         <div class="details-page">
             <div class="details-container">
-                <section class="render-panel">
+            <section class="render-panel">
                     <div class="details-page-hero-card"
                         style={{
                             background: credential_manifest.output_descriptors.styles?.background.color || credential_manifest.issuer.styles?.background.color,
                             color: credential_manifest.output_descriptors.styles?.text.color || credential_manifest.issuer.styles?.text.color
                         }}>
                         <div class="details-page-hero-card-content">
+                            <div class="details-page-hero-card-content-hero details-page-hero-card-full-width">
+                                <img src={credential_manifest.output_descriptors.styles?.hero.url || TBDWordmark} alt={credential_manifest.output_descriptors.styles?.hero.alt || "Generic abstract credential hero image"} />
+                            </div>
                             <div class="details-page-hero-card-content-thumbnail">
                                 <img src={credential_manifest.output_descriptors.styles?.thumbnail.url || TBDLogoSquare} alt={credential_manifest.output_descriptors.styles?.thumbnail.alt || "Generic abstract credential thumbnail image"} />
                             </div>
-                            <div class="details-page-hero-card-content-hero details-page-hero-card-full-width">
-                                <img src={credential_manifest.output_descriptors.styles?.hero.url || TBDLogoSquare} alt={credential_manifest.output_descriptors.styles?.hero.alt || "Generic abstract credential hero image"} />
+                            <div class="details-page-hero-card-content-info">
+                                {schemaData && Object.keys(schemaData).map(label => {
+                                    return (
+                                        <div class="info-entry">
+                                            <div class="info-entry-label">{label}</div>
+                                            <div class="info-entry-data">Placeholder</div>
+                                        </div>
+                                    )
+                                })}
+                                <div class="info-entry">
+                                    <div class="info-entry-label">Issuer</div>
+                                    <div class="info-entry-data">{credential_manifest.issuer.name}</div>
+                                </div>
                             </div>
                         </div>
                         <div class="details-page-hero-card-content">
@@ -50,6 +72,7 @@ const Details: Component<{ credential }> = (props) => {
                         </div>
                     </div>
                 </section>
+                
                 <section class="details-page-hero panel">
                     <div class="details-page-hero-content">
                         <h1>{credential_manifest.name}</h1>
@@ -59,21 +82,6 @@ const Details: Component<{ credential }> = (props) => {
                                 Application URL <Icon svg={ExternalArrow} />
                             </a>
                         </p>
-                        <div class="entry-container">
-                            <div class="entry-row">
-                                <div class="key-entry">Template ID</div>
-                                <div class="value-entry">
-                                    <p>{credential_manifest.id}</p>
-                                </div>
-                            </div>
-                            <div class="entry-row">
-                                <div class="key-entry">Issuer</div>
-                                <div class="value-entry">
-                                    <p>{credential_manifest.issuer.name}</p>
-                                    <p>{credential_manifest.issuer.id}</p>
-                                </div>
-                            </div>
-                        </div>
                         <div class="details-page-hero-content-actions button-row">
                             <IssueModal content={{
                                 button: {
@@ -94,57 +102,7 @@ const Details: Component<{ credential }> = (props) => {
                             confirmMessage={"Yes, delete"}
                             />
                     </div>
-                </section>
-                <section class="panel">
-                    <div class="panel-header">
-                        <h2>Details</h2>
-                    </div>
-                    <div class="entry-container panel-body">
-                        {schemaMeta && Object.entries(schemaMeta).map(entry => {
-                            return (
-                                <div class="entry-row">
-                                    <div class="key-entry">{entry[0]}</div>
-                                    <div class="value-entry">
-                                        <p>{JSON.stringify(entry[1], null, 2)}</p>
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </div>
-                </section>
-                <section class="panel">
-                    <div class="panel-header">
-                        <h2>Data</h2>
-                    </div>
-                    <div class="entry-container panel-body">
-                        {schemaData && Object.entries(schemaData).map(entry => {
-                            return (
-                                <div class="entry-row">
-                                    <div class="key-entry">{entry[0]}</div>
-                                    <div class="value-entry">
-                                        <p>{JSON.stringify(entry[1], null, 2)}</p>
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </div>
-                </section>
-                <section class="panel">
-                    <div class="panel-header">
-                        <h2>Requirements</h2>
-                    </div>
-                    <div class="entry-container panel-body">
-                        {credential_manifest.presentation_definition && Object.entries(credential_manifest.presentation_definition).map(entry => {
-                            return (
-                                <div class="entry-row">
-                                    <div class="key-entry">{entry[0]}</div>
-                                    <div class="value-entry">
-                                        <p>{JSON.stringify(entry[1], null, 2)}</p>
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </div>
+                    {editor.dom}
                 </section>
             </div>
         </div>
