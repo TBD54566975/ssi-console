@@ -1,9 +1,9 @@
 .did-dialog {
 
     .dialog {
-        background: var(--color-black);
+        background: var(--grey-5);
+        border: 1px solid var(--grey-10);
         color: var(--color-white);
-        border: 1px solid var(--grey-5);
         box-shadow: 0 10px 20px var(--color-black);
         max-width: 100%;
         height: calc(100% - 2rem);
@@ -18,12 +18,13 @@
         }
 
         &-header {
-            border-bottom: 1px solid var(--grey-5);
+            background: var(--grey-5);
+            border-bottom: 1px solid var(--grey-10);
             padding: 1rem;
             position: sticky;
             top: 0;
             z-index: 1;
-            background: var(--color-black);
+            margin-block-end: 1rem;
 
             button {
                 .icon-container > svg {
@@ -95,7 +96,6 @@
             position: relative;
             justify-content: center;
             min-height: calc(100% - 4rem);
-            // margin: 2rem;
             padding: 2rem;
             overflow: scroll;
             max-height: 100%;
@@ -128,9 +128,9 @@
 
         &-body form {
             margin-inline: 2rem;
-            background: var(--grey-5);
+            background: var(--grey-10);
             padding: 2rem;
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-sm);
             width: 100%;
             max-width: 680px;
             margin-block-end: 4rem;
@@ -188,7 +188,7 @@
 
             form {
                 margin-inline: 0;
-                background: var(--color-black);
+                background: var(--grey-5);
                 padding-block-start: 0;
                 margin-block-start: 0;
             }
