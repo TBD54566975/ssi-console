@@ -28,6 +28,7 @@
     --font-xl: 2rem;
     --font-huge: 3.5rem;
     --radius-sm: 6px;
+    --radius-md: 16px;
     --radius-round: 999px;
     --site-font: 'IBM Plex Mono', monospace;
 
@@ -291,10 +292,11 @@ form {
 }
 
 label,
-legend {
+legend,
+.cm-label {
     font-size: var(--font-xs);
     display: block;
-    margin: 0;
+    margin-block: 8px;
 }
 
 select,
@@ -307,7 +309,7 @@ textarea {
     padding: 12px 16px;
     font-family: var(--site-font);
     background: var(--grey-5);
-    border: 1px solid var(--grey-50);
+    border: 1px solid var(--grey-30);
     border-radius: var(--radius-sm);
     color: var(--color-white);
 }
