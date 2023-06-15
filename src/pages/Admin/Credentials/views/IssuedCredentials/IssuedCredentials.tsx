@@ -74,7 +74,7 @@ const transformCredentials = (credentials, status: "active" | "suspended" | "rev
                         type: "warn",
                         label: "Suspendable"
                         }},
-                    ...credential.credentialStatus?.statusPurpose === "revocable" && { tag: {
+                    ...credential.credentialStatus?.statusPurpose === "revocation" && { tag: {
                         type: "danger",
                         label: "Revocable"
                         }},
