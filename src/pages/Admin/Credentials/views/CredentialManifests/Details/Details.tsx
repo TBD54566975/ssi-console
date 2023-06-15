@@ -34,6 +34,11 @@ const Details: Component<{ credential }> = (props) => {
         doc: JSON.stringify(credential_manifest, null, 2)
     });
 
+    const editorForSchema = Editor({
+        readOnly: true,
+        doc: JSON.stringify(schema, null, 2)
+    });
+
     return (
         <div class="credential-manifest-details">
             <div class="details-page">
@@ -105,7 +110,12 @@ const Details: Component<{ credential }> = (props) => {
                                 cancelMessage={"No, cancel"}
                                 confirmMessage={"Yes, delete"}
                                 />
-                        {editor.dom}
+                        <div class="details-page-cm-container">
+                            <h2>Credential Manifest</h2>
+                            {editor.dom}
+                            <h2>Schema</h2>
+                            {editorForSchema.dom}
+                        </div>
                     </section>
                 </div>
             </div>
