@@ -87,6 +87,10 @@
 
             summary .panel-row-header-action {
                 transition: 0.15s ease transform;
+
+                &-right {
+                    transform: rotate(-90deg);
+                }
             }
 
             &[open] summary,

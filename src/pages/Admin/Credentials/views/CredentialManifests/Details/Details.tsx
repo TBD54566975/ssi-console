@@ -19,7 +19,6 @@ const Details: Component<{ credential }> = (props) => {
     const { credential_manifest } = store.manifests.find(manifest =>  manifest.id === params.id);
     const schema = getSchemaForSubject(credential_manifest.output_descriptors[0].schema);
     const schemaData = schema?.properties;
-    const schemaMeta = schema?.meta;
 
     let confirmDialog;
     const confirmDelete = async (item) => {
@@ -32,7 +31,7 @@ const Details: Component<{ credential }> = (props) => {
 
     const editor = Editor({
         readOnly: true,
-        doc: JSON.stringify({...credential_manifest, "test": 2, "again": true}, null, 2)
+        doc: JSON.stringify(credential_manifest, null, 2)
     });
 
     return (
@@ -75,6 +74,7 @@ const Details: Component<{ credential }> = (props) => {
                 
                 <section class="details-page-hero panel">
                     <div class="details-page-hero-content">
+                        <p class="eyebrow-label">Credential Template</p>
                         <h1>{credential_manifest.name}</h1>
                         <p class="details-description">{credential_manifest.description}</p>
                         <p>

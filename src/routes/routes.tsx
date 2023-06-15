@@ -81,7 +81,12 @@ export const dynamicRoutes = [
         path: '/verification/:id',
         name: 'Details',
         component: lazy(() => import('@/pages/Admin/Verification/views/Requests/Details/Details')),
-    }
+    },
+    {
+        path: '/credentials/history/:id',
+        name: 'Details',
+        component: lazy(() => import('@/pages/Admin/Credentials/views/IssuedCredentials/Details/Details')),
+    },
 ]
 
 export const intakeRoutes = [
