@@ -31,7 +31,7 @@ const Verify: Component = () => {
         const request = SSI.putVerifyCredential(data);
         const setters = { setIsLoading, setIsSuccess, setIsError };
         const res = await handleRequest(event, request, setters);
-        setRes(res.verified);
+        setRes(res);
     };
 
     const handleInput = (event) => {
@@ -58,13 +58,13 @@ const Verify: Component = () => {
                             }
 
                             {isSuccess() && (
-                                res() !== null && (
-                                    res()
+                                res() && res().verified !== null && (
+                                    res().verified
                                     ?   <div class="banner banner-success">
                                             Verified!
                                         </div>
-                                    :   <div class="banner banner-alert">
-                                            Credential is not verifiable.
+                                    :   <div class="banner banner-warn">
+                                            Credential is not verifiable. Reason: {res().reason}
                                         </div>
                                 )
                             )}
