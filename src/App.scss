@@ -405,6 +405,7 @@ input[type="radio"]:checked ~ label {
     .input-container,
     .textarea-container {
         flex: 1 1 75%;
+        max-width: 100%;
     }
 
     .select-container {
@@ -466,6 +467,12 @@ input[type="radio"]:checked ~ label {
                     background-position: center center;
                     background-repeat: no-repeat;
                     filter: invert(100%) brightness(100%);
+                }
+
+                &:hover:not(:disabled) {
+                    &::before {
+                        border-color: var(--color-black);
+                    }
                 }
             }
         }

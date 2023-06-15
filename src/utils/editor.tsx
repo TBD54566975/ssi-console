@@ -60,7 +60,6 @@ const Editor = (options: {
             letterSpacing: "0"
         }
     });
-    const lineWrapping = EditorView.lineWrapping;
     const updateListener = EditorView.updateListener.of((e) => {
         if (options.onInput) {
             let message;
@@ -114,7 +113,6 @@ const Editor = (options: {
             highlightActiveLine(),
             drawSelection(),
             theme,
-            // lineWrapping,
             attrs,
             updateListener,
             readonly,
