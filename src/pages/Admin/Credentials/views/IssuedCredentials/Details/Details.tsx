@@ -32,7 +32,7 @@ const Details: Component<{ credential }> = (props) => {
 
     const editor = Editor({
         readOnly: true,
-        doc: JSON.stringify(credential, null, 2)
+        doc: JSON.stringify({ ...credential, ...credentialMeta }, null, 2)
     });
 
     return (

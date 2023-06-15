@@ -76,6 +76,7 @@ const IssueModal: Component<{ content }> = (props) => {
         const setters = { setIsLoading, setIsSuccess, setIsError };
         const res = await handleRequest(event, request, setters);
         setCredentialId(parseIDFromUrl((await res.json()).id));
+        hydrateCredentialsStore();
     };
 
     const handleInput = (event) => {
@@ -232,7 +233,7 @@ const IssueModal: Component<{ content }> = (props) => {
                                     🎉 Successfully issued credential
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); hydrateCredentialsStore(); navigate(`/credentials/history/${credentialId()}`)}}>
+                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); navigate(`/credentials/history/${credentialId()}`)}}>
                                         Done
                                     </button>
                                 </div>

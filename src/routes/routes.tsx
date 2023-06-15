@@ -100,4 +100,9 @@ export const intakeRoutes = [
         name: 'Submit',
         component: lazy(() => import('@/pages/Intake/Submit/Submit')),
     },
+    {
+        path: '/verify',
+        name: 'Submit',
+        component: lazy(() => import('@/pages/Intake/Verify/Verify')),
+    },
 ]

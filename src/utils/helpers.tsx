@@ -56,10 +56,10 @@ export async function handleRequest(event, request, setters: Setters) {
     setIsError(false);
     try {
         const response = await request;
-        if (!response.ok) {
-            setIsError(true)
-            throw new Error(`Request failed with ${response.status}.`);
-        }
+        // if (!response.ok) {
+        //     setIsError(true)
+        //     throw new Error(`Request failed with ${response.status}.`);
+        // }
         setIsSuccess(true);
         return response;
     } catch (e) {
