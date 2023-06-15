@@ -54,7 +54,7 @@ const transformApplications = (applications) => {
         const { application } = vc_application;
         return {
             name: `****-${application.id.slice(-4)}`,
-            id: Object.values(store.credentials).find((credential : { id, name})  => credential.id === application.manifest_id)?.["name"],
+            id: store.credentials.find((credential : { id, name})  => credential.id === application.manifest_id)?.["name"],
             tag: {
                 type: "info",
                 label: "Needs Review",

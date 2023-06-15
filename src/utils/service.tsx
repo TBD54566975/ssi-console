@@ -26,8 +26,12 @@ export class SSIService {
         return this.sendRequest(GET_SSI.READINESS);
     }
 
-    async getCredentials(filterBy: "issuer" | "subject" | "schema" = "issuer", filterId: string): Promise<any> {
-        const { credentials } = await this.sendRequest(`${GET_SSI.CREDENTIALS}?${filterBy}=${filterId}`);
+    async getCredentials(filter?: { filterBy: "issuer" | "subject" | "schema", filterId: string }): Promise<any> {
+        let url = `${GET_SSI.CREDENTIALS}`;
+        if (filter) {
+            url += `?${filter.filterBy}=${filter.filterId}`;
+        }
+        const { credentials } = await this.sendRequest(url);
         return credentials
     }
 

@@ -3,7 +3,7 @@ import { createStore } from 'solid-js/store';
 export const [store, setStore] = createStore({
   user: {},
   manifests: [],
-  credentials: {},
+  credentials: [],
   applications: [],
   definitions: [],
   submissions: {},
