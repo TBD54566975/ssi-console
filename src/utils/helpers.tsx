@@ -163,3 +163,10 @@ export const vpJWTFormat = {
       ]
     },
 }
+
+export function parseIDFromUrl(url) {
+    const urlObj = new URL(url);
+    const path = urlObj.pathname;
+    const pathSegments = path.split("/");
+    return pathSegments[pathSegments.length - 1];
+}

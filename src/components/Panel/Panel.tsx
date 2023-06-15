@@ -1,6 +1,7 @@
 import { Component, createSignal } from "solid-js";
 import "./Panel.scss";
 import Icon, { ChevronDown } from "@/icons/Icon";
+import { useNavigate } from "@solidjs/router";
 
 export interface PanelContent {
     id?,
@@ -19,6 +20,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
     const [ page, setPage ] = createSignal(1);
     const [ listLength, setListLength ] = createSignal(props.content.listItems.length);
     const itemsPerPage = 12;
+    const navigate = useNavigate();
 
     const filterForResults = (listItem) => {
         return Object.values(listItem).some((candidate) => { 
@@ -53,9 +55,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
 
     const getPanelRowHeader = (filteredItem) => {
         return Object.keys(filteredItem).map(key => {
-            if (key === "body") return;
-            if (key === "status") return;
-            if (key === "metadata") return;
+            if (key === "body" || key === "status" || key === "metadata" || key === "navigation") return;
             if (key === "tag") return (
                 <p class={`chip chip-${filteredItem[key].type}`}>
                     {filteredItem[key].label}
@@ -99,14 +99,14 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
             {props.content.listItems.length ?
                 <ul>
                     { setPageItems(props.content.listItems).map(filteredItem => 
-                        <li class="panel-row">
+                        <li class="panel-row" onclick={() => filteredItem.navigation ? navigate(filteredItem.navigation) : null }>
                             <details>
                                 <summary class="panel-row-header">
                                     <div class="panel-row-header-data">
                                     {getPanelRowHeader(filteredItem)}
 
                                     </div>
-                                    <div class="panel-row-header-action">
+                                    <div class="panel-row-header-action" classList={{"panel-row-header-action-right": filteredItem.navigation}}>
                                         <Icon svg={ChevronDown} />
                                     </div>
                                 </summary>

@@ -5,19 +5,13 @@ import Icon, { ExternalArrow } from "@/icons/Icon";
 import { store } from "@/utils/store";
 import { updateCredentialStatusInStore } from "@/utils/setup";
 import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal";
+import { useNavigate } from "@solidjs/router";
+import { parseIDFromUrl } from "@/utils/helpers";
 
 const IssuedCredentials: Component = () => {
     const [ activeCredentials, setActiveCredentials ] = createSignal(transformCredentials(store.credentials, "active"))
     const [ suspendedCredentials, setSuspendedCredentials ] = createSignal(transformCredentials(store.credentials, "suspended"))
     const [ revokedCredentials, setRevokedCredentials ] = createSignal(transformCredentials(store.credentials, "revoked"))
-    const [ item, setItem ] = createSignal();
-    const [ statusUpdate, setStatusUpdate ] = createSignal();
-
-    let confirmDialog;
-    const confirmStatusUpdate = async (item) => {
-        await updateCredentialStatusInStore(item.metadata.id, statusUpdate());
-        confirmDialog.close();
-    }
     
     createEffect(() => {
         const storeCredentials = store.credentials;
@@ -34,31 +28,12 @@ const IssuedCredentials: Component = () => {
                 listItems: activeCredentials(),
                 footer: <a href="" target="_blank">Learn about Credentials <Icon svg={ExternalArrow} /></a>,
                 fallback: "You haven't issued any Credentials, so there's nothing here.",
-                buttons: [
-                    {
-                        label: "Suspend",
-                        className: "warn-button",
-                        onClick: (item) => { setItem(item); setStatusUpdate({ "suspended": true }); confirmDialog.showModal()}
-                    },
-                    {
-                        label: "Revoke",
-                        className: "danger-button",
-                        onClick: (item) => { setItem(item); setStatusUpdate({ "revoked": true }); confirmDialog.showModal()}
-                    }
-                ]
             },
             suspended: {
                 id: "suspended",
                 title: "Suspended",
                 listItems: suspendedCredentials(),
                 fallback: "You haven't suspended any Credentials yet, so there's nothing here.",
-                buttons: [
-                    {
-                        label: "Reinstate",
-                        className: "warn-button",
-                        onClick: (item) => { setItem(item); setStatusUpdate({ "suspended": false }); confirmDialog.showModal()}
-                    },
-                ]
             },
             revoked: {
                 id: "revoked",
@@ -73,56 +48,11 @@ const IssuedCredentials: Component = () => {
             {Object.keys(content()).map(key => 
                 <Panel content={content()[key]} />
             )}
-            <ConfirmationModal 
-                ref={confirmDialog}
-                onCancel={() => confirmDialog.close()}
-                onConfirm={() => confirmStatusUpdate(item())}
-                message={
-                    statusUpdate()?.["revoked"]
-                    ? "Are you sure you want to revoke this credential? This action is irreversible."
-                    : statusUpdate()?.["suspended"] === true
-                    ? "Are you sure you want to suspend this credential?"
-                    :"Are you sure you want to reinstate this credential?"
-                }
-                cancelMessage={"No, cancel"}
-                confirmMessage={
-                    statusUpdate()?.["revoked"]
-                    ? "Yes, revoke"
-                    : statusUpdate()?.["suspended"] === true
-                    ? "Yes, suspend"
-                    : "Yes, reinstate"
-                }
-                />
         </>
     )
 }
 
 export default IssuedCredentials;
-
-const formatCredentialData = (credentialSubject) => {
-    const { id, ...subject } = credentialSubject;
-    const data = Object.entries(subject).map(entry => {
-        return (
-            <div class="entry-row">
-                <div class="key-entry">{entry[0]}</div>
-                <div class="value-entry">
-                    <p>{JSON.stringify(entry[1], null, 2)}</p>
-                </div>
-            </div>
-        )
-    });
-    return (
-        <div class="entry-container">
-            <div class="entry-row">
-                <div class="key-entry">Subject DID</div>
-                <div class="value-entry">
-                    <p>{id}</p>
-                </div>
-            </div>
-            {data}
-        </div>
-    )
-}
 
 const transformCredentials = (credentials, status: "active" | "suspended" | "revoked") => {
         return credentials.filter(credential => {
@@ -140,18 +70,18 @@ const transformCredentials = (credentials, status: "active" | "suspended" | "rev
                     name: `****-${credential.id.slice(-4)}`,
                     credentialName: manifestName,
                     type: credential.issuanceDate,
-                    body: formatCredentialData(credential.credentialSubject), 
+                    ...credential.credentialStatus?.statusPurpose === "suspension" && { tag: {
+                        type: "warn",
+                        label: "Suspendable"
+                        }},
+                    ...credential.credentialStatus?.statusPurpose === "revocable" && { tag: {
+                        type: "danger",
+                        label: "Revocable"
+                        }},
+                    navigation: parseIDFromUrl(credential.id),
                     metadata: {
                         id: credential.id,
-                        issuerId: credential.issuer,
-                        buttonState: {
-                            "Suspend": {
-                                disabled: credential.credentialStatus?.statusPurpose !== "suspension"
-                            },
-                            "Revoke": {
-                                disabled: credential.credentialStatus?.statusPurpose !== "revocation"
-                            }  
-                        }
+                        issuerId: credential.issuer
                     }
                 }
             });
