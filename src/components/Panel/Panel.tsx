@@ -18,7 +18,7 @@ export interface PanelContent {
 const Panel: Component<{ content: PanelContent }> = (props) => {
     const [ query, setQuery ] = createSignal('');
     const [ page, setPage ] = createSignal(1);
-    const [ listLength, setListLength ] = createSignal(props.content.listItems.length);
+    const [ listLength, setListLength ] = createSignal(props.content.listItems?.length);
     const itemsPerPage = 12;
     const navigate = useNavigate();
 
@@ -55,7 +55,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
 
     const getPanelRowHeader = (filteredItem) => {
         return Object.keys(filteredItem).map(key => {
-            if (key === "body" || key === "status" || key === "metadata" || key === "navigation") return;
+            if (key === "body" || key === "status" || key === "metadata" || key === "navigation" || key === "contents") return;
             if (key === "tag") return (
                 <p class={`chip chip-${filteredItem[key].type}`}>
                     {filteredItem[key].label}
@@ -96,7 +96,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                     }
                 </div>
             </div>
-            {props.content.listItems.length ?
+            {props.content.listItems?.length ?
                 <ul>
                     { setPageItems(props.content.listItems).map(filteredItem => 
                         <li class="panel-row" onclick={() => filteredItem.navigation ? navigate(filteredItem.navigation) : null }>
@@ -138,7 +138,7 @@ const Panel: Component<{ content: PanelContent }> = (props) => {
                 <div>
                     {props.content.footer}
                 </div>
-                {props.content.listItems.length > 6 && 
+                {props.content.listItems?.length > 6 && 
                     <div class="panel-footer-buttons">
                         <button class="secondary-button" onclick={goPrevPage} disabled={page() - 1 < 1}>Prev</button>
                         Page {page()}

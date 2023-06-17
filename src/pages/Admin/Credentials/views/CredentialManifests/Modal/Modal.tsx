@@ -69,6 +69,7 @@ const Modal: Component<{ content }> = (props) => {
 
     const navigate = useNavigate();
     const [manifestId, setManifestId] = createSignal();
+    const [schemaId, setSchemaId] = createSignal();
 
     //actual form calls
     const handleSubmit = async (event) => {
@@ -123,6 +124,7 @@ const Modal: Component<{ content }> = (props) => {
         const setters = { setIsLoading, setIsSuccess, setIsError };
         const res = await handleRequest(event, request, setters);
         setManifestId((await res.json()).credential_manifest.id);
+        setSchemaId(schemaId);
         hydrateManifestStore(); 
     };
 
@@ -432,7 +434,7 @@ const Modal: Component<{ content }> = (props) => {
                                     🎉 Successfully created credential
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); navigate(`/credentials/${manifestId()}`) }}>
+                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); navigate(`/credentials/${manifestId()}?schema=${schemaId()}`) }}>
                                         Done
                                     </button>
                                 </div>

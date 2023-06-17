@@ -18,7 +18,7 @@ const Details: Component<{ credential }> = (props) => {
 
     const { credential, ...credentialMeta } = store.credentials.find(credential => credential.id.endsWith(params.id));
     const { id: subjectId, ...subjectData } = credential.credentialSubject;
-    const schema = getSchemaForSubject(credential.credentialSchema.id);
+    const schema = getSchemaForSubject(credential.credentialSchema?.id);
 
     const [ statusUpdate, setStatusUpdate ] = createSignal();
     

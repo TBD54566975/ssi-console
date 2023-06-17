@@ -55,7 +55,7 @@ const IssuedCredentials: Component = () => {
 export default IssuedCredentials;
 
 const transformCredentials = (credentials, status: "active" | "suspended" | "revoked") => {
-        return credentials.filter(credential => {
+        return credentials?.filter(credential => {
                 if (status === "active" && (!credential["suspended"] && !credential["revoked"])) return true;
                 if (credential[status]) return true;
                 return false;
@@ -63,7 +63,7 @@ const transformCredentials = (credentials, status: "active" | "suspended" | "rev
                 const { credential } = cred;
                 const manifestName = store.manifests.find(manifest => { 
                 if (credential.credentialSchema) {
-                    return manifest.credential_manifest.output_descriptors.find(output => output.schema === credential.credentialSchema.id);
+                    return manifest.credential_manifest.output_descriptors.find(output => output.schema === credential.credentialSchema?.id);
                 }
                 })?.credential_manifest?.name || "Verifiable Credential";
                 return {
@@ -79,11 +79,10 @@ const transformCredentials = (credentials, status: "active" | "suspended" | "rev
                         label: "Revocable"
                         }},
                     navigation: parseIDFromUrl(credential.id),
-                    body: JSON.stringify(credential.credentialSubject),
+                    contents: JSON.stringify(credential.credentialSubject),
                     metadata: {
                         id: credential.id,
                         issuerId: credential.issuer,
-                        
                     }
                 }
             });
