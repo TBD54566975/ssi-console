@@ -11,7 +11,7 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches: ['main', 'publish-image']
+    branches: ['main']
     tags: [ v* ]
 
 env:
