@@ -84,13 +84,13 @@ export const hydrateDefinitionStore = async () => {
 
 export const hydrateSubmissionStore = async (status: "pending" | "approved" | "denied" | "cancelled") => {
     const submissions = await SSI.getSubmissions(status);
-    const updateValue = {
-        ...store.submissions,
-        [status]: [
-            ...(submissions?.length ? submissions : [])
-        ]
+    if (submissions?.length) {
+        const updateValue = {
+            ...store.submissions,
+            [status]: submissions
+        }
+        updateStore("submissions", updateValue);
     }
-    updateStore("submissions", updateValue);
 }
 
 export const hydrateSchemaStore = async () => {
