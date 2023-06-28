@@ -241,7 +241,7 @@ const Modal: Component<{ content }> = (props) => {
                                             >
                                                 <option value={''}>New data set</option>
                                                 {store.schemas && Object.values(store.schemas).map(({schema}) => 
-                                                    <option value={schema["id"]}>{schema["name"]}</option>
+                                                    schema && <option value={schema["$id"] || schema["id"]}>{schema["name"]}</option>
                                                 )}
                                             </select>
                                             <Icon svg={ArrowUpDown} />

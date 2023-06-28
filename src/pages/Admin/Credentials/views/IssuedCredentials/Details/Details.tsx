@@ -18,6 +18,7 @@ const Details: Component<{ credential }> = (props) => {
 
     const { credential, ...credentialMeta } = store.credentials.find(credential => credential.id.endsWith(params.id));
     const { id: subjectId, ...subjectData } = credential.credentialSubject;
+    console.log(credential)
     const schema = getSchemaForSubject(credential.credentialSchema?.id);
 
     const [ statusUpdate, setStatusUpdate ] = createSignal();
@@ -65,7 +66,7 @@ const Details: Component<{ credential }> = (props) => {
                             </div>
                         </div>
                         <div class="details-page-hero-card-content">
-                            <div class="details-page-hero-card-content-header">{schema.meta.name}</div>
+                            <div class="details-page-hero-card-content-header">{schema?.meta.name}</div>
                             <div class="details-page-hero-card-content-body">Verifiable Credential</div>
                         </div>
                     </div>
@@ -82,7 +83,7 @@ const Details: Component<{ credential }> = (props) => {
                                 :   <span class="chip chip-success">Active</span>
                             }
                         </p>
-                        <h1>{schema.meta.name}</h1>
+                        <h1>{schema?.meta.name}</h1>
                         <p class="details-description">Verifiable Credential</p>
                         <div class="details-page-hero-content-actions button-row">
                             { credentialMeta["suspended"]
