@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Component, createEffect, createSignal } from "solid-js";
 import AvatarPerson from "../../../assets/avatar-person.svg";
 import SearchCheckmark from "../../../assets/search-checkmark.svg";
 import GroupPeople from "../../../assets/group-people.svg";
@@ -7,14 +7,26 @@ import Card, { CardContent } from "../../../components/Card/Card";
 import NotifyBlock from "../../../components/NotifyBlock/NotifyBlock";
 import "./AdminOverview.scss";
 import { notifications } from "../../../components/Header/Header";
+import { store, updateStore } from "@/utils/store";
 
 const AdminOverview: Component = () => {
+    const [ hasApplications, setHasApplications ] = createSignal(false);
+    const [ hasSubmissions, setHasSubmissions ] = createSignal(false);
+    
+    createEffect(() => {
+    setHasApplications(!!store.applications?.length);
+    }, [store.applications]);
+    
+    createEffect(() => {
+    setHasSubmissions(store.submissions && !!Object.values(store.submissions)?.length);
+    }, [store.submissions]);
+
     return (
         <div class="admin-overview">
             <div class="info-panel">
                 <h1>SSI Admin Console</h1>
                 <div class="info-panel-inbox">
-                    {notifications && notifications.map(notification => 
+                    {notifications(hasApplications(), hasSubmissions())?.map(notification => 
                         <NotifyBlock content={notification} />
                     )}
                 </div>
