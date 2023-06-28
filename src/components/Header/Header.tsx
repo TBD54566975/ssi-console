@@ -1,13 +1,24 @@
-import { Component } from 'solid-js';
+import { Component, createEffect, createSignal } from 'solid-js';
 import TBDBrackets from '../../assets/tbd-brackets.svg';
 import './Header.scss';
 import { A } from '@solidjs/router';
 import routes from '../../routes/routes';
 import Icon, { ArrowRight, Bell, ChevronDown, ExternalArrow, Plus } from '../../icons/Icon';
 import NotifyBlock, { NotifyBlockContent } from '../NotifyBlock/NotifyBlock';
-import { store } from '../../utils/store';
+import { store, updateStore } from '../../utils/store';
 
 const Header: Component<{ username: string }> = (props) => {
+  const [ hasApplications, setHasApplications ] = createSignal(false);
+  const [ hasSubmissions, setHasSubmissions ] = createSignal(false);
+
+  createEffect(() => {
+    setHasApplications(!!store.applications?.length);
+  }, [store.applications]);
+
+  createEffect(() => {
+    setHasSubmissions(store.submissions && !!Object.values(store.submissions)?.length);
+  }, [store.submissions]);
+
   return (
 	  <header>
 		<div class="header">
@@ -28,12 +39,12 @@ const Header: Component<{ username: string }> = (props) => {
 					Docs <Icon svg={ExternalArrow} />
 				</a>
 				<div class="secondary-nav-menu">
-					<button title="Notifications menu" class="secondary-nav-menu-icon has-notification">
+					<button title="Notifications menu" class="secondary-nav-menu-icon" classList={{"has-notification": hasApplications() || hasSubmissions()}}>
 						<Icon svg={Bell} />
 					</button>
 					<div class="secondary-nav-menu-submenu notifications-submenu">
 						<ul>
-							{notifications && notifications.map(notification => 
+							{notifications(hasApplications(), hasSubmissions())?.map(notification => 
 								<li><NotifyBlock content={notification} /></li>
 							)}
 						</ul>
@@ -79,18 +90,18 @@ const Header: Component<{ username: string }> = (props) => {
 
 export default Header;
 
-export const notifications: NotifyBlockContent[] = [
+export const notifications = (hasApplications, hasSubmissions): NotifyBlockContent[] => [
     {
         title: "View applications",
         href: "/credentials/applications",
-        hasNotify: !!store.applications?.length,
-        ...!!store.applications?.length && { message: "You have pending applications to resolve" }
+        hasNotify: hasApplications,
+        ...hasApplications && { message: "You have pending applications to resolve" }
     },
     {
         title: "View submissions",
         href: "/verification/submissions",
-        hasNotify: store.submissions && !!Object.values(store.submissions)?.length,
-        ...store.submissions && !!Object.values(store.submissions)?.length && { message: "You have pending applications to resolve" }
+        hasNotify: hasSubmissions,
+        ...hasSubmissions && { message: "You have pending applications to resolve" }
     }
 ]
 
