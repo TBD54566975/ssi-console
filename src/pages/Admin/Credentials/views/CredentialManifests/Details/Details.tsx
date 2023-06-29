@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 import "./Details.scss";
 import "@/components/Panel/Panel.scss";
-import IssueModal, { getSchemaForSubject } from "./IssueModal/IssueModal";
+import IssueModal, { getSchemaForSubject } from "../../IssuedCredentials/Modal/Modal";
 import { useNavigate, useParams, useSearchParams } from "@solidjs/router";
 import { store } from "@/utils/store";
 import Icon, { ExternalArrow } from "@/icons/Icon";

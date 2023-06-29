@@ -9,7 +9,7 @@ import ConfirmationModal from "@/components/ConfirmationModal/ConfirmationModal"
 import TBDLogoSquare from "@/assets/tbd-logo-square.svg";
 import TBDWordmark from "@/assets/tbd-wordmark.svg";
 import Editor from "@/utils/editor";
-import { getSchemaForSubject } from "../../CredentialManifests/Details/IssueModal/IssueModal";
+import { getSchemaForSubject } from "../Modal/Modal";
 import { parseDateFromIssuanceDate } from "@/utils/helpers";
 
 const Details: Component<{ credential }> = (props) => {
@@ -18,7 +18,6 @@ const Details: Component<{ credential }> = (props) => {
 
     const { credential, ...credentialMeta } = store.credentials.find(credential => credential.id.endsWith(params.id));
     const { id: subjectId, ...subjectData } = credential.credentialSubject;
-    console.log(credential)
     const schema = getSchemaForSubject(credential.credentialSchema?.id);
 
     const [ statusUpdate, setStatusUpdate ] = createSignal();

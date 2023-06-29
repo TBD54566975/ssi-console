@@ -74,7 +74,7 @@ const Modal: Component<{ content }> = (props) => {
     const isFormValid = () => {
         // check that ion is valid
         const serviceEndpointsisValid = formValues().serviceEndpoints && formValues().serviceEndpoints.length && formValues().serviceEndpoints.every(obj =>
-            {console.log(obj);
+            {
                 return obj.hasOwnProperty("id") &&
             obj.hasOwnProperty("type") &&
             obj.hasOwnProperty("serviceEndpoint")}

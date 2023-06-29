@@ -6,7 +6,7 @@ import { inputDescriptorsInput, manifestInput, schemaInput, stylesInput } from "
 import SSI from "@/utils/service";
 import { store } from "@/utils/store";
 import { hydrateManifestStore, hydrateSchemaStore } from "@/utils/setup";
-import { getSchemaForSubject } from "../Details/IssueModal/IssueModal";
+import { getSchemaForSubject } from "../../IssuedCredentials/Modal/Modal";
 import { useNavigate } from "@solidjs/router";
 
 const Modal: Component<{ content }> = (props) => {
