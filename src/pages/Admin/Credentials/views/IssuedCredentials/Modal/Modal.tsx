@@ -77,7 +77,7 @@ const IssueModal: Component<{ content }> = (props) => {
             "issuerKid": store.user[formValues().issuer]["kid"],
             "schemaId": props.content.schemaId,
             "subject": formValues().subject,
-            ...formValues().evidence.verificationMethod !== "verificationMethod-none" && { "evidence": [[formValues().evidence]] },
+            ...formValues().evidence.verificationMethod !== "verificationMethod-none" && { "evidence": [formValues().evidence] },
             ...formValues().expiry && { "expiry": new Date(formValues().expiry).toISOString() },
             ...formValues().credentialStatus !== "credentialStatus-none" && { [formValues().credentialStatus]: true }        }
         const request = SSI.putCredential(data);
