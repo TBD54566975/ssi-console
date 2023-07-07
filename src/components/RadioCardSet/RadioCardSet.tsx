@@ -1,7 +1,7 @@
 import { Component, For, JSX } from "solid-js";
 
  const RadioCardSet: Component<{
-    handleEvent?: JSX.EventHandlerUnion<HTMLInputElement, InputEvent>,
+    handleEvent?,
     name: string, 
     legend: string,  
     options: {
@@ -14,7 +14,8 @@ import { Component, For, JSX } from "solid-js";
         selected?: boolean
     }[], 
     description?: string, 
-    optional?: boolean
+    optional?: boolean,
+    activeSelection?
     }> = (props) => {
     return (
         <fieldset class="radio-card-set field-container">
@@ -25,7 +26,7 @@ import { Component, For, JSX } from "solid-js";
             <For each={props.options}>
                 {(option) => 
                     <div class="radio-container">
-                        <input required={!props.optional} checked={option.selected} oninput={props.handleEvent} type="radio" name={props.name} id={option.value} value={option.value} disabled={option.disabled}/>
+                        <input required={!props.optional} checked={option.value === props.activeSelection} oninput={props.handleEvent} type="radio" name={props.name} id={option.value} value={option.value} disabled={option.disabled}/>
                         <label for={option.value} class="radio-control">
                             <div class="radio-control-content">
                                 {option.imageSrc && <img class="radio-card-image" src={option.imageSrc} alt="" />}

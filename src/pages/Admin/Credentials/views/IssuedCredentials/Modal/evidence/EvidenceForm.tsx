@@ -28,20 +28,18 @@ const EvidenceForm: Component<{formValues, setFormValues, store, setIsError}> = 
                         {
                             value: "verificationMethod-none", 
                             label: "None",
-                            selected: props.formValues().evidence.verificationMethod === "verificationMethod-none"
                         }, 
                         {
                             value: "physical", 
                             label: "In-person",
-                            selected: props.formValues().evidence.verificationMethod === "physical"
                         }, 
                         {
                             value: "virtual", 
                             label: "Virtually",
-                            selected: props.formValues().evidence.verificationMethod === "virtual"
                         }
                     ]
-                } 
+                }
+                activeSelection={props.formValues().evidence.verificationMethod} 
             />
             { props.formValues().evidence.verificationMethod !== "verificationMethod-none" && (
                 <>

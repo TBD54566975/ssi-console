@@ -269,18 +269,18 @@ const IssueModal: Component<{ content }> = (props) => {
                                             {
                                                 value: "credentialStatus-none", 
                                                 label: "None",
-                                                selected: true
                                             }, 
                                             {
                                                 value: "suspendable", 
-                                                label: "Suspendable"
+                                                label: "Suspendable",
                                             }, 
                                             {
                                                 value: "revocable", 
-                                                label: "Revocable"
+                                                label: "Revocable",
                                             }
                                         ]
-                                    } 
+                                    }
+                                    activeSelection={formValues().credentialStatus} 
                                 />
                                 <h3>Expiry</h3>
                                 <div class="field-container checkbox-container">
