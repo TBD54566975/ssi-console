@@ -351,6 +351,7 @@ fieldset {
     padding: 0;
     margin: 0.5rem 0 1.5rem;
     display: inline-flex;
+    width: 100%;
 }
 
 legend {
@@ -363,18 +364,36 @@ input[type="radio"] {
 
 input[type="radio"] ~ label {
     padding: 2px 10px;
-    border-radius: var(--radius-round);
+    border-radius: var(--radius-sm);
     font-size: var(--font-sm);
     margin-right: 0.5rem;
     background-color: var(--grey-10);
-    border: 2px solid var(--grey-30);
+    border: 1px solid var(--grey-30);
     color: var(--grey-50);
+    text-align: center;
+    padding-inline: 2rem;
+
+    .radio-control-content {
+        .radio-control-heading {
+            font-size: var(--font-sm);
+            margin: 0.25rem;
+        }
+
+        .radio-control-description {
+            font-size: var(--font-xs);
+            margin: 0;
+        }
+    }
 }
 
 input[type="radio"]:checked ~ label {
     background-color: var(--grey-30);
     border: 1px solid var(--color-white);
     color: var(--color-white);
+
+    p {
+        color: var(--color-white);
+    }
 }
 
 #output-container {

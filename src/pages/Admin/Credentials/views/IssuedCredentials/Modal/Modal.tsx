@@ -1,13 +1,15 @@
 import { Component, JSX, createSignal, onCleanup } from "solid-js";
 import "./Modal.scss";
 import Icon, { ArrowUpDown, Beaker, DangerAlert, XCross } from "@/icons/Icon";
-import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOnInput } from "@/utils/helpers";
+import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, renderFormFromJSON, updateFormOnInput } from "@/utils/helpers";
 import { credentialInputJson } from "./samples/mock";
 import SSI from "@/utils/service";
 import { store } from "@/utils/store";
 import { hydrateCredentialsStore } from "@/utils/setup";
 import { useNavigate } from "@solidjs/router";
 import { parseIDFromUrl } from "@/utils/helpers";
+import EvidenceForm from "./evidence/EvidenceForm";
+import RadioCardSet from "@/components/RadioCardSet/RadioCardSet";
 
 const IssueModal: Component<{ content }> = (props) => {
     //pass in these props
@@ -16,21 +18,21 @@ const IssueModal: Component<{ content }> = (props) => {
 
     let initialFormValues = { 
         properties: schemaProperties,
+        data: {},
         expires: null, 
-        suspendable: null, 
-        revocable: null,
         expiry: '',
         issuer: Object.keys(store.user)[0],
         subject: '',
-        evidence: JSON.stringify([{
-            "id": "https://example.com/evidence/1234-1234-1234",
+        evidence: {
+            "id": "",
             "type": ["DocumentVerification"],
-            "verifier": "did:web:example.com",
-            "evidenceDocument": "DriversLicense",
-            "subjectPresence": "Physical",
-            "documentPresence": "Physical",
-            "licenseNumber": "123AB4567"
-        }], null, 4)
+            "verifier": Object.keys(store.user)[0],
+            "verificationMethod": "verificationMethod-none",
+            "documentType": "",
+            "documentNumber": ""
+        },
+        credentialStatus: "credentialStatus-none",
+        evidenceMethod: ''
     }
 
     // the component
@@ -70,16 +72,14 @@ const IssueModal: Component<{ content }> = (props) => {
         event.preventDefault();
         const data = {
             "@context": "https://www.w3.org/2018/credentials/v1",
-            "data": JSON.parse(formValues().properties),
+            "data": formValues().data,
             "issuer": store.user[formValues().issuer]["did"],
             "issuerKid": store.user[formValues().issuer]["kid"],
             "schemaId": props.content.schemaId,
             "subject": formValues().subject,
-            ...formValues().evidence && { "evidence": JSON.parse(formValues().evidence) },
+            ...formValues().evidence.verificationMethod !== "verificationMethod-none" && { "evidence": [[formValues().evidence]] },
             ...formValues().expiry && { "expiry": new Date(formValues().expiry).toISOString() },
-            ...formValues().revocable && { "revocable": formValues().revocable },
-            ...formValues().suspendable && { "suspendable": formValues().suspendable }
-        }
+            ...formValues().credentialStatus !== "credentialStatus-none" && { [formValues().credentialStatus]: true }        }
         const request = SSI.putCredential(data);
         const setters = { setIsLoading, setIsSuccess, setIsError };
         const res = await handleRequest(event, request, setters);
@@ -104,15 +104,9 @@ const IssueModal: Component<{ content }> = (props) => {
         } catch {
             return false;
         }
-        const isSubjectEvidencePresent = formValues().evidence?.trim() !== '' 
-        if (isSubjectEvidencePresent) {
-            try {
-                JSON.parse(formValues().evidence)
-            } catch {
-                return false;
-            }
-        }
-        return isExpiryValid && isSubjectValid && isSubjectDataValid && !isError();
+        const isSubjectEvidencePresent = formValues().evidence.verificationMethod !== "verificationMethod-none";
+        const isSubjectEvidenceValid = isSubjectEvidencePresent ? Object.values(formValues().evidence).every(val => val !== "") : true;
+        return isExpiryValid && isSubjectValid && isSubjectDataValid && isSubjectEvidenceValid && !isError();
     }
 
     return (
@@ -139,6 +133,107 @@ const IssueModal: Component<{ content }> = (props) => {
                                     </div> 
                                 }
 
+                                <h3>Credential Subject</h3>
+                                {Object.keys(getSchemaForSubject(props.content.schemaId)?.properties).map(key => {
+                                    return getSchemaForSubject(props.content.schemaId)?.properties[key] === 'string'
+                                         ?  <div class="field-container">
+                                            <label for={key}>Subject {key}</label>
+                                            <input type="text" 
+                                                    id={key} 
+                                                    name={key}
+                                                    placeholder="Enter text here"
+                                                    class="input-container"
+                                                    value={formValues().data[key] || null} 
+                                                    onInput={(e) => {
+                                                        setIsError(false);
+                                                        setFormValues((prev) => {
+                                                            return {
+                                                                ...prev,
+                                                                "data": {
+                                                                    ...formValues().data,
+                                                                    [key]: e.currentTarget.value
+                                                                }
+                                                            }
+                                                        });
+                                                    }} 
+                                                    spellcheck={false}
+                                                    required
+                                                    autocomplete="off" />
+                                            </div>
+                                        :   getSchemaForSubject(props.content.schemaId)?.properties[key] === 'string'
+                                        ?   <div class="field-container checkbox-container">
+                                                <input id={key}
+                                                    name={key}
+                                                    checked={formValues().data[key] || null}
+                                                    onInput={(e) => {
+                                                        setIsError(false);
+                                                        setFormValues((prev) => {
+                                                            return {
+                                                                ...prev,
+                                                                "data": {
+                                                                    ...formValues().data,
+                                                                    [key]: e.currentTarget.value
+                                                                }
+                                                            }
+                                                        });
+                                                    }} 
+                                                    type="checkbox"
+                                                    class="checkbox-container" />
+                                                <label for={key}>{key}</label>
+                                            </div>
+                                        :   getSchemaForSubject(props.content.schemaId)?.properties[key] === 'number'
+                                        ?   <div class="field-container">
+                                            <label for={key}>{key}</label>
+                                            <input type="number" 
+                                                    id={key} 
+                                                    name={key}
+                                                    placeholder="Enter number here"
+                                                    class="input-container"
+                                                    value={formValues().data[key] || null} 
+                                                    onInput={(e) => {
+                                                        setIsError(false);
+                                                        setFormValues((prev) => {
+                                                            return {
+                                                                ...prev,
+                                                                "data": {
+                                                                    ...formValues().data,
+                                                                    [key]: e.currentTarget.value
+                                                                }
+                                                            }
+                                                        });
+                                                    }}
+                                                    required
+                                                    autocomplete="off" />
+                                            </div>
+                                        :   <div class="field-container">
+                                                <label for={key}>{key}</label>
+                                                <div class="textarea-container">
+                                                    <textarea 
+                                                        id={key} 
+                                                        name={key}
+                                                        value={formValues().data[key] || null} 
+                                                        onInput={(e) => {
+                                                            setIsError(false);
+                                                            setFormValues((prev) => {
+                                                                return {
+                                                                    ...prev,
+                                                                    "data": {
+                                                                        ...formValues().data,
+                                                                        [key]: JSON.parse(e.currentTarget.value)
+                                                                    }
+                                                                }
+                                                            });
+                                                        }}
+                                                        placeholder="Enter JSON here"
+                                                        onkeydown={handleKeyDown}
+                                                        spellcheck={false}
+                                                        autocomplete="off"
+                                                        rows={8}
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                })}
                                 <div class="field-container">
                                     <label for="subject">Subject DID</label>
                                     <input type="text" 
@@ -152,62 +247,42 @@ const IssueModal: Component<{ content }> = (props) => {
                                         required
                                         autocomplete="off" />
                                 </div>
-                                <div class="field-container">
-                                    <label for="properties">Subject data</label>
-                                    <p class="modal-input-note">
-                                        Make sure to update all prepopulated schema values with actual subject values before attempting to submit.
-                                    </p>
-                                    <div class="textarea-container">
-                                        <textarea 
-                                            id="properties" 
-                                            name="properties" 
-                                            value={formValues().properties} 
-                                            onInput={handleInput}
-                                            onkeydown={handleKeyDown}
-                                            spellcheck={false}
-                                            autocomplete="off"
-                                            rows={8}
-                                            required
-                                        />
-                                    </div>
-                                </div>
+                                <h3>Evidence</h3>
+                                <EvidenceForm formValues={formValues} setFormValues={setFormValues} store={store} setIsError={setIsError}/>
 
-                                <div class="field-container">
-                                    <label for="evidence">Evidence (optional)</label>
-                                    <div class="textarea-container">
-                                        <textarea 
-                                            id="evidence" 
-                                            name="evidence" 
-                                            value={formValues().evidence} 
-                                            onInput={handleInput}
-                                            onkeydown={handleKeyDown}
-                                            spellcheck={false}
-                                            autocomplete="off"
-                                            rows={8}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div class="field-container checkbox-container">
-                                    <input id="revocable" 
-                                        name="revocable"
-                                        checked={formValues().revocable}
-                                        onInput={handleInput}
-                                        type="checkbox"
-                                        class="checkbox-container"
-                                        disabled={formValues().suspendable} />
-                                    <label for="revocable">Revocable?</label>
-                                </div>
-                                <div class="field-container checkbox-container">
-                                    <input id="suspendable" 
-                                        name="suspendable"
-                                        checked={formValues().suspendable}
-                                        onInput={handleInput}
-                                        type="checkbox"
-                                        class="checkbox-container" 
-                                        disabled={formValues().revocable} />
-                                    <label for="suspendable">Suspendable?</label>
-                                </div>
+                                <h3>Credential Status</h3>
+                                <RadioCardSet 
+                                    handleEvent={(e) => {
+                                        setIsError(false);
+                                        setFormValues((prev) => {
+                                            return {
+                                                ...prev,
+                                                "credentialStatus": e.currentTarget.value
+                                            }
+                                        });
+                                    }} 
+                                    name="credentialStatus" 
+                                    description="A verifiable credential's status can either be suspendable, revocable, or none. Choose none if this credential should never be suspended or revoked."
+                                    legend="How should this credential be treated?" 
+                                    options={
+                                        [
+                                            {
+                                                value: "credentialStatus-none", 
+                                                label: "None",
+                                                selected: true
+                                            }, 
+                                            {
+                                                value: "suspendable", 
+                                                label: "Suspendable"
+                                            }, 
+                                            {
+                                                value: "revocable", 
+                                                label: "Revocable"
+                                            }
+                                        ]
+                                    } 
+                                />
+                                <h3>Expiry</h3>
                                 <div class="field-container checkbox-container">
                                     <input id="expires"
                                         name="expires"
@@ -215,7 +290,7 @@ const IssueModal: Component<{ content }> = (props) => {
                                         onInput={handleInput}
                                         type="checkbox"
                                         class="checkbox-container" />
-                                    <label for="expires">Expires?</label>
+                                    <label for="expires">Set an expiry date for this credential</label>
                                 </div>
                                 {formValues().expires && <div class="field-container">
                                     <label for="expiry">Expiry date</label>
@@ -227,6 +302,7 @@ const IssueModal: Component<{ content }> = (props) => {
                                         class="input-container" />
                                 </div>}
 
+                                <h3>Issuer</h3>
                                 <div class="field-container">
                                     <label for="issuer">Issuer</label>
                                     <div class="select-container">
@@ -244,8 +320,6 @@ const IssueModal: Component<{ content }> = (props) => {
                                         <Icon svg={ArrowUpDown} />
                                     </div>
                                 </div>
-
-                                {/* {renderFormFromJSON(manifestInput.outputDescriptors[0], { setFormValues })} */}
                                 <div class="button-row">
                                     <button class="secondary-button" type="button" onClick={() => dialog.close()}>
                                         Cancel
