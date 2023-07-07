@@ -51,13 +51,16 @@
 
         details {
             background: var(--grey-15);
-            padding-block: 1rem;
             border-radius: var(--radius-sm);
 
             summary {
-                margin-inline: 1rem;
+                padding: 1rem;
                 display: flex;
                 justify-content: space-between;
+
+                &:hover {
+                    cursor: pointer;
+                }
 
                 .icon-container {
                     transition: 0.15s ease transform;
@@ -71,6 +74,7 @@
             .field-container {
                 border-top: 1px solid var(--grey-20);
                 border-radius: 0;
+                margin: 0;
 
                 a {
                     margin-top: 0.5rem;

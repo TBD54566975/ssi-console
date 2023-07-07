@@ -351,31 +351,61 @@ fieldset {
     padding: 0;
     margin: 0.5rem 0 1.5rem;
     display: inline-flex;
+    width: 100%;
 }
 
 legend {
     margin-bottom: 0.5rem;
 }
 
-input[type="radio"] {
-    display: none;
+.radio-container {
+    position: relative;
+
+    input[type="radio"] {
+        appearance: none;
+        position: absolute;
+
+        &:focus-visible ~ label {
+            outline-offset: 2px;
+            outline: -webkit-focus-ring-color auto 1px;
+        }
+    }
+    
+    input[type="radio"] ~ label {
+        padding: 2px 10px;
+        border-radius: var(--radius-sm);
+        font-size: var(--font-sm);
+        background-color: var(--grey-10);
+        border: 1px solid var(--grey-30);
+        color: var(--grey-50);
+        text-align: center;
+        padding-inline: 1rem;
+        margin-right: 0.5rem;
+    
+        .radio-control-content {
+            .radio-control-heading {
+                font-size: var(--font-sm);
+                margin: 0.25rem;
+            }
+    
+            .radio-control-description {
+                font-size: var(--font-xs);
+                margin: 0;
+            }
+        }
+    }
+    
+    input[type="radio"]:checked ~ label {
+        background-color: var(--grey-30);
+        border: 1px solid var(--color-white);
+        color: var(--color-white);
+    
+        p {
+            color: var(--color-white);
+        }
+    }
 }
 
-input[type="radio"] ~ label {
-    padding: 2px 10px;
-    border-radius: var(--radius-round);
-    font-size: var(--font-sm);
-    margin-right: 0.5rem;
-    background-color: var(--grey-10);
-    border: 2px solid var(--grey-30);
-    color: var(--grey-50);
-}
-
-input[type="radio"]:checked ~ label {
-    background-color: var(--grey-30);
-    border: 1px solid var(--color-white);
-    color: var(--color-white);
-}
 
 #output-container {
     padding: 1rem;
