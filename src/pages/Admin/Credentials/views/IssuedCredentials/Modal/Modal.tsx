@@ -10,6 +10,7 @@ import { useNavigate } from "@solidjs/router";
 import { parseIDFromUrl } from "@/utils/helpers";
 import EvidenceForm from "./evidence/EvidenceForm";
 import RadioCardSet from "@/components/RadioCardSet/RadioCardSet";
+import Dialog from "@/components/Dialog/Dialog";
 
 const IssueModal: Component<{ content }> = (props) => {
     //pass in these props
@@ -61,7 +62,7 @@ const IssueModal: Component<{ content }> = (props) => {
     }
     
     const closeModal = () => {
-        return dialog.close();
+        return document.getElementsByTagName('dialog')[0].close();
     }
 
     const navigate = useNavigate();
@@ -110,20 +111,12 @@ const IssueModal: Component<{ content }> = (props) => {
     }
 
     return (
-        <>
-            <button class={props.content.button.className} onclick={showModal}>
-                {props.content.button.label}
-            </button>
-            <dialog class="dialog" ref={dialog}>
-                <div class="dialog-header">
-                    <button title="Close dialog" onClick={closeModal}>
-                        <Icon svg={XCross} />
-                    </button>
-                </div>
-
-                <div class="dialog-body">
-                    <h2>Issue Verifiable Credential</h2>
-                    <form onSubmit={handleSubmit}>
+        <Dialog content={{
+            ...props.content,
+            heading: {
+                h2: "New Verifiable Credential"
+            }
+        }} afterCloseModal={resetForm} handleSubmit={handleSubmit}>
                         {!isLoading() && !isSuccess() && (
                             <>
                                 {isError() && 
@@ -345,10 +338,7 @@ const IssueModal: Component<{ content }> = (props) => {
                                 </div>
                             </>
                         )}
-                    </form>
-                </div>
-            </dialog>
-        </>
+        </Dialog>
     )
 }
 
