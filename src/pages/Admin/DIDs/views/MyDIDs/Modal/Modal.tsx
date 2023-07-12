@@ -5,6 +5,7 @@ import { formatTextAreaOnKeyDown, handleRequest, insertSampleInput, updateFormOn
 import SSI, { DIDMethod, KeyType, didMethods, keyTypes } from "@/utils/service";
 import { hydrateDIDStore } from "@/utils/setup";
 import Editor from "@/utils/editor";
+import Dialog from "@/components/Dialog/Dialog";
 
 
 const Modal: Component<{ content }> = (props) => {
@@ -13,7 +14,7 @@ const Modal: Component<{ content }> = (props) => {
         didMethod: didMethods[0], 
         keyType: keyTypes[0], 
         didWebId: "",
-        serviceEndpoints: "",
+        serviceEndpoints: [],
         includeServiceEndpoints: false 
     }
 
@@ -30,22 +31,6 @@ const Modal: Component<{ content }> = (props) => {
         setIsError(false);
     }
 
-    //dialog magic
-    let dialog;
-
-    const showModal = () => {
-        dialog.showModal();
-        document.body.classList.add('no-scroll');
-        dialog.addEventListener('close', () => {
-            document.body.classList.remove('no-scroll');
-            resetForm();
-        });
-    }
-
-    const closeModal = () => {
-        return dialog.close();
-    }
-
     //actual form calls
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -54,7 +39,7 @@ const Modal: Component<{ content }> = (props) => {
         }
         if (formValues().didMethod === "web") {
             data["options"] = {
-                "didWebId": formValues().didWebId
+                "didWebId": `did:web:${formValues().didWebId}`
             }
         }
         if (formValues().didMethod === "ion" && formValues().includeServiceEndpoints && formValues().serviceEndpoints) {
@@ -73,13 +58,15 @@ const Modal: Component<{ content }> = (props) => {
 
     const isFormValid = () => {
         // check that ion is valid
-        const serviceEndpointsisValid = formValues().serviceEndpoints && formValues().serviceEndpoints.length && formValues().serviceEndpoints.every(obj =>
+        const serviceEndpointsisValid = formValues().serviceEndpoints?.length && formValues().serviceEndpoints?.every(obj =>
             {
+                console.log(formValues().serviceEndpoints)
                 return obj.hasOwnProperty("id") &&
-            obj.hasOwnProperty("type") &&
-            obj.hasOwnProperty("serviceEndpoint")}
+                    obj.hasOwnProperty("type") &&
+                    obj.hasOwnProperty("serviceEndpoint")
+            }
         );
-        if (formValues().didMethod === "ion" && (serviceEndpointsisValid || (!formValues().serviceEndpoints && !editor.state.doc.toString()))) return true;
+        if (formValues().didMethod === "ion" && (!formValues().includeServiceEndpoints || serviceEndpointsisValid)) return true;
         
         // check that web is valid
         const didWebIdPattern = /^did:web:(https?:\/\/)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/\S*)?$/;
@@ -104,22 +91,13 @@ const Modal: Component<{ content }> = (props) => {
     });
 
     return (
-        <div class="did-dialog">
-            <button class={props.content.button.className} disabled={props.content.button.disabled} onclick={showModal}>
-                {props.content.button.label}
-            </button>
-            <dialog class="dialog" ref={dialog}>
-                <div class="dialog-header">
-                    <button title="Close dialog" onClick={closeModal}>
-                        <Icon svg={XCross} />
-                    </button>
-                </div>
-
-                <div class="dialog-body">
-
-                    <form onSubmit={handleSubmit}>
-                    <h2>Create a DID</h2>
-                    <p>Set a DID and start issuing, verifying, or testing out credentials.</p>
+        <Dialog content={{
+            ...props.content,
+            heading: {
+                h2: "New Verifiable Credential Template",
+                p: "Set a DID and start issuing, verifying, or testing out credentials."
+            }
+        }} afterCloseModal={resetForm} handleSubmit={handleSubmit}>
                         
                         {!isLoading() && !isSuccess() && (
                             <>
@@ -151,11 +129,12 @@ const Modal: Component<{ content }> = (props) => {
 
                                         { formValues().didMethod === 'web' && (
                                             <div class="field-container">
-                                                <label for="didWebId">DID Web ID</label>
+                                                <label for="didWebId">Website domain</label>
+                                                <p>The website to be associated with your new DID</p>
                                                 <input type="text" 
                                                     id="didWebId" 
                                                     name="didWebId" 
-                                                    placeholder="did:web:www.example.com" 
+                                                    placeholder="www.example.com" 
                                                     class="input-container"
                                                     value={formValues().didWebId} 
                                                     onInput={handleInput}
@@ -210,7 +189,7 @@ const Modal: Component<{ content }> = (props) => {
                                     </details>
                                 </div>
                                 <div class="button-row">
-                                    <button class="secondary-button" type="button" onClick={() => dialog.close()}>
+                                    <button class="secondary-button" type="button" onClick={() => document.getElementsByTagName('dialog')[0].close()}>
                                         Cancel
                                     </button>
                                     <button class="primary-button" type="submit" disabled={!isFormValid()}>
@@ -228,16 +207,13 @@ const Modal: Component<{ content }> = (props) => {
                                     🎉 Successfully created
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); hydrateDIDStore() }}>
+                                    <button class="secondary-button" type="button" onClick={() => { document.getElementsByTagName('dialog')[0].close(); hydrateDIDStore() }}>
                                         Done
                                     </button>
                                 </div>
                             </>
                         )}
-                    </form>
-                </div>
-            </dialog>
-        </div>
+        </Dialog>
     )
 }
 
