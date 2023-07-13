@@ -44,6 +44,20 @@ const MyDIDs: Component = () => {
                     }}/>,
                 buttons: [
                     {
+                        label: "Download DID Document",
+                        className: "secondary-button",
+                        onClick: (item) => { 
+                            const blob = new Blob([JSON.stringify(store.user[item.id].doc, null, 4)], { type: 'application/json' });
+                            const url = URL.createObjectURL(blob);
+                            
+                            const anchor = document.createElement('a');
+                            anchor.setAttribute('hidden', 'true');
+                            anchor.setAttribute('download', 'did.json');
+                            anchor.setAttribute('href', url);
+                            anchor.click();
+                        }
+                    },
+                    {
                         label: "Archive",
                         className: "danger-button",
                         disabled: dids().length < 2,
@@ -82,12 +96,11 @@ const transformDIDs = (userDIDs) => {
     if (typeof userDIDs === "object") {
         userDIDs = Object.values(userDIDs);
     }
-    return userDIDs.map((userDID: { did, kid, id }) => {
+    return userDIDs.map((userDID: { did, kid, id, doc }) => {
         const didId = userDID.did || userDID.id;
         return {
-            name: `****-${didId?.slice(-4)}`,
-            id: didId,
             type: getDIDMethodFromDID(didId),
+            id: didId
         }
     })
 }
