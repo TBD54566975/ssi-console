@@ -381,7 +381,7 @@ fieldset {
     }
     
     input[type="radio"] ~ label {
-        padding: 1rem 2rem;
+        padding: 0.5rem 1rem;
         border-radius: var(--radius-sm);
         font-size: var(--font-sm);
         background-color: var(--grey-10);

@@ -56,6 +56,7 @@ export const hydrateDIDStore = async () => {
                 ...store.user,
                 [did.id] : {
                     did: did.id,
+                    doc: did,
                     kid: did.verificationMethod.find(method => method.id === did.id)?.id || did.verificationMethod.find(method => method.controller === did.id)?.id,
                 }
             }
