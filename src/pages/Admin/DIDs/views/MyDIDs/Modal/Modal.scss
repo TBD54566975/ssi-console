@@ -1,53 +1,6 @@
-.did-dialog {
 
     .dialog {
-        background: var(--grey-5);
-        border: 1px solid var(--grey-10);
-        color: var(--color-white);
-        box-shadow: 0 10px 20px var(--color-black);
-        max-width: 100%;
-        height: calc(100% - 2rem);
-        margin-block: auto;
-        padding: 0;
-        border-radius: var(--radius-sm);
-        overflow: hidden;
-        width: max-content;
 
-        &::backdrop {
-            background: rgba(6,6,6,0.9);
-        }
-
-        &-header {
-            background: var(--grey-5);
-            border-bottom: 1px solid var(--grey-10);
-            padding: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-            margin-block-end: 1rem;
-
-            button {
-                .icon-container > svg {
-                    width: 24px;
-                }
-            }
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            padding-inline-end: 35%;
-            letter-spacing: 1px;
-        }
-
-        p {
-            font-size: 1rem;
-            padding-inline-end: 12.5%;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--grey-15);
-            letter-spacing: 0.5px;
-            padding-bottom: 1rem;
-            line-height: 1.75;
-        }
 
         details {
             background: var(--grey-15);
@@ -67,8 +20,11 @@
                 }
             }
 
-            &[open] summary .icon-container {
-                transform: rotate(-180deg);
+            &[open] {
+                padding-block-end: 1rem;
+                summary .icon-container {
+                    transform: rotate(-180deg);
+                }
             }
 
             .field-container {
@@ -198,4 +154,3 @@
             }
         }
     }
-}

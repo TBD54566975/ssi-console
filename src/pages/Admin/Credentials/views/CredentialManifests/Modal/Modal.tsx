@@ -8,6 +8,7 @@ import { store } from "@/utils/store";
 import { hydrateManifestStore, hydrateSchemaStore } from "@/utils/setup";
 import { getSchemaForSubject } from "../../IssuedCredentials/Modal/Modal";
 import { useNavigate } from "@solidjs/router";
+import Dialog from "@/components/Dialog/Dialog";
 
 const Modal: Component<{ content }> = (props) => {
     let initialFormValues = { 
@@ -37,21 +38,6 @@ const Modal: Component<{ content }> = (props) => {
         setIsSuccess(false);
         setIsError(false);
         setStep(1);
-    }
-
-    //dialog magic
-    let dialog;
-    const showModal = () => {
-        dialog.showModal();
-        document.body.classList.add('no-scroll');
-        dialog.addEventListener('close', () => {
-            document.body.classList.remove('no-scroll');
-            resetForm();
-        });
-    }
-    
-    const closeModal = () => {
-        return dialog.close();
     }
 
     // Specific to verifiable credential modal
@@ -138,12 +124,11 @@ const Modal: Component<{ content }> = (props) => {
     }
 
     const isFormValid = () => {
-        let isComplete;
-        if (step() === 1) isComplete = formValues().name.trim() !== '' && formValues().description.trim() !== ''
-        if (step() === 2) isComplete = formValues().schema.trim() !== '' || formValues().schemaId.trim() !== ''
-        if (step() === 3) isComplete = true;
-        // if (step() === 4) isComplete = true;
-        if (step() === 4) isComplete = formValues().issuerName.trim() !== ''
+        let isComplete = formValues().name.trim() !== '' && formValues().description.trim() !== '' && formValues().schema.trim() !== '' || formValues().schemaId.trim() !== '' && formValues().issuerName.trim() !== '';
+        // if (step() === 1) isComplete = formValues().name.trim() !== '' && formValues().description.trim() !== ''
+        // if (step() === 2) isComplete = formValues().schema.trim() !== '' || formValues().schemaId.trim() !== ''
+        // if (step() === 3) isComplete = true;
+        // if (step() === 4) isComplete = formValues().issuerName.trim() !== ''
         return isComplete && !isError();
     }
 
@@ -168,20 +153,13 @@ const Modal: Component<{ content }> = (props) => {
     }
 
     return (
-        <>
-            <button class={props.content.button.className} onclick={showModal}>
-                {props.content.button.label}
-            </button>
-            <dialog class="dialog" ref={dialog}>
-                <div class="dialog-header">
-                    <button title="Close dialog" onClick={closeModal}>
-                        <Icon svg={XCross} />
-                    </button>
-                </div>
+        <Dialog content={{
+            ...props.content,
+            heading: {
+                h2: "New Verifiable Credential Template"
+            }
+        }} afterCloseModal={resetForm} handleSubmit={handleSubmit}>
 
-                <div class="dialog-body">
-                    <h2>New Verifiable Credential Template</h2>
-                    <form onSubmit={handleSubmit}>
                         {!isLoading() && !isSuccess() && (
                             <>
                                 {isError() && 
@@ -218,17 +196,9 @@ const Modal: Component<{ content }> = (props) => {
                                             required
                                             autocomplete="off" />
                                     </div>
-                                    <div class="button-row">
-                                        <button class="secondary-button" type="button" onClick={() => dialog.close()}>
-                                            Cancel
-                                        </button>
-                                        <button class="primary-button" type="button" disabled={!isFormValid()} onClick={goToNextStep}>
-                                            Next
-                                        </button>
-                                    </div>
                                 </Show>
 
-                                <Show when={step() === 2}>
+                                <Show when={step() === 1}>
                                     <div class="field-container">
                                         <label for="schemaId">Schema</label>
                                         <div class="select-container">
@@ -272,20 +242,9 @@ const Modal: Component<{ content }> = (props) => {
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="button-row">
-                                        <button class="secondary-button" type="button" onClick={() => dialog.close()}>
-                                            Cancel
-                                        </button>
-                                        <button class="secondary-button" type="button" onClick={goToPrevStep}>
-                                            Back
-                                        </button>
-                                        <button class="primary-button" type="button" disabled={!isFormValid()} onClick={goToNextStep}>
-                                            Next
-                                        </button>
-                                    </div>
                                 </Show>
 
-                                <Show when={step() === 3}>
+                                <Show when={step() === 1}>
                                     <div class="field-container">
                                         <label for="inputDescriptors">Input Descriptors (optional)</label>
                                         <div class="textarea-container">
@@ -303,18 +262,6 @@ const Modal: Component<{ content }> = (props) => {
                                                 Try sample input
                                             </button>
                                         </div>
-                                    </div>
-                                
-                                    <div class="button-row">
-                                        <button class="secondary-button" type="button" onClick={() => dialog.close()}>
-                                            Cancel
-                                        </button>
-                                        <button class="secondary-button" type="button" onClick={goToPrevStep}>
-                                            Back
-                                        </button>
-                                        <button class="primary-button" type="button" disabled={!isFormValid()} onClick={goToNextStep}>
-                                            Next
-                                        </button>
                                     </div>
                                 </Show>
 
@@ -366,21 +313,9 @@ const Modal: Component<{ content }> = (props) => {
                                             </div>
                                         </div>
                                     )}
-                                
-                                    <div class="button-row">
-                                        <button class="secondary-button" type="button" onClick={() => dialog.close()}>
-                                            Cancel
-                                        </button>
-                                        <button class="secondary-button" type="button" onClick={goToPrevStep}>
-                                            Back
-                                        </button>
-                                        <button class="primary-button" type="button" disabled={!isFormValid()} onClick={goToNextStep}>
-                                            Next
-                                        </button>
-                                    </div>
                                 </Show> */}
 
-                                <Show when={step() === 4} >
+                                <Show when={step() === 1} >
                                     <div class="field-container">
                                         <label for="issuer">Issuer</label>
                                         <div class="select-container">
@@ -411,18 +346,28 @@ const Modal: Component<{ content }> = (props) => {
                                             required
                                             autocomplete="off" />
                                     </div>
+                                </Show>
+
+                                {step() === 1 && (
                                     <div class="button-row">
-                                        <button class="secondary-button" type="button" onClick={() => dialog.close()}>
+                                        <button class="secondary-button" type="button" onClick={() => document.getElementsByTagName('dialog')[0].close()}>
                                             Cancel
                                         </button>
-                                        <button class="secondary-button" type="button" onClick={goToPrevStep}>
-                                            Back
-                                        </button>
-                                        <button class="primary-button" type="submit" disabled={!isFormValid()}>
-                                            Submit
-                                        </button>
+                                        {step() === 2 && (
+                                            <button class="secondary-button" type="button" onClick={goToPrevStep}>
+                                                Back
+                                            </button>
+                                        )}
+                                        {step() === 1
+                                            ?   <button class="primary-button" type="submit" disabled={!isFormValid()}>
+                                                    Submit
+                                                </button>
+                                            :   <button class="primary-button" type="button" disabled={!isFormValid()} onClick={goToNextStep}>
+                                                    Next
+                                                </button>
+                                        }
                                     </div>
-                                </Show>
+                                )}
                             </>
                         )}
 
@@ -434,16 +379,14 @@ const Modal: Component<{ content }> = (props) => {
                                     🎉 Successfully created credential
                                 </div>
                                 <div class="button-row"> 
-                                    <button class="secondary-button" type="button" onClick={() => { closeModal(); navigate(`/credentials/${manifestId()}?schema=${schemaId()}`) }}>
+                                    <button class="secondary-button" type="button" onClick={() => { document.getElementsByTagName('dialog')[0].close(); navigate(`/credentials/${manifestId()}?schema=${schemaId()}`) }}>
                                         Done
                                     </button>
                                 </div>
                             </>
                         )}
-                    </form>
-                </div>
-            </dialog>
-        </>
+
+        </Dialog>
     )
 }
 
