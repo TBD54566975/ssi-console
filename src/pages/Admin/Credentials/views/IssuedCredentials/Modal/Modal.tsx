@@ -75,7 +75,7 @@ const IssueModal: Component<{ content }> = (props) => {
             "@context": "https://www.w3.org/2018/credentials/v1",
             "data": formValues().data,
             "issuer": store.user[formValues().issuer]["did"],
-            "issuerKid": store.user[formValues().issuer]["kid"],
+            "verificationMethodId": store.user[formValues().issuer]["kid"],
             "schemaId": props.content.schemaId,
             "subject": formValues().subject,
             ...formValues().evidence.verificationMethod !== "verificationMethod-none" && { "evidence": [formValues().evidence] },
