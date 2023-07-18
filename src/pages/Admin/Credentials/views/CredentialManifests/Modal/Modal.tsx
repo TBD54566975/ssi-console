@@ -81,7 +81,7 @@ const Modal: Component<{ content }> = (props) => {
             "name": formValues().name,
             "description": formValues().description,
             "issuerDid": store.user[formValues().issuer]["did"],
-            "issuerKid": store.user[formValues().issuer]["kid"],
+            "verificationMethodId": store.user[formValues().issuer]["kid"],
             "issuerName": formValues().issuerName,
             "format": vcJWTFormat,
             "outputDescriptors": [
