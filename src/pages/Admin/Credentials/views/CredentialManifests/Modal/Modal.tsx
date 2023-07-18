@@ -133,23 +133,21 @@ const Modal: Component<{ content }> = (props) => {
     }
 
     //populate textarea field with sample input
-    const populateSampleInput = (event, field) => {
+    const populateSampleInput = (event, field : 'schema' | 'inputDescriptors') => {
         const setters = { setIsError, setFormValues };;
-        let fieldToSet;
+
         let sampleInput: typeof schemaInput.schema | typeof inputDescriptorsInput | typeof stylesInput;
         if (field == 'schema') {
-            fieldToSet = field;
             sampleInput = schemaInput.schema;
         }
         if (field == 'inputDescriptors') {
-            fieldToSet = field;
             sampleInput = inputDescriptorsInput;
         }
         // if (step() === 4) {
         //     fieldToSet = 'styles';
         //     sampleInput = stylesInput;
         // }
-        insertSampleInput(event, setters, fieldToSet, sampleInput);
+        insertSampleInput(event, setters, field, sampleInput);
     }
 
     return (
