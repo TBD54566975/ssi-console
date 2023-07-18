@@ -207,7 +207,6 @@ const Modal: Component<{ content }> = (props) => {
                                                 name="schemaId" 
                                                 value={formValues().schemaId} 
                                                 onInput={handleInput}
-                                                required
                                             >
                                                 <option value={''}>New data set</option>
                                                 {store.schemas && Object.values(store.schemas).map(({schema}) => 
