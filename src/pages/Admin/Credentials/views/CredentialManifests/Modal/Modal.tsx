@@ -133,23 +133,21 @@ const Modal: Component<{ content }> = (props) => {
     }
 
     //populate textarea field with sample input
-    const populateSampleInput = (event) => {
+    const populateSampleInput = (event, field : 'schema' | 'inputDescriptors') => {
         const setters = { setIsError, setFormValues };;
-        let fieldToSet;
+
         let sampleInput: typeof schemaInput.schema | typeof inputDescriptorsInput | typeof stylesInput;
-        if (step() === 2) {
-            fieldToSet = 'schema';
+        if (field == 'schema') {
             sampleInput = schemaInput.schema;
         }
-        if (step() === 3) {
-            fieldToSet = 'inputDescriptors';
+        if (field == 'inputDescriptors') {
             sampleInput = inputDescriptorsInput;
         }
         // if (step() === 4) {
         //     fieldToSet = 'styles';
         //     sampleInput = stylesInput;
         // }
-        insertSampleInput(event, setters, fieldToSet, sampleInput);
+        insertSampleInput(event, setters, field, sampleInput);
     }
 
     return (
@@ -235,7 +233,7 @@ const Modal: Component<{ content }> = (props) => {
                                                 required 
                                                 readonly={formValues().schemaId.trim() !== ''}
                                                 />
-                                            <button class="tiny-ghost-button" type="button" onclick={populateSampleInput} disabled={formValues().schemaId.trim() !== ''}>
+                                            <button class="tiny-ghost-button" type="button" onclick={(e) => populateSampleInput(e, 'schema')} disabled={formValues().schemaId.trim() !== ''}>
                                                 <Icon svg={Beaker} />
                                                 Try sample input
                                             </button>
@@ -256,7 +254,7 @@ const Modal: Component<{ content }> = (props) => {
                                                 spellcheck={false}
                                                 autocomplete="off"
                                                 rows={8} />
-                                            <button class="tiny-ghost-button" type="button" onclick={populateSampleInput}>
+                                            <button class="tiny-ghost-button" type="button" onclick={(e) => populateSampleInput(e, 'inputDescriptors')}>
                                                 <Icon svg={Beaker} />
                                                 Try sample input
                                             </button>
