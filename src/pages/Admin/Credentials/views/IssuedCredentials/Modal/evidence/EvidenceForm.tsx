@@ -63,7 +63,6 @@ const EvidenceForm: Component<{formValues, setFormValues, store, setIsError}> = 
                                 });
                             }}
                             value={props.formValues().evidence.id} 
-                            onInput={console.log}
                             spellcheck={false}
                             required
                             autocomplete="off" />
@@ -88,7 +87,6 @@ const EvidenceForm: Component<{formValues, setFormValues, store, setIsError}> = 
                                 });
                             }}
                             value={props.formValues().evidence.documentType} 
-                            onInput={console.log}
                             spellcheck={false}
                             required
                             autocomplete="off" />
@@ -113,7 +111,6 @@ const EvidenceForm: Component<{formValues, setFormValues, store, setIsError}> = 
                                 });
                             }}
                             value={props.formValues().evidence.documentNumber} 
-                            onInput={console.log}
                             spellcheck={false}
                             required
                             autocomplete="off" />

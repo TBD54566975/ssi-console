@@ -31,6 +31,8 @@ const Modal: Component<{ content }> = (props) => {
         setIsError(false);
     }
 
+    const [ DIDDoc, setDIDDoc ] = createSignal();
+
     //actual form calls
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -49,18 +51,20 @@ const Modal: Component<{ content }> = (props) => {
         }
         const request = SSI.putDID(formValues().didMethod, data);
         const setters = { setIsLoading, setIsSuccess, setIsError };
-        handleRequest(event, request, setters);
+        const res = await handleRequest(event, request, setters);
+        if (isSuccess()) {
+            setDIDDoc((await res.json()).did);
+        }
     };
 
     const handleInput = (event) => {
         updateFormOnInput(event, { setIsError, setFormValues });
-    };
+    };                                 
 
     const isFormValid = () => {
         // check that ion is valid
         const serviceEndpointsisValid = formValues().serviceEndpoints?.length && formValues().serviceEndpoints?.every(obj =>
             {
-                console.log(formValues().serviceEndpoints)
                 return obj.hasOwnProperty("id") &&
                     obj.hasOwnProperty("type") &&
                     obj.hasOwnProperty("serviceEndpoint")
@@ -69,7 +73,7 @@ const Modal: Component<{ content }> = (props) => {
         if (formValues().didMethod === "ion" && (!formValues().includeServiceEndpoints || serviceEndpointsisValid)) return true;
         
         // check that web is valid
-        const didWebIdPattern = /^did:web:(https?:\/\/)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/\S*)?$/;
+        const didWebIdPattern = /(https?:\/\/)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/\S*)?$/;
         if (formValues().didMethod === "web" && didWebIdPattern.test(formValues().didWebId)) return true;
         
         // check that key is valid
@@ -94,7 +98,7 @@ const Modal: Component<{ content }> = (props) => {
         <Dialog content={{
             ...props.content,
             heading: {
-                h2: "New Verifiable Credential Template",
+                h2: "Create a new DID",
                 p: "Set a DID and start issuing, verifying, or testing out credentials."
             }
         }} afterCloseModal={resetForm} handleSubmit={handleSubmit}>
@@ -130,7 +134,7 @@ const Modal: Component<{ content }> = (props) => {
                                         { formValues().didMethod === 'web' && (
                                             <div class="field-container">
                                                 <label for="didWebId">Website domain</label>
-                                                <p>The website to be associated with your new DID</p>
+                                                <p>The URL to be associated with your new DID</p>
                                                 <input type="text" 
                                                     id="didWebId" 
                                                     name="didWebId" 
@@ -206,8 +210,11 @@ const Modal: Component<{ content }> = (props) => {
                                 <div class="banner banner-success">
                                     🎉 Successfully created
                                 </div>
+                                {formValues().didMethod === "web" && (
+                                    <p>You still have an extra step. You need to download the <a href={generateDIDDocument(DIDDoc())} download="did.json">DID document</a> and upload it to your <code>.well-known</code> folder.</p>
+                                )}
                                 <div class="button-row"> 
-                                    <button class="secondary-button" type="button" onClick={() => { document.getElementsByTagName('dialog')[0].close(); hydrateDIDStore() }}>
+                                    <button class="secondary-button" type="button" onClick={() => { document.getElementsByTagName('dialog')[0].close(); hydrateDIDStore(); }}>
                                         Done
                                     </button>
                                 </div>
@@ -218,3 +225,9 @@ const Modal: Component<{ content }> = (props) => {
 }
 
 export default Modal;
+
+const generateDIDDocument = (doc) => {
+    const blob = new Blob([JSON.stringify(doc, null, 4)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    return url
+}

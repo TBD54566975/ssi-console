@@ -8,7 +8,7 @@ export const manifestInput =  {
       },
     },
     "issuerDid": "",
-    "issuerKid": "",
+    "verificationMethodId": "",
     "issuerName": "",
     "name": "",
     "outputDescriptors": [
