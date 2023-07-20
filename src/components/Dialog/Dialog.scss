@@ -96,6 +96,11 @@
             padding: 1rem;
             margin-block: 1rem;
             border-radius: var(--radius-sm);
+
+            label ~ p {
+                font-size: var(--font-xs);
+                margin-block: 0 4px;
+            }
         }
 
         &-body {
